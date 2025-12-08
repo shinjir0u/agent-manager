@@ -1,0 +1,19 @@
+# Ignore the entire directory where Maven puts compiled classes, WARs, etc.
+/target/
+
+# Log files created at runtime
+*.log
+/logs/
+
+# Jars and Zips
+*.jar
+*.war
+*.zip
+*.rar
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+.env
