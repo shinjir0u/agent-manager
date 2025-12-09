@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS registrations (
     agent_name VARCHAR(255),
     phone_number VARCHAR(50),
     registered_at TIMESTAMP,
-    sale_executive_id BIGINT,
+    sale_executive_id BIGINT, 
+
     FOREIGN KEY (sale_executive_id)
         REFERENCES sale_executives(id)
 );
