@@ -40,7 +40,7 @@ public class AdminController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Admin> addAdminJson(@RequestBody Admin admin) {
 		Admin adminAdded = adminService.addAdmin(admin);
-		URI adminLocation = generateEntryUri(adminAdded);
+		URI adminLocation = generateEntryUri(adminAdded.getId());
 		logger.info("Admin: {} created at: {}", adminAdded, adminLocation);
 		return ResponseEntity.created(adminLocation).contentType(MediaType.APPLICATION_JSON).body(adminAdded);
 	}
@@ -48,7 +48,7 @@ public class AdminController {
 	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<Admin> addAdminForm(Admin admin) {
 		Admin adminAdded = adminService.addAdmin(admin);
-		URI adminLocation = generateEntryUri(adminAdded);
+		URI adminLocation = generateEntryUri(adminAdded.getId());
 		logger.info("Admin {} created at {}", adminAdded, adminLocation);
 		return ResponseEntity.created(adminLocation).contentType(MediaType.APPLICATION_JSON).body(adminAdded);
 	}
