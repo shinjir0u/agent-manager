@@ -32,8 +32,15 @@ public class AdminController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(admins);
 	}
 
-	@PostMapping
-	public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Admin> addAdminJson(@RequestBody Admin admin) {
+		Admin adminAdded = adminService.addAdmin(admin);
+		URI adminLocation = generateEntryUri(adminAdded);
+		return ResponseEntity.created(adminLocation).contentType(MediaType.APPLICATION_JSON).body(adminAdded);
+	}
+
+	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public ResponseEntity<Admin> addAdminForm(Admin admin) {
 		Admin adminAdded = adminService.addAdmin(admin);
 		URI adminLocation = generateEntryUri(adminAdded);
 		return ResponseEntity.created(adminLocation).contentType(MediaType.APPLICATION_JSON).body(adminAdded);
@@ -45,14 +52,20 @@ public class AdminController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(admin);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Admin> updateAdmin(@PathVariable Long id, @RequestBody Admin admin) {
+	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Admin> updateAdminJson(@PathVariable Long id, @RequestBody Admin admin) {
+		Admin adminUpdated = adminService.updateAdmin(id, admin);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(adminUpdated);
+	}
+
+	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public ResponseEntity<Admin> updateAdminForm(@PathVariable Long id, Admin admin) {
 		Admin adminUpdated = adminService.updateAdmin(id, admin);
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(adminUpdated);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) throws IllegalArgumentException {
 		adminService.deleteAdmin(id);
 		return ResponseEntity.noContent().build();
 	}
