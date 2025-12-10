@@ -4,10 +4,14 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -20,25 +24,28 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories("agentmanager")
-@Profile("local")
+@PropertySource("classpath:postgres.properties")
 public class PersistenceConfig {
 
-	@Value("${DATABASE_URL}")
-	private String DATABASE_URL;
+	private final Logger logger = LogManager.getLogger(PersistenceConfig.class);
 
-	@Value("${DATABASE_USERNAME}")
-	private String DATABASE_USERNAME;
+	@Bean
+	static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 
-	@Value("${DATABASE_PASSWORD}")
-	private String DATABASE_PASSWORD;
+	@Autowired
+	private Environment env;
 
 	@Bean
 	DataSource dataSource() {
+		logger.info("Url {}, Username {}, Password {}", env.getProperty("database.url"),
+				env.getProperty("database.username"), env.getProperty("database.password"));
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl(DATABASE_URL);
-		dataSource.setUsername(DATABASE_USERNAME);
-		dataSource.setPassword(DATABASE_PASSWORD);
+		dataSource.setUrl(env.getProperty("database.url"));
+		dataSource.setUsername(env.getProperty("database.username"));
+		dataSource.setPassword(env.getProperty("database.password"));
 		return dataSource;
 	}
 
@@ -50,7 +57,7 @@ public class PersistenceConfig {
 		entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
 		Properties properties = new Properties();
-		properties.put("hibernate.dialet", "org.hibernate.dialect.PostgreSQLDialect");
+		properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
 		properties.put("hibernate.show_sql", true);
 		properties.put("hibernate.hbm2ddl.auto", "none");
 
