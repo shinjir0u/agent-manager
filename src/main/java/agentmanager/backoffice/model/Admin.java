@@ -1,6 +1,4 @@
-package agent_manager.registration;
-
-import java.util.Date;
+package agentmanager.backoffice.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,32 +6,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder(toBuilder = true)
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 @Entity
-@Table(name = "registrations")
-public class Registration {
+@Table(name = "admins")
+public class Admin {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JsonProperty("agent_name")
-	private String agentName;
+	private String username;
 
-	@JsonProperty("phone_number")
-	private String phoneNumber;
+	private String email;
 
-	@JsonProperty("registered_at")
-	private Date registeredAt;
+	private String password;
 
 }

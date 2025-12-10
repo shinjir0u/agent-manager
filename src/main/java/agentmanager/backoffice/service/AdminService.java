@@ -1,6 +1,8 @@
-package agent_manager.back_office;
+package agentmanager.backoffice.service;
 
 import java.util.List;
+
+import agentmanager.backoffice.model.Admin;
 
 public interface AdminService {
 	List<Admin> getAdmins();

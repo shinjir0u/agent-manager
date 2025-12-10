@@ -1,4 +1,4 @@
-package agent_manager.sale_executive;
+package agentmanager.saleexecutive.model;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import agent_manager.registration.Registration;
+import agentmanager.registration.model.Registration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package agent_manager.back_office_rest;
+package agentmanager.backoffice.rest;
 
 import java.net.URI;
 import java.util.List;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import agent_manager.back_office.Admin;
-import agent_manager.back_office.AdminService;
+import agentmanager.backoffice.model.Admin;
+import agentmanager.backoffice.service.AdminService;
 
 @RestController
 @RequestMapping("/admins")

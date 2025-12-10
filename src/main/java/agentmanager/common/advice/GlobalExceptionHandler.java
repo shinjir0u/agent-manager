@@ -1,4 +1,4 @@
-package agent_manager.common.advice;
+package agentmanager.common.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

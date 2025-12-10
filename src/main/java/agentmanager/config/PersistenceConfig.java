@@ -1,4 +1,4 @@
-package agent_manager.config;
+package agentmanager.config;
 
 import java.util.Properties;
 
@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -18,6 +19,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@EnableJpaRepositories("agentmanager")
 @Profile("local")
 public class PersistenceConfig {
 
@@ -44,7 +46,7 @@ public class PersistenceConfig {
 	LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource());
-		entityManagerFactory.setPackagesToScan("agent_manager");
+		entityManagerFactory.setPackagesToScan("agentmanager");
 		entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
 		Properties properties = new Properties();
@@ -57,7 +59,7 @@ public class PersistenceConfig {
 	}
 
 	@Bean
-	PlatformTransactionManager platformTransactionManager() {
+	PlatformTransactionManager transactionManager() {
 		return new JpaTransactionManager(entityManagerFactory().getObject());
 	}
 

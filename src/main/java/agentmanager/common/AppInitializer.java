@@ -1,8 +1,8 @@
-package agent_manager.common;
+package agentmanager.common;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import agent_manager.config.WebConfig;
+import agentmanager.config.WebConfig;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 

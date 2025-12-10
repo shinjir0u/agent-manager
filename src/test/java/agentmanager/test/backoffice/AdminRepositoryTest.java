@@ -1,4 +1,4 @@
-package agent_manager.back_office;
+package agentmanager.test.backoffice;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,8 +24,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import agent_manager.config.TestConfig;
-import agent_manager.config.WebConfig;
+import agentmanager.backoffice.model.Admin;
+import agentmanager.config.WebConfig;
+import agentmanager.test.config.TestConfig;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { WebConfig.class, TestConfig.class })
