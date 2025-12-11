@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
@@ -15,6 +16,9 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	@Autowired
 	private SaleExecutiveRepository saleExecutiveRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<SaleExecutive> getSaleExecutives() {
@@ -31,6 +35,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	@Override
 	public SaleExecutive addSaleExecutive(SaleExecutive saleExecutive) {
+		saleExecutive.encodePassword(passwordEncoder);
 		SaleExecutive saleExecutiveAdded = saleExecutiveRepository.save(saleExecutive);
 		return saleExecutiveAdded;
 	}
@@ -38,6 +43,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	@Override
 	public SaleExecutive updateSaleExecutive(Long id, SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveToAdd = saleExecutive.toBuilder().id(id).build();
+		saleExecutive.encodePassword(passwordEncoder);
 		SaleExecutive saleExecutiveUpdated = saleExecutiveRepository.save(saleExecutiveToAdd);
 		return saleExecutiveUpdated;
 	}

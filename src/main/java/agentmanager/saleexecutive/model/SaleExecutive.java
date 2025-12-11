@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import agentmanager.registration.model.Registration;
@@ -42,5 +44,14 @@ public class SaleExecutive {
 	@OneToMany
 	@JoinColumn(name = "sale_executive_id")
 	private List<Registration> registrations;
+
+	public void encodePassword(PasswordEncoder passwordEncoder) {
+
+		if (this.password != null && !this.password.isEmpty()) {
+			String encodedPassword = passwordEncoder.encode(this.password);
+			setPassword(encodedPassword);
+		}
+
+	}
 
 }

@@ -34,6 +34,7 @@ public class Admin {
 	private String password;
 
 	public void encodePassword(PasswordEncoder passwordEncoder) {
+
 		if (this.password != null && !this.password.isEmpty()) {
 			String encodedPassword = passwordEncoder.encode(this.password);
 			setPassword(encodedPassword);
