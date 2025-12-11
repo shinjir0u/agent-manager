@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 
 @Service
+@Transactional
 public class RegistrationServiceImpl implements RegistrationService {
 
 	@Autowired
@@ -26,9 +29,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public Registration getRegistration(Long id) {
 		Optional<Registration> registrationOptional = registrationRepository.findById(id);
-		if (!registrationOptional.isPresent())
-			throw new IllegalArgumentException("No such registraction with id: " + id);
-		return registrationOptional.get();
+		return registrationOptional.orElse(null);
 	}
 
 	@Override
@@ -39,6 +40,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Registration updaRegistration(Long id, Registration registration) {
+		Registration registrationFetched = getRegistration(id);
+		if (registrationFetched == null)
+			throw new IllegalArgumentException("No such registration with id" + id);
 		Registration registrationToAdd = registration.toBuilder().id(id).build();
 		Registration registrationUpdated = registrationRepository.save(registrationToAdd);
 		return registrationUpdated;

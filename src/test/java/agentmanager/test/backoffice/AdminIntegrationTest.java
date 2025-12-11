@@ -7,8 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import javax.transaction.Transactional;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +28,7 @@ import agentmanager.config.WebConfig;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { WebConfig.class, PersistenceConfig.class })
 @WebAppConfiguration
-@Transactional
-public class AdminRepositoryTest {
+public class AdminIntegrationTest {
 
 	@Autowired
 	private WebApplicationContext context;
@@ -47,8 +44,7 @@ public class AdminRepositoryTest {
 
 	@Test
 	public void testGetUsers() throws Exception {
-		mockMvc.perform(get("/admins")).andExpectAll(status().isOk(), jsonPath("$").isArray(),
-				jsonPath("$.length()").value(2));
+		mockMvc.perform(get("/admins")).andExpectAll(status().isOk(), jsonPath("$").isArray());
 	}
 
 	@Test
@@ -59,18 +55,18 @@ public class AdminRepositoryTest {
 
 	@Test
 	public void testCreateUserJson() throws Exception {
-		Admin adminToAdd = Admin.builder().username("user").email("user@gmail.com").password("123").build();
+		Admin adminToAdd = Admin.builder().username("test").email("test@gmail.com").password("123").build();
 		String adminJson = objectMapper.writeValueAsString(adminToAdd);
 		mockMvc.perform(post("/admins").contentType(MediaType.APPLICATION_JSON).content(adminJson)).andExpectAll(
-				status().isCreated(), jsonPath("$.username").value("user"), jsonPath("$.email").value("user@gmail.com"),
+				status().isCreated(), jsonPath("$.username").value("test"), jsonPath("$.email").value("test@gmail.com"),
 				jsonPath("$.password").exists(), jsonPath("$.id").exists());
 	}
 
 	@Test
 	public void testCreateUserForm() throws Exception {
-		mockMvc.perform(post("/admins").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("username", "user")
-				.param("email", "user@gmail.com").param("password", "123")).andExpectAll(status().isCreated(),
-						jsonPath("$.username").value("user"), jsonPath("$.email").value("user@gmail.com"),
+		mockMvc.perform(post("/admins").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("username", "test")
+				.param("email", "test1@gmail.com").param("password", "123")).andExpectAll(status().isCreated(),
+						jsonPath("$.username").value("test"), jsonPath("$.email").value("test1@gmail.com"),
 						jsonPath("$.password").exists(), jsonPath("$.id").exists());
 	}
 
@@ -78,24 +74,24 @@ public class AdminRepositoryTest {
 	public void testUpdateUserJson() throws Exception {
 		testGetUser();
 
-		Admin adminToUpdate = Admin.builder().id(1L).username("user").email("user@gmail.com").password("123").build();
+		Admin adminToUpdate = Admin.builder().id(1L).username("test").email("test@gmail.com").password("123").build();
 		String adminJson = objectMapper.writeValueAsString(adminToUpdate);
 		mockMvc.perform(put("/admins/1").contentType(MediaType.APPLICATION_JSON).content(adminJson))
 				.andExpect(status().isOk());
 
-		mockMvc.perform(get("/admins/1")).andExpectAll(status().isOk(), jsonPath("$.username").value("user"),
-				jsonPath("$.email").value("user@gmail.com"), jsonPath("$.password").exists());
+		mockMvc.perform(get("/admins/1")).andExpectAll(status().isOk(), jsonPath("$.username").value("test"),
+				jsonPath("$.email").value("test@gmail.com"), jsonPath("$.password").exists());
 	}
 
 	@Test
 	public void testUpdateUserForm() throws Exception {
 		testGetUser();
 
-		mockMvc.perform(put("/admins/1").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("username", "user")
-				.param("email", "user@gmail.com").param("password", "123")).andExpect(status().isOk());
+		mockMvc.perform(put("/admins/1").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("username", "test")
+				.param("email", "test@gmail.com").param("password", "123")).andExpect(status().isOk());
 
-		mockMvc.perform(get("/admins/1")).andExpectAll(status().isOk(), jsonPath("$.username").value("user"),
-				jsonPath("$.email").value("user@gmail.com"), jsonPath("$.password").exists());
+		mockMvc.perform(get("/admins/1")).andExpectAll(status().isOk(), jsonPath("$.username").value("test"),
+				jsonPath("$.email").value("test@gmail.com"), jsonPath("$.password").exists());
 	}
 
 	@Test

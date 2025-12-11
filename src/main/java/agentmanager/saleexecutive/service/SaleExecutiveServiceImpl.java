@@ -11,7 +11,7 @@ import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 
 @Service
-public class SaleExecutiveImpl implements SaleExecutiveService {
+public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	@Autowired
 	private SaleExecutiveRepository saleExecutiveRepository;
@@ -26,9 +26,7 @@ public class SaleExecutiveImpl implements SaleExecutiveService {
 	@Override
 	public SaleExecutive getSaleExecutive(Long id) {
 		Optional<SaleExecutive> saleExecutiveOptional = saleExecutiveRepository.findById(id);
-		if (!saleExecutiveOptional.isPresent())
-			throw new IllegalArgumentException("No such sale executive with id: " + id);
-		return saleExecutiveOptional.get();
+		return saleExecutiveOptional.orElse(null);
 	}
 
 	@Override
@@ -39,6 +37,9 @@ public class SaleExecutiveImpl implements SaleExecutiveService {
 
 	@Override
 	public SaleExecutive updateSaleExecutive(Long id, SaleExecutive saleExecutive) {
+		SaleExecutive saleExecutiveFetched = getSaleExecutive(id);
+		if (saleExecutiveFetched == null)
+			throw new IllegalArgumentException("No such sale executive with id: " + id);
 		SaleExecutive saleExecutiveToAdd = saleExecutive.toBuilder().id(id).build();
 		SaleExecutive saleExecutiveUpdated = saleExecutiveRepository.save(saleExecutiveToAdd);
 		return saleExecutiveUpdated;

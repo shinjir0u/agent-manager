@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,5 +32,13 @@ public class Admin {
 	private String email;
 
 	private String password;
+
+	public void encodePassword(PasswordEncoder passwordEncoder) {
+		if (this.password != null && this.password.isEmpty()) {
+			String encodedPassword = passwordEncoder.encode(this.password);
+			setPassword(encodedPassword);
+		}
+
+	}
 
 }

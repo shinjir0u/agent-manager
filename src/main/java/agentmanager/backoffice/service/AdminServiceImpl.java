@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.repository.AdminRepository;
 
 @Service
+@Transactional
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired
@@ -30,23 +33,24 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Admin getAdmin(Long id) {
 		Optional<Admin> adminOptional = adminRepository.findById(id);
-		if (!adminOptional.isPresent())
-			throw new IllegalArgumentException("No such admin with id: " + id);
-		return adminOptional.get();
+		return adminOptional.orElse(null);
 	}
 
 	@Override
 	public Admin addAdmin(Admin admin) {
-		String hashedPassword = passwordEncoder.encode(admin.getPassword());
-		Admin adminToAdd = admin.toBuilder().password(hashedPassword).build();
-		Admin adminAdded = adminRepository.save(adminToAdd);
+		admin.encodePassword(passwordEncoder);
+		Admin adminAdded = adminRepository.save(admin);
 		return adminAdded;
 	}
 
 	@Override
 	public Admin updateAdmin(Long id, Admin admin) {
-		Admin adminToAdd = admin.toBuilder().id(id).build();
-		Admin adminUpdated = adminRepository.save(adminToAdd);
+		Admin adminFetched = getAdmin(id);
+		if (adminFetched == null)
+			throw new IllegalArgumentException("No such admin with id: " + id);
+		Admin adminToUpdate = admin.toBuilder().id(id).build();
+		adminToUpdate.encodePassword(passwordEncoder);
+		Admin adminUpdated = adminRepository.save(adminToUpdate);
 		return adminUpdated;
 	}
 
