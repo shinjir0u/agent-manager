@@ -62,6 +62,10 @@ public class AdminController {
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Admin> updateAdminJson(@PathVariable Long id, @RequestBody Admin admin) {
+		Admin adminFetched = adminService.getAdmin(id);
+		if (adminFetched == null)
+			throw new IllegalArgumentException("No such admin with id: " + id);
+
 		Admin adminUpdated = adminService.updateAdmin(id, admin);
 		logger.info("Updated admin: {}", adminUpdated);
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(adminUpdated);
@@ -69,6 +73,10 @@ public class AdminController {
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<Admin> updateAdminForm(@PathVariable Long id, Admin admin) {
+		Admin adminFetched = adminService.getAdmin(id);
+		if (adminFetched == null)
+			throw new IllegalArgumentException("No such admin with id: " + id);
+
 		Admin adminUpdated = adminService.updateAdmin(id, admin);
 		logger.info("Updated admin: {}", adminUpdated);
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(adminUpdated);
@@ -76,6 +84,10 @@ public class AdminController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) throws IllegalArgumentException {
+		Admin adminFetched = adminService.getAdmin(id);
+		if (adminFetched == null)
+			throw new IllegalArgumentException("No such admin with id: " + id);
+
 		adminService.deleteAdmin(id);
 		logger.info("Admin with id {} is deleted", id);
 		return ResponseEntity.noContent().build();

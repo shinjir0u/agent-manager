@@ -40,9 +40,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Registration updaRegistration(Long id, Registration registration) {
-		Registration registrationFetched = getRegistration(id);
-		if (registrationFetched == null)
-			throw new IllegalArgumentException("No such registration with id" + id);
 		Registration registrationToAdd = registration.toBuilder().id(id).build();
 		Registration registrationUpdated = registrationRepository.save(registrationToAdd);
 		return registrationUpdated;

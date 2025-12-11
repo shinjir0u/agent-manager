@@ -37,9 +37,6 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	@Override
 	public SaleExecutive updateSaleExecutive(Long id, SaleExecutive saleExecutive) {
-		SaleExecutive saleExecutiveFetched = getSaleExecutive(id);
-		if (saleExecutiveFetched == null)
-			throw new IllegalArgumentException("No such sale executive with id: " + id);
 		SaleExecutive saleExecutiveToAdd = saleExecutive.toBuilder().id(id).build();
 		SaleExecutive saleExecutiveUpdated = saleExecutiveRepository.save(saleExecutiveToAdd);
 		return saleExecutiveUpdated;

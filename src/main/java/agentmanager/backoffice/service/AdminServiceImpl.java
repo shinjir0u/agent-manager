@@ -45,9 +45,6 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Admin updateAdmin(Long id, Admin admin) {
-		Admin adminFetched = getAdmin(id);
-		if (adminFetched == null)
-			throw new IllegalArgumentException("No such admin with id: " + id);
 		Admin adminToUpdate = admin.toBuilder().id(id).build();
 		adminToUpdate.encodePassword(passwordEncoder);
 		Admin adminUpdated = adminRepository.save(adminToUpdate);
