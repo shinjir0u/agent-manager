@@ -2,6 +2,7 @@ package agentmanager.saleexecutive.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import agentmanager.registration.model.Registration;
 import lombok.AllArgsConstructor;
@@ -38,7 +37,7 @@ public class SaleExecutive {
 
 	private String password;
 
-	@JsonProperty("phone_number")
+	@Column(name = "phone_number")
 	private String phoneNumber;
 
 	@OneToMany
