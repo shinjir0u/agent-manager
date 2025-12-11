@@ -39,15 +39,15 @@ public class AdminServiceImpl implements AdminService {
 	public Admin addAdmin(Admin admin) {
 		String hashedPassword = passwordEncoder.encode(admin.getPassword());
 		Admin adminToAdd = admin.toBuilder().password(hashedPassword).build();
-		adminRepository.save(adminToAdd);
-		return adminToAdd;
+		Admin adminAdded = adminRepository.save(adminToAdd);
+		return adminAdded;
 	}
 
 	@Override
 	public Admin updateAdmin(Long id, Admin admin) {
 		Admin adminToAdd = admin.toBuilder().id(id).build();
-		adminRepository.save(adminToAdd);
-		return adminToAdd;
+		Admin adminUpdated = adminRepository.save(adminToAdd);
+		return adminUpdated;
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.stereotype.Service;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
@@ -14,14 +13,8 @@ import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 @Service
 public class SaleExecutiveImpl implements SaleExecutiveService {
 
-	private final DataSourceInitializer dataSourceInitializer;
-
 	@Autowired
 	private SaleExecutiveRepository saleExecutiveRepository;
-
-	SaleExecutiveImpl(DataSourceInitializer dataSourceInitializer) {
-		this.dataSourceInitializer = dataSourceInitializer;
-	}
 
 	@Override
 	public List<SaleExecutive> getSaleExecutives() {
@@ -40,15 +33,15 @@ public class SaleExecutiveImpl implements SaleExecutiveService {
 
 	@Override
 	public SaleExecutive addSaleExecutive(SaleExecutive saleExecutive) {
-		saleExecutiveRepository.save(saleExecutive);
-		return saleExecutive;
+		SaleExecutive saleExecutiveAdded = saleExecutiveRepository.save(saleExecutive);
+		return saleExecutiveAdded;
 	}
 
 	@Override
 	public SaleExecutive updateSaleExecutive(Long id, SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveToAdd = saleExecutive.toBuilder().id(id).build();
-		saleExecutiveRepository.save(saleExecutiveToAdd);
-		return saleExecutiveToAdd;
+		SaleExecutive saleExecutiveUpdated = saleExecutiveRepository.save(saleExecutiveToAdd);
+		return saleExecutiveUpdated;
 	}
 
 	@Override

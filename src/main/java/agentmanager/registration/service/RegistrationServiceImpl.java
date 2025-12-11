@@ -33,15 +33,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Registration addRegistration(Registration registration) {
-		registrationRepository.save(registration);
-		return registration;
+		Registration registrationAdded = registrationRepository.save(registration);
+		return registrationAdded;
 	}
 
 	@Override
 	public Registration updaRegistration(Long id, Registration registration) {
 		Registration registrationToAdd = registration.toBuilder().id(id).build();
-		registrationRepository.save(registrationToAdd);
-		return registrationToAdd;
+		Registration registrationUpdated = registrationRepository.save(registrationToAdd);
+		return registrationUpdated;
 	}
 
 	@Override
