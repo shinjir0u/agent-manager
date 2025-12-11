@@ -43,7 +43,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	@Override
 	public SaleExecutive updateSaleExecutive(Long id, SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveToAdd = saleExecutive.toBuilder().id(id).build();
-		saleExecutive.encodePassword(passwordEncoder);
+		saleExecutiveToAdd.encodePassword(passwordEncoder);
 		SaleExecutive saleExecutiveUpdated = saleExecutiveRepository.save(saleExecutiveToAdd);
 		return saleExecutiveUpdated;
 	}
