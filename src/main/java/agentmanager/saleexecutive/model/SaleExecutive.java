@@ -1,5 +1,6 @@
 package agentmanager.saleexecutive.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -43,7 +44,7 @@ public class SaleExecutive {
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sale_executive_id")
-	private List<Registration> registrations;
+	private List<Registration> registrations = new ArrayList<>();
 
 	public void encodePassword(PasswordEncoder passwordEncoder) {
 
