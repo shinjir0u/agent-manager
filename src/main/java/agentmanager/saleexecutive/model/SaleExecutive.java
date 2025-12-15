@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import agentmanager.registration.model.Registration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +39,7 @@ public class SaleExecutive {
 
 	private String email;
 
+	@JsonIgnore
 	private String password;
 
 	@Column(name = "phone_number")

@@ -8,6 +8,8 @@ import javax.persistence.Table;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +33,7 @@ public class Admin {
 
 	private String email;
 
+	@JsonIgnore
 	private String password;
 
 	public void encodePassword(PasswordEncoder passwordEncoder) {
