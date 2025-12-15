@@ -9,8 +9,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +77,6 @@ public class RegistrationServiceTest {
 	}
 
 	@Test
-	@Transactional
 	public void testDeleteRegistration() {
 		registrationService.deleteRegistration(10L, 11L);
 

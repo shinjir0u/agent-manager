@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 
 @Service
+@Transactional
 public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	private SaleExecutiveRepository saleExecutiveRepository;
@@ -59,15 +61,6 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	@Override
 	public void deleteSaleExecutive(Long id) {
 		saleExecutiveRepository.deleteById(id);
-	}
-
-	@Override
-	public Registration addAgent(Long id, Registration registration) {
-		SaleExecutive saleExecutive = getSaleExecutive(id);
-		Registration registrationAdded = registrationRepository.save(registration);
-		saleExecutive.getRegistrations().add(registrationAdded);
-		saleExecutiveRepository.save(saleExecutive);
-		return registrationAdded;
 	}
 
 }
