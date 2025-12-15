@@ -3,15 +3,18 @@ package agentmanager.registration.service;
 import java.util.List;
 
 import agentmanager.registration.model.Registration;
+import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface RegistrationService {
-	List<Registration> getRegistrations(Long saleExecutiveId);
+	List<Registration> getRegistrations();
 
-	Registration getRegistration(Long saleExecutiveId, Long registrationId);
+	List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive);
 
-	Registration addRegistration(Long saleExecutiveId, Registration registration);
+	Registration getRegistration(Long registrationId);
 
-	Registration updateRegistration(Long saleExecutiveId, Long registrationId, Registration registration);
+	Registration addRegistration(SaleExecutive saleExecutive, Registration registration);
 
-	void deleteRegistration(Long saleExecutiveId, Long registrationId);
+	Registration updateRegistration(Long registrationId, Registration registration);
+
+	void deleteRegistration(Long registrationId);
 }

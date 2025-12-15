@@ -20,19 +20,34 @@ import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.registration.service.RegistrationService;
 import agentmanager.registration.service.RegistrationServiceImpl;
+import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import agentmanager.saleexecutive.service.SaleExecutiveServiceImpl;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { PersistenceConfig.class, RegistrationServiceImpl.class,
+@ContextConfiguration(classes = { PersistenceConfig.class, RegistrationServiceImpl.class, SaleExecutiveRepository.class,
 		SaleExecutiveServiceImpl.class, RegistrationRepository.class })
+
 public class RegistrationServiceTest {
+
+	@Autowired
+	private SaleExecutiveRepository saleExecutiveRepository;
 
 	@Autowired
 	private RegistrationService registrationService;
 
 	@Test
 	public void testGetRegistrations() {
-		List<Registration> registrations = registrationService.getRegistrations(10L);
+		List<Registration> registrations = registrationService.getRegistrations();
+
+		assertNotNull(registrations);
+		assertThat(registrations.size() > 0);
+	}
+
+	@Test
+	public void testGetRegistrationsBySaleExecutive() {
+		SaleExecutive saleExecutive = saleExecutiveRepository.findById(10L).orElse(null);
+		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive);
 
 		assertNotNull(registrations);
 		assertThat(registrations.size() > 0);
@@ -40,7 +55,7 @@ public class RegistrationServiceTest {
 
 	@Test
 	public void testGetRegistration() {
-		Registration registration = registrationService.getRegistration(1L, 1L);
+		Registration registration = registrationService.getRegistration(1L);
 
 		assertNotNull(registration);
 		assertEquals(registration.getAgentName(), "Agent A");
@@ -50,37 +65,39 @@ public class RegistrationServiceTest {
 
 	@Test
 	public void testCreateRegistration() {
+		SaleExecutive saleExecutive = saleExecutiveRepository.findById(10L).orElse(null);
 		Date now = new Date();
 		Registration registration = Registration.builder().agentName("Agent Pi").phoneNumber("09876567898")
 				.registeredAt(now).build();
-		Registration registrationAdded = registrationService.addRegistration(10L, registration);
+		Registration registrationAdded = registrationService.addRegistration(saleExecutive, registration);
 
 		assertNotNull(registrationAdded);
 		assertNotNull(registrationAdded.getId());
 		assertEquals(registrationAdded.getAgentName(), "Agent Pi");
 		assertEquals(registrationAdded.getPhoneNumber(), "09876567898");
 		assertEquals(registrationAdded.getRegisteredAt(), now);
+		assertNotNull(registrationAdded.getSaleExecutive());
 	}
 
 	@Test
 	public void testUpdateRegistration() {
 		Date now = new Date();
-		Registration registration = Registration.builder().agentName("Agent P").phoneNumber("09876567898")
+		Registration registration = Registration.builder().agentName("Agent PK").phoneNumber("09876567899")
 				.registeredAt(now).build();
-		Registration registrationUpdated = registrationService.updateRegistration(10L, 11L, registration);
+		Registration registrationUpdated = registrationService.updateRegistration(12L, registration);
 
 		assertNotNull(registrationUpdated);
 		assertNotNull(registrationUpdated.getId());
-		assertEquals(registrationUpdated.getAgentName(), "Agent P");
-		assertEquals(registrationUpdated.getPhoneNumber(), "09876567898");
+		assertEquals(registrationUpdated.getAgentName(), "Agent PK");
+		assertEquals(registrationUpdated.getPhoneNumber(), "09876567899");
 		assertEquals(registrationUpdated.getRegisteredAt(), now);
 	}
 
 	@Test
 	public void testDeleteRegistration() {
-		registrationService.deleteRegistration(10L, 11L);
+		registrationService.deleteRegistration(11L);
 
-		assertNull(registrationService.getRegistration(10L, 11L));
+		assertNull(registrationService.getRegistration(11L));
 	}
 
 }
