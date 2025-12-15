@@ -78,7 +78,7 @@ public class SaleExecutiveController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<SaleExecutive> updateSaleExecutiveForm(SaleExecutive saleExecutive, @PathVariable Long id) {
+	public ResponseEntity<SaleExecutive> updateSaleExecutiveForm(@PathVariable Long id, SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
 		if (saleExecutiveFetched == null)
 			throw new IllegalArgumentException("No such sale executive with id: " + id);

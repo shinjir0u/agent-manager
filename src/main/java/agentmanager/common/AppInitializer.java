@@ -1,5 +1,8 @@
 package agentmanager.common;
 
+import javax.servlet.Filter;
+
+import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import agentmanager.config.WebConfig;
@@ -19,6 +22,12 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	@Override
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
+	}
+
+	@Override
+	protected Filter[] getServletFilters() {
+		// Return a list of filters, including FormContentFilter
+		return new Filter[] { new FormContentFilter() };
 	}
 
 }
