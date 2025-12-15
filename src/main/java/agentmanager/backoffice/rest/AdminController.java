@@ -18,78 +18,81 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import agentmanager.backoffice.model.Admin;
-import agentmanager.backoffice.service.AdminService;
+import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.service.SaleExecutiveService;
 
 @RestController
-@RequestMapping("/admins")
+@RequestMapping("/sale_executives")
 public class AdminController {
 
 	private final Logger logger = LogManager.getLogger(AdminController.class);
 
 	@Autowired
-	private AdminService adminService;
+	private SaleExecutiveService saleExecutiveService;
 
 	@GetMapping
-	public ResponseEntity<List<Admin>> getAdmins() {
-		List<Admin> admins = adminService.getAdmins();
-		logger.info("Fetched admins: {} ", admins);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(admins);
+	public ResponseEntity<List<SaleExecutive>> getSaleExecutives() {
+		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives();
+		logger.info("Fetched sale executives: {}", saleExecutives);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutives);
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Admin> addAdminJson(@RequestBody Admin admin) {
-		Admin adminAdded = adminService.addAdmin(admin);
-		URI adminLocation = generateEntryUri(adminAdded.getId());
-		logger.info("Admin: {} created at: {}", adminAdded, adminLocation);
-		return ResponseEntity.created(adminLocation).contentType(MediaType.APPLICATION_JSON).body(adminAdded);
+	public ResponseEntity<SaleExecutive> addSaleExecutiveJson(@RequestBody SaleExecutive saleExecutive) {
+		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(saleExecutive);
+		URI saleExecutiveLocation = generateEntryUri(saleExecutiveAdded.getId());
+		logger.info("Sale Executive: {} created at: {}", saleExecutiveAdded, saleExecutiveLocation);
+		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON)
+				.body(saleExecutiveAdded);
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<Admin> addAdminForm(Admin admin) {
-		Admin adminAdded = adminService.addAdmin(admin);
-		URI adminLocation = generateEntryUri(adminAdded.getId());
-		logger.info("Admin {} created at {}", adminAdded, adminLocation);
-		return ResponseEntity.created(adminLocation).contentType(MediaType.APPLICATION_JSON).body(adminAdded);
+	public ResponseEntity<SaleExecutive> addSaleExecutiveForm(SaleExecutive saleExecutive) {
+		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(saleExecutive);
+		URI saleExecutiveLocation = generateEntryUri(saleExecutiveAdded.getId());
+		logger.info("Sale Executive: {} created at: {}", saleExecutiveAdded, saleExecutiveLocation);
+		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON)
+				.body(saleExecutiveAdded);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Admin> getAdmin(@PathVariable Long id) {
-		Admin admin = adminService.getAdmin(id);
-		logger.info("Fetched admin: {}", admin);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(admin);
+	public ResponseEntity<SaleExecutive> getSaleExecutive(@PathVariable Long id) {
+		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(id);
+		logger.info("Fetched sale executive: {}", saleExecutive);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutive);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Admin> updateAdminJson(@PathVariable Long id, @RequestBody Admin admin) {
-		Admin adminFetched = adminService.getAdmin(id);
-		if (adminFetched == null)
-			throw new IllegalArgumentException("No such admin with id: " + id);
+	public ResponseEntity<SaleExecutive> updateSaleExecutiveJson(@PathVariable Long id,
+			@RequestBody SaleExecutive saleExecutive) {
+		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
+		if (saleExecutiveFetched == null)
+			throw new IllegalArgumentException("No such sale executive with id: " + id);
 
-		Admin adminUpdated = adminService.updateAdmin(id, admin);
-		logger.info("Updated admin: {}", adminUpdated);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(adminUpdated);
+		SaleExecutive saleExecutiveUpdated = saleExecutiveService.updateSaleExecutive(id, saleExecutive);
+		logger.info("Updated admin: {}", saleExecutiveUpdated);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveUpdated);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<Admin> updateAdminForm(@PathVariable Long id, Admin admin) {
-		Admin adminFetched = adminService.getAdmin(id);
-		if (adminFetched == null)
-			throw new IllegalArgumentException("No such admin with id: " + id);
+	public ResponseEntity<SaleExecutive> updateSaleExecutiveForm(@PathVariable Long id, SaleExecutive saleExecutive) {
+		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
+		if (saleExecutiveFetched == null)
+			throw new IllegalArgumentException("No such sale executive with id: " + id);
 
-		Admin adminUpdated = adminService.updateAdmin(id, admin);
-		logger.info("Updated admin: {}", adminUpdated);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(adminUpdated);
+		SaleExecutive saleExecutiveUpdated = saleExecutiveService.updateSaleExecutive(id, saleExecutive);
+		logger.info("Updated admin: {}", saleExecutiveUpdated);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveUpdated);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) throws IllegalArgumentException {
-		Admin adminFetched = adminService.getAdmin(id);
-		if (adminFetched == null)
-			throw new IllegalArgumentException("No such admin with id: " + id);
+	public ResponseEntity<Void> deleteSaleExecutive(@PathVariable Long id) {
+		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
+		if (saleExecutiveFetched == null)
+			throw new IllegalArgumentException("No such sale executive with id: " + id);
 
-		adminService.deleteAdmin(id);
-		logger.info("Admin with id {} is deleted", id);
+		saleExecutiveService.deleteSaleExecutive(id);
+		logger.info("Sale executive with id {} is deleted", id);
 		return ResponseEntity.noContent().build();
 	}
 

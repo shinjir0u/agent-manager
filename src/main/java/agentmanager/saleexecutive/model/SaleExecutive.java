@@ -5,11 +5,9 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -47,8 +45,7 @@ public class SaleExecutive {
 	@JsonProperty("phone_number")
 	private String phoneNumber;
 
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "sale_executive_id")
+	@OneToMany(mappedBy = "saleExecutive")
 	private List<Registration> registrations = new ArrayList<>();
 
 	public void encodePassword(PasswordEncoder passwordEncoder) {

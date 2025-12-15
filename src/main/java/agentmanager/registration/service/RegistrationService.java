@@ -5,13 +5,13 @@ import java.util.List;
 import agentmanager.registration.model.Registration;
 
 public interface RegistrationService {
-	List<Registration> getRegistrations();
+	List<Registration> getRegistrations(Long saleExecutiveId);
 
-	Registration getRegistration(Long id);
+	Registration getRegistration(Long saleExecutiveId, Long registrationId);
 
-	Registration addRegistration(Registration registration);
+	Registration addRegistration(Long saleExecutiveId, Registration registration);
 
-	Registration updateRegistration(Long id, Registration registration);
+	Registration updateRegistration(Long saleExecutiveId, Long registrationId, Registration registration);
 
-	void deleteRegistration(Long id);
+	void deleteRegistration(Long saleExecutiveId, Long registrationId);
 }

@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,11 @@ import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.registration.service.RegistrationService;
 import agentmanager.registration.service.RegistrationServiceImpl;
+import agentmanager.saleexecutive.service.SaleExecutiveServiceImpl;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { PersistenceConfig.class, RegistrationServiceImpl.class,
-		RegistrationRepository.class })
+		SaleExecutiveServiceImpl.class, RegistrationRepository.class })
 public class RegistrationServiceTest {
 
 	@Autowired
@@ -31,7 +34,7 @@ public class RegistrationServiceTest {
 
 	@Test
 	public void testGetRegistrations() {
-		List<Registration> registrations = registrationService.getRegistrations();
+		List<Registration> registrations = registrationService.getRegistrations(10L);
 
 		assertNotNull(registrations);
 		assertThat(registrations.size() > 0);
@@ -39,7 +42,7 @@ public class RegistrationServiceTest {
 
 	@Test
 	public void testGetRegistration() {
-		Registration registration = registrationService.getRegistration(1L);
+		Registration registration = registrationService.getRegistration(1L, 1L);
 
 		assertNotNull(registration);
 		assertEquals(registration.getAgentName(), "Agent A");
@@ -50,13 +53,13 @@ public class RegistrationServiceTest {
 	@Test
 	public void testCreateRegistration() {
 		Date now = new Date();
-		Registration registration = Registration.builder().agentName("Agent P").phoneNumber("09876567898")
+		Registration registration = Registration.builder().agentName("Agent Pi").phoneNumber("09876567898")
 				.registeredAt(now).build();
-		Registration registrationAdded = registrationService.addRegistration(registration);
+		Registration registrationAdded = registrationService.addRegistration(10L, registration);
 
 		assertNotNull(registrationAdded);
 		assertNotNull(registrationAdded.getId());
-		assertEquals(registrationAdded.getAgentName(), "Agent P");
+		assertEquals(registrationAdded.getAgentName(), "Agent Pi");
 		assertEquals(registrationAdded.getPhoneNumber(), "09876567898");
 		assertEquals(registrationAdded.getRegisteredAt(), now);
 	}
@@ -64,22 +67,23 @@ public class RegistrationServiceTest {
 	@Test
 	public void testUpdateRegistration() {
 		Date now = new Date();
-		Registration registration = Registration.builder().agentName("Agent K").phoneNumber("09876567898")
+		Registration registration = Registration.builder().agentName("Agent P").phoneNumber("09876567898")
 				.registeredAt(now).build();
-		Registration registrationUpdated = registrationService.updateRegistration(4L, registration);
+		Registration registrationUpdated = registrationService.updateRegistration(10L, 11L, registration);
 
 		assertNotNull(registrationUpdated);
 		assertNotNull(registrationUpdated.getId());
-		assertEquals(registrationUpdated.getAgentName(), "Agent K");
+		assertEquals(registrationUpdated.getAgentName(), "Agent P");
 		assertEquals(registrationUpdated.getPhoneNumber(), "09876567898");
 		assertEquals(registrationUpdated.getRegisteredAt(), now);
 	}
 
 	@Test
+	@Transactional
 	public void testDeleteRegistration() {
-		registrationService.deleteRegistration(4L);
+		registrationService.deleteRegistration(10L, 11L);
 
-		assertNull(registrationService.getRegistration(4L));
+		assertNull(registrationService.getRegistration(10L, 11L));
 	}
 
 }
