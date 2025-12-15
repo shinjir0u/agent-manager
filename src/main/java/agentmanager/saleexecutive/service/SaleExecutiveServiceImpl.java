@@ -64,8 +64,8 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	@Override
 	public Registration addAgent(Long id, Registration registration) {
 		SaleExecutive saleExecutive = getSaleExecutive(id);
-		saleExecutive.getRegistrations().add(registration);
 		Registration registrationAdded = registrationRepository.save(registration);
+		saleExecutive.getRegistrations().add(registrationAdded);
 		saleExecutiveRepository.save(saleExecutive);
 		return registrationAdded;
 	}

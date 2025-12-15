@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,12 +29,15 @@ public class Registration {
 	private Long id;
 
 	@Column(name = "agent_name")
+	@JsonProperty("agent_name")
 	private String agentName;
 
 	@Column(name = "phone_number")
+	@JsonProperty("phone_number")
 	private String phoneNumber;
 
 	@Column(name = "registered_at")
-	private Date registeredAt;
+	@JsonProperty(value = "registered_at")
+	private Date registeredAt = new Date();
 
 }

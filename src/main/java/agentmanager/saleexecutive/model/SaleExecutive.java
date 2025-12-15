@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import agentmanager.registration.model.Registration;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,7 @@ public class SaleExecutive {
 	private String password;
 
 	@Column(name = "phone_number")
+	@JsonProperty("phone_number")
 	private String phoneNumber;
 
 	@OneToMany(fetch = FetchType.EAGER)
