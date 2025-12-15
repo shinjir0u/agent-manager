@@ -4,21 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import agentmanager.registration.model.Registration;
+import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 
 @Service
 public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
-	@Autowired
 	private SaleExecutiveRepository saleExecutiveRepository;
 
-	@Autowired
+	private RegistrationRepository registrationRepository;
+
 	private PasswordEncoder passwordEncoder;
+
+	public SaleExecutiveServiceImpl(SaleExecutiveRepository saleExecutiveRepository,
+			RegistrationRepository registrationRepository, PasswordEncoder passwordEncoder) {
+		this.saleExecutiveRepository = saleExecutiveRepository;
+		this.registrationRepository = registrationRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	@Override
 	public List<SaleExecutive> getSaleExecutives() {
@@ -51,6 +59,15 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	@Override
 	public void deleteSaleExecutive(Long id) {
 		saleExecutiveRepository.deleteById(id);
+	}
+
+	@Override
+	public Registration addAgent(Long id, Registration registration) {
+		SaleExecutive saleExecutive = getSaleExecutive(id);
+		saleExecutive.getRegistrations().add(registration);
+		Registration registrationAdded = registrationRepository.save(registration);
+		saleExecutiveRepository.save(saleExecutive);
+		return registrationAdded;
 	}
 
 }

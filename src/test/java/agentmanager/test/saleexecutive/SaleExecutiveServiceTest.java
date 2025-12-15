@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import agentmanager.config.PersistenceConfig;
+import agentmanager.registration.model.Registration;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
@@ -79,6 +81,21 @@ public class SaleExecutiveServiceTest {
 		saleExecutiveService.deleteSaleExecutive(4L);
 
 		assertNull(saleExecutiveService.getSaleExecutive(4L));
+	}
+
+	@Test
+	public void testAddAgent() {
+		Date now = new Date();
+		Registration registration = Registration.builder().agentName("Agent I").phoneNumber("09876567898")
+				.registeredAt(now).build();
+
+		Registration registrationAdded = saleExecutiveService.addAgent(2L, registration);
+
+		assertNotNull(registrationAdded);
+		assertNotNull(registrationAdded.getId());
+		assertEquals(registrationAdded.getAgentName(), "Agent I");
+		assertEquals(registrationAdded.getPhoneNumber(), "09876567898");
+		assertEquals(registrationAdded.getRegisteredAt(), now);
 	}
 
 }
