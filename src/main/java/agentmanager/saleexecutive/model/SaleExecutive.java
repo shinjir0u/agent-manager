@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,7 +14,6 @@ import javax.persistence.Table;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import agentmanager.registration.model.Registration;
@@ -38,14 +38,13 @@ public class SaleExecutive {
 
 	private String email;
 
-	@JsonIgnore
 	private String password;
 
 	@Column(name = "phone_number")
 	@JsonProperty("phone_number")
 	private String phoneNumber;
 
-	@OneToMany(mappedBy = "saleExecutive")
+	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER)
 	private List<Registration> registrations = new ArrayList<>();
 
 	public void encodePassword(PasswordEncoder passwordEncoder) {

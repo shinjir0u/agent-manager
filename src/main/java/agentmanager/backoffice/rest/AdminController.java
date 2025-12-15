@@ -22,7 +22,7 @@ import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
 
 @RestController
-@RequestMapping("/sale_executives")
+@RequestMapping("/admin")
 public class AdminController {
 
 	private final Logger logger = LogManager.getLogger(AdminController.class);
@@ -30,15 +30,15 @@ public class AdminController {
 	@Autowired
 	private SaleExecutiveService saleExecutiveService;
 
-	@GetMapping
+	@GetMapping("/sale_executive_list")
 	public ResponseEntity<List<SaleExecutive>> getSaleExecutives() {
 		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives();
 		logger.info("Fetched sale executives: {}", saleExecutives);
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutives);
 	}
 
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SaleExecutive> addSaleExecutiveJson(@RequestBody SaleExecutive saleExecutive) {
+	@PostMapping(value = "/sale_executive/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SaleExecutive> addSaleExecutive(@RequestBody SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(saleExecutive);
 		URI saleExecutiveLocation = generateEntryUri(saleExecutiveAdded.getId());
 		logger.info("Sale Executive: {} created at: {}", saleExecutiveAdded, saleExecutiveLocation);
@@ -46,7 +46,7 @@ public class AdminController {
 				.body(saleExecutiveAdded);
 	}
 
-	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	@PostMapping(value = "/sale_executive/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<SaleExecutive> addSaleExecutiveForm(SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(saleExecutive);
 		URI saleExecutiveLocation = generateEntryUri(saleExecutiveAdded.getId());
@@ -55,14 +55,14 @@ public class AdminController {
 				.body(saleExecutiveAdded);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/sale_executive_details/{id}")
 	public ResponseEntity<SaleExecutive> getSaleExecutive(@PathVariable Long id) {
 		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(id);
 		logger.info("Fetched sale executive: {}", saleExecutive);
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutive);
 	}
 
-	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/updating_sale_executive/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SaleExecutive> updateSaleExecutiveJson(@PathVariable Long id,
 			@RequestBody SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
@@ -74,7 +74,7 @@ public class AdminController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveUpdated);
 	}
 
-	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	@PutMapping(value = "/updating_sale_executive/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<SaleExecutive> updateSaleExecutiveForm(@PathVariable Long id, SaleExecutive saleExecutive) {
 		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
 		if (saleExecutiveFetched == null)
@@ -85,7 +85,7 @@ public class AdminController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveUpdated);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/deleting_sale_executive/{id}")
 	public ResponseEntity<Void> deleteSaleExecutive(@PathVariable Long id) {
 		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
 		if (saleExecutiveFetched == null)

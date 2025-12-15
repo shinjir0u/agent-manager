@@ -32,7 +32,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public List<Registration> getRegistrations(Long saleExecutiveId) {
 		List<Registration> registrations = new ArrayList<>();
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(saleExecutiveId);
 
 		registrationRepository.findBySaleExecutive(saleExecutive).forEach(registrations::add);
 		return registrations;
@@ -40,7 +40,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Registration getRegistration(Long saleExecutiveId, Long registrationId) {
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(saleExecutiveId);
 
 		Optional<Registration> registrationOptional = registrationRepository.findBySaleExecutiveAndId(saleExecutive,
 				registrationId);
@@ -49,7 +49,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Registration addRegistration(Long saleExecutiveId, Registration registration) {
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(saleExecutiveId);
 		registration.setSaleExecutive(saleExecutive);
 
 		Registration registrationAdded = registrationRepository.save(registration);
@@ -58,7 +58,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Registration updateRegistration(Long saleExecutiveId, Long registrationId, Registration registration) {
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(saleExecutiveId);
 		Registration registrationToAdd = registration.toBuilder().id(registrationId).saleExecutive(saleExecutive)
 				.build();
 		Registration registrationUpdated = registrationRepository.save(registrationToAdd);
@@ -67,16 +67,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public void deleteRegistration(Long saleExecutiveId, Long registrationId) {
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(saleExecutiveId);
 
 		registrationRepository.deleteBySaleExecutiveAndId(saleExecutive, registrationId);
-	}
-
-	private SaleExecutive getSaleExecutive(Long id) {
-		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(id);
-		if (saleExecutive == null)
-			throw new IllegalArgumentException("No such sale executive with id: " + id);
-		return saleExecutive;
 	}
 
 }
