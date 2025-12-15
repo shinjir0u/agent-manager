@@ -11,7 +11,7 @@ public interface RegistrationService {
 
 	Registration addRegistration(Registration registration);
 
-	Registration updaRegistration(Long id, Registration registration);
+	Registration updateRegistration(Long id, Registration registration);
 
 	void deleteRegistration(Long id);
 }
