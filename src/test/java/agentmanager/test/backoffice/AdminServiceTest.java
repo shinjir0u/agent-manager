@@ -43,34 +43,30 @@ public class AdminServiceTest {
 		assertEquals(admin.getEmail(), "admin2@example.com");
 	}
 
-//	@Test
-//	public void testCreateAdmin() {
-//		Admin adminToAdd = Admin.builder().username("test").email("test@gmail.com").password("123").build();
-//		Admin adminAdded = adminService.addAdmin(adminToAdd);
-//
-//		assertNotNull(adminAdded);
-//		assertEquals(adminAdded.getUsername(), "test");
-//		assertEquals(adminAdded.getEmail(), "test@gmail.com");
-//		assertNotNull(adminAdded.getPassword());
-//	}
-//
-//	@Test
-//	public void testUpdateAdmin() {
-//		Admin adminToAdd = Admin.builder().username("test1").email("test1@gmail.com").password("123").build();
-//		Admin adminUpdated = adminService.updateAdmin(13L, adminToAdd);
-//
-//		assertNotNull(adminUpdated);
-//		assertEquals(adminUpdated.getId(), new Long(13L));
-//		assertEquals(adminUpdated.getUsername(), "test1");
-//		assertEquals(adminUpdated.getEmail(), "test1@gmail.com");
-//		assertNotNull(adminUpdated.getPassword());
-//	}
+	@Test
+	public void testCreateAdmin() {
+		Admin adminAdded = adminService.addAdmin("testing", "testing@gmail.com", "123");
+
+		assertNotNull(adminAdded);
+		assertEquals(adminAdded.getUsername(), "testing");
+		assertEquals(adminAdded.getEmail(), "testing@gmail.com");
+		assertNotNull(adminAdded.getPassword());
+	}
+
+	@Test
+	public void testUpdateAdmin() {
+		Admin adminUpdated = adminService.updateAdmin(30L, "testokay@gmail.com");
+
+		assertNotNull(adminUpdated);
+		assertEquals(adminUpdated.getId(), new Long(30L));
+		assertEquals(adminUpdated.getEmail(), "testokay@gmail.com");
+	}
 
 	@Test
 	public void testDeleteAdmin() {
-		adminService.deleteAdmin(28L);
+		adminService.deleteAdmin(30L);
 
-		assertNull(adminService.getAdmin(28L));
+		assertNull(adminService.getAdmin(30L));
 	}
 
 }
