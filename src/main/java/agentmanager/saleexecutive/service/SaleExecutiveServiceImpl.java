@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import agentmanager.registration.repository.RegistrationRepository;
@@ -19,15 +18,9 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	private SaleExecutiveRepository saleExecutiveRepository;
 
-	private RegistrationRepository registrationRepository;
-
-	private PasswordEncoder passwordEncoder;
-
 	public SaleExecutiveServiceImpl(SaleExecutiveRepository saleExecutiveRepository,
-			RegistrationRepository registrationRepository, PasswordEncoder passwordEncoder) {
+			RegistrationRepository registrationRepository) {
 		this.saleExecutiveRepository = saleExecutiveRepository;
-		this.registrationRepository = registrationRepository;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -44,17 +37,17 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	}
 
 	@Override
-	public SaleExecutive addSaleExecutive(SaleExecutive saleExecutive) {
-		saleExecutive.encodePassword(passwordEncoder);
-		SaleExecutive saleExecutiveAdded = saleExecutiveRepository.save(saleExecutive);
+	public SaleExecutive addSaleExecutive(String username, String email, String password, String phoneNumber) {
+		SaleExecutive saleExecutiveToAdd = new SaleExecutive(username, email, password, phoneNumber);
+		SaleExecutive saleExecutiveAdded = saleExecutiveRepository.save(saleExecutiveToAdd);
 		return saleExecutiveAdded;
 	}
 
 	@Override
-	public SaleExecutive updateSaleExecutive(Long id, SaleExecutive saleExecutive) {
-		SaleExecutive saleExecutiveToAdd = saleExecutive.toBuilder().id(id).build();
-		saleExecutiveToAdd.encodePassword(passwordEncoder);
-		SaleExecutive saleExecutiveUpdated = saleExecutiveRepository.save(saleExecutiveToAdd);
+	public SaleExecutive updateSaleExecutive(Long id, String email, String phoneNumber) {
+		SaleExecutive saleExecutiveFetched = getSaleExecutive(id);
+		saleExecutiveFetched.update(email, phoneNumber);
+		SaleExecutive saleExecutiveUpdated = saleExecutiveRepository.save(saleExecutiveFetched);
 		return saleExecutiveUpdated;
 	}
 

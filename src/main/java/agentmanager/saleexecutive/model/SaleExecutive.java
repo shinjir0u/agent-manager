@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,16 +45,40 @@ public class SaleExecutive {
 	@JsonProperty("phone_number")
 	private String phoneNumber;
 
-	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER)
-	private List<Registration> registrations = new ArrayList<>();
+	public SaleExecutive(String username, String email, String password, String phoneNumber) {
 
-	public void encodePassword(PasswordEncoder passwordEncoder) {
-
-		if (this.password != null && !this.password.isEmpty()) {
-			String encodedPassword = passwordEncoder.encode(this.password);
-			setPassword(encodedPassword);
-		}
+		this.username = username;
+		this.email = email;
+		this.password = encodingPassword(password);
+		this.phoneNumber = phoneNumber;
 
 	}
+
+	public String encodingPassword(String password) {
+
+		if (password == null) {
+			throw new NullPointerException("Password cannot be null");
+		}
+
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+		return passwordEncoder.encode(password);
+	}
+
+	public void update(String email, String phoneNumber) {
+
+		if (email == null) {
+			throw new NullPointerException("Email cannot be null");
+		}
+
+		if (phoneNumber == null)
+			throw new NullPointerException("Phone number cannot be null");
+
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+	}
+
+	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER)
+	private List<Registration> registrations = new ArrayList<>();
 
 }

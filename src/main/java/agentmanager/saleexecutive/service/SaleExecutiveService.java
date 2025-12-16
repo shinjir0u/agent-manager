@@ -9,9 +9,9 @@ public interface SaleExecutiveService {
 
 	SaleExecutive getSaleExecutive(Long id);
 
-	SaleExecutive addSaleExecutive(SaleExecutive saleExecutive);
+	SaleExecutive addSaleExecutive(String username, String email, String password, String phoneNumber);
 
-	SaleExecutive updateSaleExecutive(Long id, SaleExecutive saleExecutive);
+	SaleExecutive updateSaleExecutive(Long id, String email, String phoneNumber);
 
 	void deleteSaleExecutive(Long id);
 }
