@@ -44,7 +44,7 @@ public class Admin {
 	public String encodingPassword(String password) {
 
 		if (password == null) {
-
+			throw new NullPointerException("Password cannot be null");
 		}
 
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -52,19 +52,10 @@ public class Admin {
 		return passwordEncoder.encode(password);
 	}
 
-	public void encodePassword(PasswordEncoder passwordEncoder) {
-
-		if (this.password != null && !this.password.isEmpty()) {
-			String encodedPassword = passwordEncoder.encode(this.password);
-			setPassword(encodedPassword);
-		}
-
-	}
-
 	public void update(String email) {
 
 		if (email == null) {
-
+			throw new NullPointerException("Email cannot be null");
 		}
 
 		this.email = email;

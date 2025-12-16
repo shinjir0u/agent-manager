@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import agentmanager.backoffice.model.Admin;
@@ -19,9 +18,6 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AdminRepository adminRepository;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<Admin> getAdmins() {
@@ -41,7 +37,6 @@ public class AdminServiceImpl implements AdminService {
 
 		Admin admin = new Admin(username, email, password);
 
-		// admin.encodePassword(passwordEncoder);
 		Admin adminAdded = adminRepository.save(admin);
 		return adminAdded;
 	}
@@ -49,17 +44,6 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Admin updateAdmin(Long id, String email) {
 		Admin adminFetched = getAdmin(id);
-
-//		if (admin.getUsername() != null)
-//			adminFetched.setUsername(admin.getUsername());
-//
-//		if (admin.getEmail() != null)
-//			adminFetched.setEmail(admin.getEmail());
-//
-//		if (admin.getPassword() != null) {
-//			admin.encodePassword(passwordEncoder);
-//			adminFetched.setPassword(admin.getPassword());
-//		}
 
 		adminFetched.update(email);
 
