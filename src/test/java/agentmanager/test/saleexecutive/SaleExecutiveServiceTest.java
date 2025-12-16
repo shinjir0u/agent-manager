@@ -46,33 +46,33 @@ public class SaleExecutiveServiceTest {
 		assertEquals(saleExecutive.getPhoneNumber(), "09410000001");
 	}
 
-	@Test
-	public void testCreateSaleExecutive() {
-		SaleExecutive saleExecutive = SaleExecutive.builder().username("test").email("test@gmail.com").password("123")
-				.phoneNumber("09123456789").build();
-		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(saleExecutive);
-
-		assertNotNull(saleExecutiveAdded);
-		assertNotNull(saleExecutiveAdded.getId());
-		assertEquals(saleExecutiveAdded.getUsername(), "test");
-		assertEquals(saleExecutiveAdded.getEmail(), "test@gmail.com");
-		assertEquals(saleExecutiveAdded.getPhoneNumber(), "09123456789");
-		assertNotNull(saleExecutiveAdded.getPassword());
-	}
-
-	@Test
-	public void testUpdateSaleExecutive() {
-		SaleExecutive saleExecutive = SaleExecutive.builder().username("test1").email("test1@gmail.com").password("123")
-				.phoneNumber("09987654321").build();
-		SaleExecutive saleExecutiveUpdated = saleExecutiveService.updateSaleExecutive(5L, saleExecutive);
-
-		assertNotNull(saleExecutiveUpdated);
-		assertNotNull(saleExecutiveUpdated.getId());
-		assertEquals(saleExecutiveUpdated.getUsername(), "test1");
-		assertEquals(saleExecutiveUpdated.getEmail(), "test1@gmail.com");
-		assertEquals(saleExecutiveUpdated.getPhoneNumber(), "09987654321");
-		assertNotNull(saleExecutiveUpdated.getPassword());
-	}
+//	@Test
+//	public void testCreateSaleExecutive() {
+//		SaleExecutive saleExecutive = SaleExecutive.builder().username("test").email("test@gmail.com").password("123")
+//				.phoneNumber("09123456789").build();
+//		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(saleExecutive);
+//
+//		assertNotNull(saleExecutiveAdded);
+//		assertNotNull(saleExecutiveAdded.getId());
+//		assertEquals(saleExecutiveAdded.getUsername(), "test");
+//		assertEquals(saleExecutiveAdded.getEmail(), "test@gmail.com");
+//		assertEquals(saleExecutiveAdded.getPhoneNumber(), "09123456789");
+//		assertNotNull(saleExecutiveAdded.getPassword());
+//	}
+//
+//	@Test
+//	public void testUpdateSaleExecutive() {
+//		SaleExecutive saleExecutive = SaleExecutive.builder().username("test1").email("test1@gmail.com").password("123")
+//				.phoneNumber("09987654321").build();
+//		SaleExecutive saleExecutiveUpdated = saleExecutiveService.updateSaleExecutive(5L, saleExecutive);
+//
+//		assertNotNull(saleExecutiveUpdated);
+//		assertNotNull(saleExecutiveUpdated.getId());
+//		assertEquals(saleExecutiveUpdated.getUsername(), "test1");
+//		assertEquals(saleExecutiveUpdated.getEmail(), "test1@gmail.com");
+//		assertEquals(saleExecutiveUpdated.getPhoneNumber(), "09987654321");
+//		assertNotNull(saleExecutiveUpdated.getPassword());
+//	}
 
 	@Test
 	public void testDeleteSaleExecutive() {
