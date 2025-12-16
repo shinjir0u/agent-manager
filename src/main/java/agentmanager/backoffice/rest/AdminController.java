@@ -49,22 +49,22 @@ public class AdminController {
 
 	@PostMapping(value = "/sale_executive/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SaleExecutive> addSaleExecutive(@RequestBody Request request) {
-		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(request.getUsername(),
+		SaleExecutive saleExecutive = saleExecutiveService.addSaleExecutive(request.getUsername(),
 				request.getEmail(), request.getPassword(), request.getPhoneNumber());
-		URI saleExecutiveLocation = generateEntryUri(saleExecutiveAdded.getId());
-		logger.info("Sale Executive: {} created at: {}", saleExecutiveAdded, saleExecutiveLocation);
+		URI saleExecutiveLocation = generateEntryUri(saleExecutive.getId());
+		logger.info("Sale Executive: {} created at: {}", saleExecutive, saleExecutiveLocation);
 		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON)
-				.body(saleExecutiveAdded);
+				.body(saleExecutive);
 	}
 
 	@PostMapping(value = "/sale_executive/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<SaleExecutive> addSaleExecutiveForm(Request request) {
-		SaleExecutive saleExecutiveAdded = saleExecutiveService.addSaleExecutive(request.getUsername(),
+		SaleExecutive saleExecutive = saleExecutiveService.addSaleExecutive(request.getUsername(),
 				request.getEmail(), request.getPassword(), request.getPhoneNumber());
-		URI saleExecutiveLocation = generateEntryUri(saleExecutiveAdded.getId());
-		logger.info("Sale Executive: {} created at: {}", saleExecutiveAdded, saleExecutiveLocation);
+		URI saleExecutiveLocation = generateEntryUri(saleExecutive.getId());
+		logger.info("Sale Executive: {} created at: {}", saleExecutive, saleExecutiveLocation);
 		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON)
-				.body(saleExecutiveAdded);
+				.body(saleExecutive);
 	}
 
 	@GetMapping("/sale_executive/details/{id}")
@@ -80,10 +80,10 @@ public class AdminController {
 		if (saleExecutiveFetched == null)
 			throw new IllegalArgumentException("No such sale executive with id: " + id);
 
-		SaleExecutive saleExecutiveUpdated = saleExecutiveService.updateSaleExecutive(id, request.getEmail(),
+		SaleExecutive saleExecutive = saleExecutiveService.updateSaleExecutive(id, request.getEmail(),
 				request.getPhoneNumber());
-		logger.info("Updated admin: {}", saleExecutiveUpdated);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveUpdated);
+		logger.info("Updated admin: {}", saleExecutive);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutive);
 	}
 
 	@PutMapping(value = "/sale_executive/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -92,10 +92,10 @@ public class AdminController {
 		if (saleExecutiveFetched == null)
 			throw new IllegalArgumentException("No such sale executive with id: " + id);
 
-		SaleExecutive saleExecutiveUpdated = saleExecutiveService.updateSaleExecutive(id, request.getEmail(),
+		SaleExecutive saleExecutive = saleExecutiveService.updateSaleExecutive(id, request.getEmail(),
 				request.getPhoneNumber());
-		logger.info("Updated admin: {}", saleExecutiveUpdated);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveUpdated);
+		logger.info("Updated admin: {}", saleExecutive);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutive);
 	}
 
 	@DeleteMapping("/sale_executive/delete/{id}")
@@ -129,9 +129,9 @@ public class AdminController {
 		if (registrationFetched == null)
 			throw new IllegalArgumentException("No such registration with id: " + id);
 
-		Registration registrationUpdated = registrationService.updateRegistration(id, request.getPhoneNumber());
-		logger.info("Updated registration: {}", registrationUpdated);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registrationUpdated);
+		Registration registration = registrationService.updateRegistration(id, request.getPhoneNumber());
+		logger.info("Updated registration: {}", registration);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registration);
 	}
 
 	private URI generateEntryUri(Object entryId) {
@@ -142,7 +142,7 @@ public class AdminController {
 	@Data
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class Request {
+	static class Request {
 
 		private String username;
 
