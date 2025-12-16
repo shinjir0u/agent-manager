@@ -62,41 +62,32 @@ public class RegistrationServiceTest {
 		assertEquals(registration.getRegisteredAt(), Timestamp.valueOf("2025-12-10 16:43:40.154114"));
 	}
 
-//	@Test
-//	public void testCreateRegistration() {
-//		SaleExecutive saleExecutive = saleExecutiveRepository.findById(10L).orElse(null);
-//		Date now = new Date();
-//		Registration registration = Registration.builder().agentName("Agent Pi").phoneNumber("09876567898")
-//				.registeredAt(now).build();
-//		Registration registrationAdded = registrationService.addRegistration(saleExecutive, registration);
-//
-//		assertNotNull(registrationAdded);
-//		assertNotNull(registrationAdded.getId());
-//		assertEquals(registrationAdded.getAgentName(), "Agent Pi");
-//		assertEquals(registrationAdded.getPhoneNumber(), "09876567898");
-//		assertEquals(registrationAdded.getRegisteredAt(), now);
-//		assertNotNull(registrationAdded.getSaleExecutive());
-//	}
-//
-//	@Test
-//	public void testUpdateRegistration() {
-//		Date now = new Date();
-//		Registration registration = Registration.builder().agentName("Agent PK").phoneNumber("09876567899")
-//				.registeredAt(now).build();
-//		Registration registrationUpdated = registrationService.updateRegistration(12L, registration);
-//
-//		assertNotNull(registrationUpdated);
-//		assertNotNull(registrationUpdated.getId());
-//		assertEquals(registrationUpdated.getAgentName(), "Agent PK");
-//		assertEquals(registrationUpdated.getPhoneNumber(), "09876567899");
-//		assertEquals(registrationUpdated.getRegisteredAt(), now);
-//	}
+	@Test
+	public void testCreateRegistration() {
+		SaleExecutive saleExecutive = saleExecutiveRepository.findById(13L).orElse(null);
+		Registration registrationAdded = registrationService.addRegistration("Agent S", "09876567898", saleExecutive);
+
+		assertNotNull(registrationAdded);
+		assertNotNull(registrationAdded.getId());
+		assertEquals(registrationAdded.getAgentName(), "Agent S");
+		assertEquals(registrationAdded.getPhoneNumber(), "09876567898");
+		assertNotNull(registrationAdded.getSaleExecutive());
+	}
+
+	@Test
+	public void testUpdateRegistration() {
+		Registration registrationUpdated = registrationService.updateRegistration(13L, "09333882128");
+
+		assertNotNull(registrationUpdated);
+		assertNotNull(registrationUpdated.getId());
+		assertEquals(registrationUpdated.getPhoneNumber(), "09333882128");
+	}
 
 	@Test
 	public void testDeleteRegistration() {
-		registrationService.deleteRegistration(11L);
+		registrationService.deleteRegistration(12L);
 
-		assertNull(registrationService.getRegistration(11L));
+		assertNull(registrationService.getRegistration(12L));
 	}
 
 }
