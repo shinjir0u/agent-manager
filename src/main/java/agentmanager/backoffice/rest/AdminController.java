@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import agentmanager.registration.model.Registration;
+import agentmanager.registration.service.RegistrationService;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
 
@@ -29,6 +31,9 @@ public class AdminController {
 
 	@Autowired
 	private SaleExecutiveService saleExecutiveService;
+
+	@Autowired
+	private RegistrationService registrationService;
 
 	@GetMapping("/sale_executive_list")
 	public ResponseEntity<List<SaleExecutive>> getSaleExecutives() {
@@ -94,6 +99,61 @@ public class AdminController {
 		saleExecutiveService.deleteSaleExecutive(id);
 		logger.info("Sale executive with id {} is deleted", id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/registration_list")
+	public ResponseEntity<List<Registration>> getRegistrations() {
+		List<Registration> registrations = registrationService.getRegistrations();
+		logger.info("Fetched registrations: {}", registrations);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registrations);
+	}
+
+	@GetMapping("/sale_executive/{saleExecutiveId}/registration_list")
+	public ResponseEntity<List<Registration>> getRegistrationsBySaleExecutive(@PathVariable Long saleExecutiveId) {
+		SaleExecutive saleExecutive = checkSaleExecutiveAndReturn(saleExecutiveId);
+
+		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive);
+		logger.info("Fetched registrations: {}", registrations);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registrations);
+	}
+
+	@PostMapping("/sale_executive/{saleExecutiveId}/registrations/register")
+	public ResponseEntity<Registration> createRegistration(@PathVariable Long saleExecutiveId,
+			@RequestBody Registration registration) {
+		SaleExecutive saleExecutive = checkSaleExecutiveAndReturn(saleExecutiveId);
+
+		Registration registrationAdded = registrationService.addRegistration(saleExecutive, registration);
+		URI registrationLocation = generateEntryUri(registrationAdded.getId());
+		logger.info("Registration: {} created at: {}", registrationAdded, registrationLocation);
+		return ResponseEntity.created(registrationLocation).contentType(MediaType.APPLICATION_JSON)
+				.body(registrationAdded);
+	}
+
+	@GetMapping("/registration_details/{id}")
+	public ResponseEntity<Registration> getRegistration(@PathVariable Long id) {
+		Registration registration = registrationService.getRegistration(id);
+		logger.info("Fetched registration: {}", registration);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registration);
+	}
+
+	@PutMapping("/updating_registration/{id}")
+	public ResponseEntity<Registration> updateRegistration(@PathVariable Long id,
+			@RequestBody Registration registration) {
+		Registration registrationFetched = registrationService.getRegistration(id);
+		if (registrationFetched == null)
+			throw new IllegalArgumentException("No such registration with id: " + id);
+
+		Registration registrationToAdd = registration.toBuilder().id(id).build();
+		Registration registrationUpdated = registrationService.updateRegistration(id, registrationToAdd);
+		logger.info("Updated registration: {}", registrationUpdated);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registrationUpdated);
+	}
+
+	private SaleExecutive checkSaleExecutiveAndReturn(Long id) {
+		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
+		if (saleExecutiveFetched == null)
+			throw new IllegalArgumentException("No such sale executive with id: " + id);
+		return saleExecutiveFetched;
 	}
 
 	private URI generateEntryUri(Object entryId) {
