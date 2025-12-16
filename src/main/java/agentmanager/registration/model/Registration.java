@@ -50,4 +50,19 @@ public class Registration {
 	@JoinColumn(name = "sale_executive_id")
 	private SaleExecutive saleExecutive;
 
+	public Registration(String agentName, String phoneNumber, SaleExecutive saleExecutive) {
+		this.agentName = agentName;
+		this.phoneNumber = phoneNumber;
+		this.saleExecutive = saleExecutive;
+	}
+
+	public void update(String phoneNumber) {
+
+		if (phoneNumber == null)
+			throw new NullPointerException("Phone number cannot be null");
+
+		this.phoneNumber = phoneNumber;
+
+	}
+
 }

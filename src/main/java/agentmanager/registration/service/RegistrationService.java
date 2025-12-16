@@ -12,9 +12,9 @@ public interface RegistrationService {
 
 	Registration getRegistration(Long registrationId);
 
-	Registration addRegistration(SaleExecutive saleExecutive, Registration registration);
+	Registration addRegistration(String agentName, String phoneNumber, SaleExecutive saleExecutive);
 
-	Registration updateRegistration(Long registrationId, Registration registration);
+	Registration updateRegistration(Long registrationId, String phoneNumber);
 
 	void deleteRegistration(Long registrationId);
 }

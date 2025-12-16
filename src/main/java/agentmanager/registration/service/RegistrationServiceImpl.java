@@ -48,16 +48,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
-	public Registration addRegistration(SaleExecutive saleExecutive, Registration registration) {
-		Registration registrationToAdd = registration.toBuilder().saleExecutive(saleExecutive).build();
+	public Registration addRegistration(String agentName, String phoneNumber, SaleExecutive saleExecutive) {
+		Registration registrationToAdd = new Registration(agentName, phoneNumber, saleExecutive);
 		Registration registrationAdded = registrationRepository.save(registrationToAdd);
 		return registrationAdded;
 	}
 
 	@Override
-	public Registration updateRegistration(Long id, Registration registration) {
-		Registration registrationToAdd = registration.toBuilder().id(id).build();
-		Registration registrationUpdated = registrationRepository.save(registrationToAdd);
+	public Registration updateRegistration(Long id, String phoneNumber) {
+		Registration registrationFetched = getRegistration(id);
+		registrationFetched.update(phoneNumber);
+		Registration registrationUpdated = registrationRepository.save(registrationFetched);
 		return registrationUpdated;
 	}
 
