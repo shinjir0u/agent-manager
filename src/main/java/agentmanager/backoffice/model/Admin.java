@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AllArgsConstructor;
@@ -33,6 +34,24 @@ public class Admin {
 
 	private String password;
 
+	public Admin(String username, String email, String password) {
+
+		this.username = username;
+		this.email = email;
+		this.password = encodingPassword(password);
+	}
+
+	public String encodingPassword(String password) {
+
+		if (password == null) {
+
+		}
+
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+		return passwordEncoder.encode(password);
+	}
+
 	public void encodePassword(PasswordEncoder passwordEncoder) {
 
 		if (this.password != null && !this.password.isEmpty()) {
@@ -40,6 +59,15 @@ public class Admin {
 			setPassword(encodedPassword);
 		}
 
+	}
+
+	public void update(String email) {
+
+		if (email == null) {
+
+		}
+
+		this.email = email;
 	}
 
 }

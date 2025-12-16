@@ -9,9 +9,9 @@ public interface AdminService {
 
 	Admin getAdmin(Long id);
 
-	Admin addAdmin(Admin admin);
+	Admin addAdmin(String username, String email, String password);
 
-	Admin updateAdmin(Long id, Admin admin);
+	Admin updateAdmin(Long id, String email);
 
 	void deleteAdmin(Long id);
 }

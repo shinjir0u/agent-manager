@@ -37,17 +37,33 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin addAdmin(Admin admin) {
-		admin.encodePassword(passwordEncoder);
+	public Admin addAdmin(String username, String email, String password) {
+
+		Admin admin = new Admin(username, email, password);
+
+		// admin.encodePassword(passwordEncoder);
 		Admin adminAdded = adminRepository.save(admin);
 		return adminAdded;
 	}
 
 	@Override
-	public Admin updateAdmin(Long id, Admin admin) {
-		Admin adminToUpdate = admin.toBuilder().id(id).build();
-		adminToUpdate.encodePassword(passwordEncoder);
-		Admin adminUpdated = adminRepository.save(adminToUpdate);
+	public Admin updateAdmin(Long id, String email) {
+		Admin adminFetched = getAdmin(id);
+
+//		if (admin.getUsername() != null)
+//			adminFetched.setUsername(admin.getUsername());
+//
+//		if (admin.getEmail() != null)
+//			adminFetched.setEmail(admin.getEmail());
+//
+//		if (admin.getPassword() != null) {
+//			admin.encodePassword(passwordEncoder);
+//			adminFetched.setPassword(admin.getPassword());
+//		}
+
+		adminFetched.update(email);
+
+		Admin adminUpdated = adminRepository.save(adminFetched);
 		return adminUpdated;
 	}
 
