@@ -63,17 +63,6 @@ public class AdminController {
 		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
-	@PostMapping(value = "/sale_executive/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<SaleExecutiveResponse> addSaleExecutiveForm(SaleExecutiveRequest request) {
-		SaleExecutive saleExecutive = saleExecutiveService.addSaleExecutive(request.getUsername(), request.getEmail(),
-				request.getPassword(), request.getPhoneNumber());
-		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
-		URI saleExecutiveLocation = generateEntryUri(saleExecutive.getId());
-		logger.info("Sale Executive: {} created at: {}", response, saleExecutiveLocation);
-
-		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON).body(response);
-	}
-
 	@GetMapping("/sale_executive/details/{id}")
 	public ResponseEntity<SaleExecutiveResponse> getSaleExecutive(@PathVariable Long id) {
 		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(id);
@@ -94,21 +83,6 @@ public class AdminController {
 				request.getPhoneNumber());
 		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
 
-		logger.info("Updated admin: {}", response);
-
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
-	}
-
-	@PutMapping(value = "/sale_executive/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<SaleExecutiveResponse> updateSaleExecutiveForm(@PathVariable Long id,
-			SaleExecutiveRequest request) {
-		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
-		if (saleExecutiveFetched == null)
-			throw new IllegalArgumentException("No such sale executive with id: " + id);
-
-		SaleExecutive saleExecutive = saleExecutiveService.updateSaleExecutive(id, request.getEmail(),
-				request.getPhoneNumber());
-		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
 		logger.info("Updated admin: {}", response);
 
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
