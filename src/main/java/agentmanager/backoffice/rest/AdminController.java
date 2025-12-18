@@ -1,7 +1,9 @@
 package agentmanager.backoffice.rest;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,61 +43,75 @@ public class AdminController {
 	private RegistrationService registrationService;
 
 	@GetMapping("/sale_executive/list")
-	public ResponseEntity<List<SaleExecutive>> getSaleExecutives() {
+	public ResponseEntity<List<SaleExecutiveResponse>> getSaleExecutives() {
 		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives();
-		logger.info("Fetched sale executives: {}", saleExecutives);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutives);
+		List<SaleExecutiveResponse> response = saleExecutives.stream()
+				.map(saleExecutive -> new SaleExecutiveResponse(saleExecutive)).collect(Collectors.toList());
+		logger.info("Fetched sale executives: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@PostMapping(value = "/sale_executive/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SaleExecutive> addSaleExecutive(@RequestBody Request request) {
-		SaleExecutive saleExecutive = saleExecutiveService.addSaleExecutive(request.getUsername(),
-				request.getEmail(), request.getPassword(), request.getPhoneNumber());
+	public ResponseEntity<SaleExecutiveResponse> addSaleExecutive(@RequestBody SaleExecutiveRequest request) {
+		SaleExecutive saleExecutive = saleExecutiveService.addSaleExecutive(request.getUsername(), request.getEmail(),
+				request.getPassword(), request.getPhoneNumber());
+		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
 		URI saleExecutiveLocation = generateEntryUri(saleExecutive.getId());
-		logger.info("Sale Executive: {} created at: {}", saleExecutive, saleExecutiveLocation);
-		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON)
-				.body(saleExecutive);
+		logger.info("Sale Executive: {} created at: {}", response, saleExecutiveLocation);
+
+		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@PostMapping(value = "/sale_executive/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<SaleExecutive> addSaleExecutiveForm(Request request) {
-		SaleExecutive saleExecutive = saleExecutiveService.addSaleExecutive(request.getUsername(),
-				request.getEmail(), request.getPassword(), request.getPhoneNumber());
+	public ResponseEntity<SaleExecutiveResponse> addSaleExecutiveForm(SaleExecutiveRequest request) {
+		SaleExecutive saleExecutive = saleExecutiveService.addSaleExecutive(request.getUsername(), request.getEmail(),
+				request.getPassword(), request.getPhoneNumber());
+		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
 		URI saleExecutiveLocation = generateEntryUri(saleExecutive.getId());
-		logger.info("Sale Executive: {} created at: {}", saleExecutive, saleExecutiveLocation);
-		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON)
-				.body(saleExecutive);
+		logger.info("Sale Executive: {} created at: {}", response, saleExecutiveLocation);
+
+		return ResponseEntity.created(saleExecutiveLocation).contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@GetMapping("/sale_executive/details/{id}")
-	public ResponseEntity<SaleExecutive> getSaleExecutive(@PathVariable Long id) {
+	public ResponseEntity<SaleExecutiveResponse> getSaleExecutive(@PathVariable Long id) {
 		SaleExecutive saleExecutive = saleExecutiveService.getSaleExecutive(id);
-		logger.info("Fetched sale executive: {}", saleExecutive);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutive);
+		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
+		logger.info("Fetched sale executive: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@PutMapping(value = "/sale_executive/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SaleExecutive> updateSaleExecutiveJson(@PathVariable Long id, @RequestBody Request request) {
+	public ResponseEntity<SaleExecutiveResponse> updateSaleExecutiveJson(@PathVariable Long id,
+			@RequestBody SaleExecutiveRequest request) {
 		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
 		if (saleExecutiveFetched == null)
 			throw new IllegalArgumentException("No such sale executive with id: " + id);
 
 		SaleExecutive saleExecutive = saleExecutiveService.updateSaleExecutive(id, request.getEmail(),
 				request.getPhoneNumber());
-		logger.info("Updated admin: {}", saleExecutive);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutive);
+		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
+
+		logger.info("Updated admin: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@PutMapping(value = "/sale_executive/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<SaleExecutive> updateSaleExecutiveForm(@PathVariable Long id, Request request) {
+	public ResponseEntity<SaleExecutiveResponse> updateSaleExecutiveForm(@PathVariable Long id,
+			SaleExecutiveRequest request) {
 		SaleExecutive saleExecutiveFetched = saleExecutiveService.getSaleExecutive(id);
 		if (saleExecutiveFetched == null)
 			throw new IllegalArgumentException("No such sale executive with id: " + id);
 
 		SaleExecutive saleExecutive = saleExecutiveService.updateSaleExecutive(id, request.getEmail(),
 				request.getPhoneNumber());
-		logger.info("Updated admin: {}", saleExecutive);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutive);
+		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive);
+		logger.info("Updated admin: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@DeleteMapping("/sale_executive/delete/{id}")
@@ -106,32 +122,41 @@ public class AdminController {
 
 		saleExecutiveService.deleteSaleExecutive(id);
 		logger.info("Sale executive with id {} is deleted", id);
+
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/registration/list")
-	public ResponseEntity<List<Registration>> getRegistrations() {
+	public ResponseEntity<List<RegistrationResponse>> getRegistrations() {
 		List<Registration> registrations = registrationService.getRegistrations();
-		logger.info("Fetched registrations: {}", registrations);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registrations);
+		List<RegistrationResponse> response = registrations.stream()
+				.map(registration -> new RegistrationResponse(registration)).collect(Collectors.toList());
+		logger.info("Fetched registrations: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@GetMapping("/registration/details/{id}")
-	public ResponseEntity<Registration> getRegistration(@PathVariable Long id) {
+	public ResponseEntity<RegistrationResponse> getRegistration(@PathVariable Long id) {
 		Registration registration = registrationService.getRegistration(id);
-		logger.info("Fetched registration: {}", registration);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registration);
+		RegistrationResponse response = new RegistrationResponse(registration);
+		logger.info("Fetched registration: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@PutMapping("/registration/update/{id}")
-	public ResponseEntity<Registration> updateRegistration(@PathVariable Long id, @RequestBody Request request) {
+	public ResponseEntity<RegistrationResponse> updateRegistration(@PathVariable Long id,
+			@RequestBody RegistrationRequest request) {
 		Registration registrationFetched = registrationService.getRegistration(id);
 		if (registrationFetched == null)
 			throw new IllegalArgumentException("No such registration with id: " + id);
 
 		Registration registration = registrationService.updateRegistration(id, request.getPhoneNumber());
-		logger.info("Updated registration: {}", registration);
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(registration);
+		RegistrationResponse response = new RegistrationResponse(registration);
+		logger.info("Updated registration: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	private URI generateEntryUri(Object entryId) {
@@ -142,7 +167,7 @@ public class AdminController {
 	@Data
 	@AllArgsConstructor
 	@NoArgsConstructor
-	static class Request {
+	static class SaleExecutiveRequest {
 
 		private String username;
 
@@ -152,6 +177,69 @@ public class AdminController {
 
 		@JsonProperty("phone_number")
 		private String phoneNumber;
+
+	}
+
+	@Data
+	@NoArgsConstructor
+	static class SaleExecutiveResponse {
+
+		private Long id;
+
+		private String username;
+
+		private String email;
+
+		@JsonProperty("phone_number")
+		private String phoneNumber;
+
+		SaleExecutiveResponse(SaleExecutive saleExecutive) {
+			this.id = saleExecutive.getId();
+			this.username = saleExecutive.getUsername();
+			this.email = saleExecutive.getEmail();
+			this.phoneNumber = saleExecutive.getPhoneNumber();
+		}
+
+	}
+
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	static class RegistrationRequest {
+
+		@JsonProperty("agent_name")
+		private String agentName;
+
+		@JsonProperty("phone_number")
+		private String phoneNumber;
+
+	}
+
+	@Data
+	@NoArgsConstructor
+	static class RegistrationResponse {
+
+		private Long id;
+
+		@JsonProperty("agent_name")
+		private String agentName;
+
+		@JsonProperty("phone_number")
+		private String phoneNumber;
+
+		@JsonProperty("registered_at")
+		private Date registeredAt;
+
+		@JsonProperty("registered_by")
+		private String registeredBy;
+
+		RegistrationResponse(Registration registration) {
+			this.id = registration.getId();
+			this.agentName = registration.getAgentName();
+			this.phoneNumber = registration.getPhoneNumber();
+			this.registeredAt = registration.getRegisteredAt();
+			this.registeredBy = registration.getSaleExecutive().getUsername();
+		}
 
 	}
 

@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
@@ -45,7 +44,6 @@ public class Registration {
 	@JsonProperty(value = "registered_at")
 	private Date registeredAt = new Date();
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sale_executive_id")
 	private SaleExecutive saleExecutive;
