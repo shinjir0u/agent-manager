@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS sale_executives (
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255),
-    phone_number VARCHAR(50)
+    phone_number VARCHAR(50),
+    status sale_executive_status
 );
 
 CREATE TABLE IF NOT EXISTS registrations (

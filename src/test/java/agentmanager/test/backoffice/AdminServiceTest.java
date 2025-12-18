@@ -18,13 +18,22 @@ import agentmanager.backoffice.repository.AdminRepository;
 import agentmanager.backoffice.service.AdminService;
 import agentmanager.backoffice.service.AdminServiceImpl;
 import agentmanager.config.PersistenceConfig;
+import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
+import agentmanager.saleexecutive.service.SaleExecutiveService;
+import agentmanager.saleexecutive.service.SaleExecutiveServiceImpl;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { PersistenceConfig.class, AdminServiceImpl.class, AdminRepository.class })
+@ContextConfiguration(classes = { PersistenceConfig.class, AdminServiceImpl.class, AdminRepository.class,
+		SaleExecutiveRepository.class, SaleExecutiveServiceImpl.class })
 public class AdminServiceTest {
 
 	@Autowired
 	private AdminService adminService;
+
+	@Autowired
+	private SaleExecutiveService saleExecutiveService;
 
 	@Test
 	public void testGetAdmins() {
@@ -67,6 +76,22 @@ public class AdminServiceTest {
 		adminService.deleteAdmin(30L);
 
 		assertNull(adminService.getAdmin(30L));
+	}
+
+	@Test
+	public void testTerminateSaleExecutive() {
+		SaleExecutive saleExecutive = adminService.terminateSaleExecutive(10L);
+
+		assertEquals(saleExecutive.getStatus(), Status.TERMINATED);
+	}
+
+	@Test
+	public void testReassignRegistrationsToNewSaleExecutive() {
+		SaleExecutive saleExecutive = adminService.reassignRegistrationsToNewSaleExecutive(10L, 17L);
+		SaleExecutive saleExecutiveTransferred = saleExecutiveService.getSaleExecutive(10L);
+
+		assertEquals(saleExecutiveTransferred.getRegistrations().size(), 0);
+		assertThat(saleExecutive.getRegistrations().size() > 1);
 	}
 
 }

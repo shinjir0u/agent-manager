@@ -3,8 +3,11 @@ package agentmanager.saleexecutive.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -29,6 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder(toBuilder = true)
 @Table(name = "sale_executives")
+@TypeDef(name = "status_enum", typeClass = PostgresEnumType.class)
 public class SaleExecutive {
 
 	@Id
@@ -44,6 +50,11 @@ public class SaleExecutive {
 	@Column(name = "phone_number")
 	@JsonProperty("phone_number")
 	private String phoneNumber;
+
+	@Enumerated(EnumType.STRING)
+	@Type(type = "status_enum")
+	@Column(columnDefinition = "sale_executive_status")
+	private Status status = Status.ACTIVE;
 
 	public SaleExecutive(String username, String email, String password, String phoneNumber) {
 
@@ -78,7 +89,20 @@ public class SaleExecutive {
 		this.phoneNumber = phoneNumber;
 	}
 
-	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Registration> registrations = new ArrayList<>();
+
+	public void transferRegistrations(SaleExecutive saleExecutiveToReceive) {
+		saleExecutiveToReceive.getRegistrations().addAll(this.registrations);
+
+		for (Registration registration : this.registrations)
+			registration.setSaleExecutive(saleExecutiveToReceive);
+
+		this.registrations = new ArrayList<>();
+	}
+
+	public void terminate() {
+		this.status = Status.TERMINATED;
+	}
 
 }

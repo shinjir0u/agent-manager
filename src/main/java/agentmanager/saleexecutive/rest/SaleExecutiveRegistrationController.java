@@ -29,15 +29,15 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/sale_executive")
-public class SaleExecutiveController {
+public class SaleExecutiveRegistrationController {
 
-	private final Logger logger = LogManager.getLogger(SaleExecutiveController.class);
+	private final Logger logger = LogManager.getLogger(SaleExecutiveRegistrationController.class);
 
 	private final RegistrationService registrationService;
 
 	private final SaleExecutiveService saleExecutiveService;
 
-	public SaleExecutiveController(RegistrationService registrationService, SaleExecutiveService saleExecutiveService) {
+	public SaleExecutiveRegistrationController(RegistrationService registrationService, SaleExecutiveService saleExecutiveService) {
 		this.registrationService = registrationService;
 		this.saleExecutiveService = saleExecutiveService;
 	}

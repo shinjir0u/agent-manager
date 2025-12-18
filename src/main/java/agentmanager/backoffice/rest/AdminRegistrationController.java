@@ -26,9 +26,9 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/admin/registration")
-public class RegistrationController {
+public class AdminRegistrationController {
 
-	private final Logger logger = LogManager.getLogger(RegistrationController.class);
+	private final Logger logger = LogManager.getLogger(AdminRegistrationController.class);
 
 	@Autowired
 	private RegistrationService registrationService;

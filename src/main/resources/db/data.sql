@@ -10,14 +10,14 @@ WHERE NOT EXISTS (
     SELECT 1 FROM admins WHERE email = 'admin2@example.com'
 );
 
-INSERT INTO sale_executives (username, email, password, phone_number)
-SELECT 'dse001', 'dse001@example.com', 'pw123', '09410000001'
+INSERT INTO sale_executives (username, email, password, phone_number, status)
+SELECT 'dse001', 'dse001@example.com', 'pw123', '09410000001', 'ACTIVE'
 WHERE NOT EXISTS (
     SELECT 1 FROM sale_executives WHERE email = 'dse001@example.com'
 );
 
-INSERT INTO sale_executives (username, email, password, phone_number)
-SELECT 'dse002', 'dse002@example.com', 'pw456', '09410000002'
+INSERT INTO sale_executives (username, email, password, phone_number, status)
+SELECT 'dse002', 'dse002@example.com', 'pw456', '09410000002', 'ACTIVE'
 WHERE NOT EXISTS (
     SELECT 1 FROM sale_executives WHERE email = 'dse002@example.com'
 );

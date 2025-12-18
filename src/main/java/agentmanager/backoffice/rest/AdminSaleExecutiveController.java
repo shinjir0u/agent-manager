@@ -29,9 +29,9 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/admin/sale_executive")
-public class SaleExecutiveController {
+public class AdminSaleExecutiveController {
 
-	private final Logger logger = LogManager.getLogger(SaleExecutiveController.class);
+	private final Logger logger = LogManager.getLogger(AdminSaleExecutiveController.class);
 
 	@Autowired
 	private SaleExecutiveService saleExecutiveService;
@@ -97,6 +97,18 @@ public class SaleExecutiveController {
 		logger.info("Sale executive with id {} is deleted", id);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/{id}/reassign/{idToReassign}")
+	public ResponseEntity<SaleExecutive> reassignAndTerminateSaleExecutive(@PathVariable Long id,
+			@PathVariable Long idToReassign) {
+		SaleExecutive saleExecutiveToTransfer = saleExecutiveService.getSaleExecutive(id);
+		SaleExecutive saleExecutiveToReceive = saleExecutiveService.getSaleExecutive(idToReassign);
+
+		saleExecutiveToTransfer.transferRegistrations(saleExecutiveToReceive);
+		saleExecutiveToTransfer.terminate();
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveToTransfer);
 	}
 
 	private URI generateEntryUri(Object entryId) {

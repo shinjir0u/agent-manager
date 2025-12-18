@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.repository.AdminRepository;
+import agentmanager.registration.model.Registration;
+import agentmanager.registration.repository.RegistrationRepository;
+import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 
 @Service
 @Transactional
@@ -18,6 +22,12 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AdminRepository adminRepository;
+
+	@Autowired
+	private SaleExecutiveRepository saleExecutiveRepository;
+
+	@Autowired
+	private RegistrationRepository registrationRepository;
 
 	@Override
 	public List<Admin> getAdmins() {
@@ -54,6 +64,30 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void deleteAdmin(Long id) {
 		adminRepository.deleteById(id);
+	}
+
+	@Override
+	public SaleExecutive terminateSaleExecutive(Long saleExecutiveId) {
+		SaleExecutive saleExecutive = saleExecutiveRepository.findById(saleExecutiveId).orElse(null);
+
+		saleExecutive.terminate();
+		SaleExecutive saleExecutiveTerminated = saleExecutiveRepository.save(saleExecutive);
+		saleExecutiveRepository.save(saleExecutiveTerminated);
+		return saleExecutiveTerminated;
+	}
+
+	@Override
+	public SaleExecutive reassignRegistrationsToNewSaleExecutive(Long saleExecutiveId, Long newSaleExecutiveId) {
+		SaleExecutive saleExecutiveToTransfer = saleExecutiveRepository.findById(saleExecutiveId).orElse(null);
+		SaleExecutive saleExecutiveToReceive = saleExecutiveRepository.findById(newSaleExecutiveId).orElse(null);
+
+		saleExecutiveToTransfer.transferRegistrations(saleExecutiveToReceive);
+		for (Registration registration : saleExecutiveToReceive.getRegistrations())
+			registrationRepository.save(registration);
+		saleExecutiveRepository.save(saleExecutiveToReceive);
+		saleExecutiveRepository.save(saleExecutiveToTransfer);
+
+		return saleExecutiveToReceive;
 	}
 
 }
