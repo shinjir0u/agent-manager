@@ -3,6 +3,7 @@ package agentmanager.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import agentmanager.api.DogApi;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -22,7 +23,12 @@ public class RetrofitConfig {
 
 	@Bean
 	Retrofit retrofit() {
-		return new Retrofit.Builder().baseUrl("https://dogapi.dog/api/v2").client(client())
+		return new Retrofit.Builder().baseUrl("https://dogapi.dog/api/v2/").client(client())
 				.addConverterFactory(JacksonConverterFactory.create()).build();
+	}
+
+	@Bean
+	DogApi dogApi() {
+		return retrofit().create(DogApi.class);
 	}
 }
