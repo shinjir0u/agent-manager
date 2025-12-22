@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import agentmanager.backoffice.service.AdminService;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,9 @@ public class AdminSaleExecutiveController {
 
 	@Autowired
 	private SaleExecutiveService saleExecutiveService;
+
+	@Autowired
+	private AdminService adminService;
 
 	@GetMapping("/list")
 	public ResponseEntity<List<SaleExecutiveResponse>> getSaleExecutives(
@@ -103,15 +107,17 @@ public class AdminSaleExecutiveController {
 	}
 
 	@GetMapping("/{id}/reassign/{idToReassign}")
-	public ResponseEntity<SaleExecutive> reassignAndTerminateSaleExecutive(@PathVariable Long id,
+	public ResponseEntity<SaleExecutiveResponse> reassignAndTerminateSaleExecutive(@PathVariable Long id,
 			@PathVariable Long idToReassign) {
-		SaleExecutive saleExecutiveToTransfer = saleExecutiveService.getSaleExecutive(id);
-		SaleExecutive saleExecutiveToReceive = saleExecutiveService.getSaleExecutive(idToReassign);
 
-		saleExecutiveToTransfer.transferRegistrations(saleExecutiveToReceive);
-		saleExecutiveToTransfer.terminate();
+		adminService.terminateSaleExecutive(id);
+		SaleExecutive saleExecutive = adminService.reassignRegistrationsToNewSaleExecutive(id, idToReassign);
+		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive.getId(), saleExecutive.getUsername(),
+				saleExecutive.getEmail(), saleExecutive.getPhoneNumber());
 
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(saleExecutiveToTransfer);
+		logger.info("Received sale executive: {}", response);
+
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	private URI generateEntryUri(Object entryId) {

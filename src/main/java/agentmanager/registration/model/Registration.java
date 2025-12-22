@@ -2,6 +2,7 @@ package agentmanager.registration.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,7 +45,7 @@ public class Registration {
 	@JsonProperty(value = "registered_at")
 	private Date registeredAt = new Date();
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "sale_executive_id")
 	private SaleExecutive saleExecutive;
 

@@ -5,30 +5,27 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.repository.AdminRepository;
-import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
+import lombok.AllArgsConstructor;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
-	@Autowired
-	private AdminRepository adminRepository;
+	private final AdminRepository adminRepository;
 
-	@Autowired
-	private SaleExecutiveRepository saleExecutiveRepository;
+	private final SaleExecutiveRepository saleExecutiveRepository;
 
-	@Autowired
-	private RegistrationRepository registrationRepository;
+	private final RegistrationRepository registrationRepository;
 
 	@Override
 	public List<Admin> getAdmins(int page, int size) {
@@ -72,7 +69,6 @@ public class AdminServiceImpl implements AdminService {
 
 		saleExecutive.terminate();
 		SaleExecutive saleExecutiveTerminated = saleExecutiveRepository.save(saleExecutive);
-		saleExecutiveRepository.save(saleExecutiveTerminated);
 		return saleExecutiveTerminated;
 	}
 
@@ -82,12 +78,8 @@ public class AdminServiceImpl implements AdminService {
 		SaleExecutive saleExecutiveToReceive = saleExecutiveRepository.findById(newSaleExecutiveId).orElse(null);
 
 		saleExecutiveToTransfer.transferRegistrations(saleExecutiveToReceive);
-		for (Registration registration : saleExecutiveToReceive.getRegistrations())
-			registrationRepository.save(registration);
-		saleExecutiveRepository.save(saleExecutiveToReceive);
-		saleExecutiveRepository.save(saleExecutiveToTransfer);
-
-		return saleExecutiveToReceive;
+		SaleExecutive saleExecutive = saleExecutiveRepository.save(saleExecutiveToReceive);
+		return saleExecutive;
 	}
 
 }

@@ -56,6 +56,9 @@ public class SaleExecutive {
 	@Column(columnDefinition = "sale_executive_status")
 	private Status status = Status.ACTIVE;
 
+	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Registration> registrations = new ArrayList<>();
+
 	public SaleExecutive(String username, String email, String password, String phoneNumber) {
 
 		this.username = username;
@@ -88,9 +91,6 @@ public class SaleExecutive {
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 	}
-
-	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Registration> registrations = new ArrayList<>();
 
 	public void transferRegistrations(SaleExecutive saleExecutiveToReceive) {
 		saleExecutiveToReceive.getRegistrations().addAll(this.registrations);
