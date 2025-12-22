@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,8 +38,10 @@ public class AdminSaleExecutiveController {
 	private SaleExecutiveService saleExecutiveService;
 
 	@GetMapping("/list")
-	public ResponseEntity<List<SaleExecutiveResponse>> getSaleExecutives() {
-		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives();
+	public ResponseEntity<List<SaleExecutiveResponse>> getSaleExecutives(
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size) {
+		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size);
 		List<SaleExecutiveResponse> response = saleExecutives
 				.stream().map(saleExecutive -> new SaleExecutiveResponse(saleExecutive.getId(),
 						saleExecutive.getUsername(), saleExecutive.getEmail(), saleExecutive.getPhoneNumber()))

@@ -1,12 +1,13 @@
 package agentmanager.backoffice.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import agentmanager.backoffice.model.Admin;
@@ -30,10 +31,9 @@ public class AdminServiceImpl implements AdminService {
 	private RegistrationRepository registrationRepository;
 
 	@Override
-	public List<Admin> getAdmins() {
-		List<Admin> admins = new ArrayList<>();
-		adminRepository.findAll().forEach(admins::add);
-		return admins;
+	public List<Admin> getAdmins(int page, int size) {
+		Page<Admin> admins = adminRepository.findAll(PageRequest.of(page, size));
+		return admins.getContent();
 	}
 
 	@Override

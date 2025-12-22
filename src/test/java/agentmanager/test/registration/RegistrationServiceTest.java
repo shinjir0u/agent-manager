@@ -37,7 +37,7 @@ public class RegistrationServiceTest {
 
 	@Test
 	public void testGetRegistrations() {
-		List<Registration> registrations = registrationService.getRegistrations();
+		List<Registration> registrations = registrationService.getRegistrations(0, 10);
 
 		assertNotNull(registrations);
 		assertThat(registrations.size() > 0);
@@ -46,7 +46,7 @@ public class RegistrationServiceTest {
 	@Test
 	public void testGetRegistrationsBySaleExecutive() {
 		SaleExecutive saleExecutive = saleExecutiveRepository.findById(10L).orElse(null);
-		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive);
+		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, 0, 10);
 
 		assertNotNull(registrations);
 		assertThat(registrations.size() > 0);

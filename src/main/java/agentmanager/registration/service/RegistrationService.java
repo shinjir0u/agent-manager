@@ -6,9 +6,9 @@ import agentmanager.registration.model.Registration;
 import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface RegistrationService {
-	List<Registration> getRegistrations();
+	List<Registration> getRegistrations(int page, int size);
 
-	List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive);
+	List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage);
 
 	Registration getRegistration(Long registrationId);
 

@@ -5,7 +5,7 @@ import java.util.List;
 import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface SaleExecutiveService {
-	List<SaleExecutive> getSaleExecutives();
+	List<SaleExecutive> getSaleExecutives(int page, int size);
 
 	SaleExecutive getSaleExecutive(Long id);
 

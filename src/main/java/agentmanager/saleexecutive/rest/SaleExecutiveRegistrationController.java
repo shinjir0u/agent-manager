@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,17 +38,20 @@ public class SaleExecutiveRegistrationController {
 
 	private final SaleExecutiveService saleExecutiveService;
 
-	public SaleExecutiveRegistrationController(RegistrationService registrationService, SaleExecutiveService saleExecutiveService) {
+	public SaleExecutiveRegistrationController(RegistrationService registrationService,
+			SaleExecutiveService saleExecutiveService) {
 		this.registrationService = registrationService;
 		this.saleExecutiveService = saleExecutiveService;
 	}
 
 	@GetMapping("/{saleExecutiveId}/registration/list")
 	public ResponseEntity<List<RegistrationResponse>> getRegistrationsBySaleExecutive(
-			@PathVariable Long saleExecutiveId) {
+			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size) {
 		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
 
-		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive);
+		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,
+				size);
 		List<RegistrationResponse> response = registrations.stream()
 				.map(registration -> new RegistrationResponse(registration)).collect(Collectors.toList());
 		logger.info("Fetched registrations: {}", response);

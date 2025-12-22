@@ -1,11 +1,12 @@
 package agentmanager.saleexecutive.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import agentmanager.registration.repository.RegistrationRepository;
@@ -24,10 +25,9 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	}
 
 	@Override
-	public List<SaleExecutive> getSaleExecutives() {
-		List<SaleExecutive> saleExecutives = new ArrayList<>();
-		saleExecutiveRepository.findAll().forEach(saleExecutives::add);
-		return saleExecutives;
+	public List<SaleExecutive> getSaleExecutives(int page, int size) {
+		Page<SaleExecutive> saleExecutives = saleExecutiveRepository.findAll(PageRequest.of(page, size));
+		return saleExecutives.getContent();
 	}
 
 	@Override

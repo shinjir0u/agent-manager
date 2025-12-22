@@ -1,12 +1,13 @@
 package agentmanager.registration.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import agentmanager.registration.model.Registration;
@@ -27,18 +28,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
-	public List<Registration> getRegistrations() {
-		List<Registration> registrations = new ArrayList<>();
-		registrationRepository.findAll().forEach(registrations::add);
-		return registrations;
+	public List<Registration> getRegistrations(int page, int size) {
+		Page<Registration> registrations = registrationRepository.findAll(PageRequest.of(page, size));
+		return registrations.getContent();
 	}
 
 	@Override
-	public List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive) {
-		List<Registration> registrations = new ArrayList<>();
-
-		registrationRepository.findBySaleExecutive(saleExecutive).forEach(registrations::add);
-		return registrations;
+	public List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage) {
+		Page<Registration> registrations = registrationRepository.findBySaleExecutive(saleExecutive,
+				PageRequest.of(page, perPage));
+		return registrations.getContent();
 	}
 
 	@Override

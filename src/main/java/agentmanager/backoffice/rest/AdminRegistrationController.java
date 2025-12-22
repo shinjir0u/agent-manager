@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,8 +35,10 @@ public class AdminRegistrationController {
 	private RegistrationService registrationService;
 
 	@GetMapping("/list")
-	public ResponseEntity<List<RegistrationResponse>> getRegistrations() {
-		List<Registration> registrations = registrationService.getRegistrations();
+	public ResponseEntity<List<RegistrationResponse>> getRegistrations(
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size) {
+		List<Registration> registrations = registrationService.getRegistrations(page, size);
 		List<RegistrationResponse> response = registrations.stream()
 				.map(registration -> new RegistrationResponse(registration.getId(), registration.getAgentName(),
 						registration.getPhoneNumber(), registration.getRegisteredAt(),

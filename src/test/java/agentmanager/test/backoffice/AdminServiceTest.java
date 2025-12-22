@@ -37,7 +37,7 @@ public class AdminServiceTest {
 
 	@Test
 	public void testGetAdmins() {
-		List<Admin> admins = adminService.getAdmins();
+		List<Admin> admins = adminService.getAdmins(0, 10);
 
 		assertNotNull(admins);
 		assertThat(admins.size() > 0);
