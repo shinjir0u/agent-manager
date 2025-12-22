@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -13,19 +12,14 @@ import org.springframework.stereotype.Service;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
-import agentmanager.saleexecutive.service.SaleExecutiveService;
+import lombok.AllArgsConstructor;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class RegistrationServiceImpl implements RegistrationService {
 
 	private final RegistrationRepository registrationRepository;
-
-	@Autowired
-	public RegistrationServiceImpl(RegistrationRepository registrationRepository,
-			SaleExecutiveService saleExecutiveService) {
-		this.registrationRepository = registrationRepository;
-	}
 
 	@Override
 	public List<Registration> getRegistrations(int page, int size) {

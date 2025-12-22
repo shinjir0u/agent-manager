@@ -9,20 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
+import lombok.AllArgsConstructor;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
-	private SaleExecutiveRepository saleExecutiveRepository;
-
-	public SaleExecutiveServiceImpl(SaleExecutiveRepository saleExecutiveRepository,
-			RegistrationRepository registrationRepository) {
-		this.saleExecutiveRepository = saleExecutiveRepository;
-	}
+	private final SaleExecutiveRepository saleExecutiveRepository;
 
 	@Override
 	public List<SaleExecutive> getSaleExecutives(int page, int size) {
