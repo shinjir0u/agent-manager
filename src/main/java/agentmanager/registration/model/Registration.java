@@ -43,7 +43,7 @@ public class Registration {
 
 	@Column(name = "registered_at")
 	@JsonProperty(value = "registered_at")
-	private Date registeredAt = new Date();
+	private Date registeredAt;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "sale_executive_id")
@@ -53,6 +53,7 @@ public class Registration {
 		this.agentName = agentName;
 		this.phoneNumber = phoneNumber;
 		this.saleExecutive = saleExecutive;
+		this.registeredAt = new Date();
 	}
 
 	public void update(String phoneNumber) {

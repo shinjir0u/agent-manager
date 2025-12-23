@@ -1,5 +1,6 @@
 package agentmanager.registration.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,10 +8,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
+import agentmanager.registration.repository.specification.RegistrationSpecifications;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import lombok.AllArgsConstructor;
 
@@ -22,14 +25,26 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private final RegistrationRepository registrationRepository;
 
 	@Override
-	public List<Registration> getRegistrations(int page, int size) {
-		Page<Registration> registrations = registrationRepository.findAll(PageRequest.of(page, size));
+	public List<Registration> getRegistrations(int page, int size, String agentName, String phoneNumber,
+			Date registeredAt, Long saleExecutiveId) {
+		Specification<Registration> specification = Specification
+				.where(RegistrationSpecifications.withAgentName(agentName))
+				.and(RegistrationSpecifications.withPhoneNumber(phoneNumber))
+				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
+				.and(RegistrationSpecifications.withSaleExecutive(saleExecutiveId));
+		Page<Registration> registrations = registrationRepository.findAll(specification, PageRequest.of(page, size));
 		return registrations.getContent();
 	}
 
 	@Override
-	public List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage) {
-		Page<Registration> registrations = registrationRepository.findBySaleExecutive(saleExecutive,
+	public List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
+			String agentName, String phoneNumber, Date registeredAt, Long saleExecutiveId) {
+		Specification<Registration> specification = Specification
+				.where(RegistrationSpecifications.withAgentName(agentName))
+				.and(RegistrationSpecifications.withPhoneNumber(phoneNumber))
+				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
+				.and(RegistrationSpecifications.withSaleExecutive(saleExecutiveId));
+		Page<Registration> registrations = registrationRepository.findBySaleExecutive(saleExecutive, specification,
 				PageRequest.of(page, perPage));
 		return registrations.getContent();
 	}

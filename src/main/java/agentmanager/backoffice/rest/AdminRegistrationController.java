@@ -37,8 +37,10 @@ public class AdminRegistrationController {
 	@GetMapping("/list")
 	public ResponseEntity<List<RegistrationResponse>> getRegistrations(
 			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size) {
-		List<Registration> registrations = registrationService.getRegistrations(page, size);
+			@RequestParam(name = "size", defaultValue = "10") int size, RegistrationParams registrationParams) {
+		List<Registration> registrations = registrationService.getRegistrations(page, size,
+				registrationParams.getAgent_name(), registrationParams.getPhone_number(),
+				registrationParams.getRegistered_at(), registrationParams.getRegistered_by());
 		List<RegistrationResponse> response = registrations.stream()
 				.map(registration -> new RegistrationResponse(registration.getId(), registration.getAgentName(),
 						registration.getPhoneNumber(), registration.getRegisteredAt(),
@@ -104,6 +106,21 @@ public class AdminRegistrationController {
 
 		@JsonProperty("registered_by")
 		private String registeredBy;
+
+	}
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	static class RegistrationParams {
+
+		private String agent_name;
+
+		private String phone_number;
+
+		private Date registered_at;
+
+		private Long registered_by;
 
 	}
 

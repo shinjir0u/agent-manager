@@ -2,20 +2,16 @@ package agentmanager.saleexecutive.rest;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -44,20 +40,20 @@ public class SaleExecutiveRegistrationController {
 		this.saleExecutiveService = saleExecutiveService;
 	}
 
-	@GetMapping("/{saleExecutiveId}/registration/list")
-	public ResponseEntity<List<RegistrationResponse>> getRegistrationsBySaleExecutive(
-			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size) {
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
-
-		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,
-				size);
-		List<RegistrationResponse> response = registrations.stream()
-				.map(registration -> new RegistrationResponse(registration)).collect(Collectors.toList());
-		logger.info("Fetched registrations: {}", response);
-
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
-	}
+//	@GetMapping("/{saleExecutiveId}/registration/list")
+//	public ResponseEntity<List<RegistrationResponse>> getRegistrationsBySaleExecutive(
+//			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
+//			@RequestParam(name = "size", defaultValue = "10") int size) {
+//		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+//
+//		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,
+//				size);
+//		List<RegistrationResponse> response = registrations.stream()
+//				.map(registration -> new RegistrationResponse(registration)).collect(Collectors.toList());
+//		logger.info("Fetched registrations: {}", response);
+//
+//		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
+//	}
 
 	@PostMapping(value = "/{saleExecutiveId}/registration/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RegistrationResponse> createRegistration(@PathVariable Long saleExecutiveId,
