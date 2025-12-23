@@ -1,17 +1,15 @@
-package agentmanager.common;
+package agentmanager.config;
 
 import javax.servlet.Filter;
 
 import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import agentmanager.config.WebConfig;
-
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { WebConfig.class };
+		return new Class<?>[] {};
 	}
 
 	@Override
