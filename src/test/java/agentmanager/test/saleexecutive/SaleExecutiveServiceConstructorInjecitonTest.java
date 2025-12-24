@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
@@ -47,12 +48,13 @@ public class SaleExecutiveServiceConstructorInjecitonTest {
 		saleExecutives.add(new SaleExecutive("executive2", "executive2@gmail.com", "pass2", "09123321894"));
 		Page<SaleExecutive> saleExecutivePage = convertListToPage(saleExecutives, 0, 10);
 
-		when(saleExecutiveRepository.findAll(PageRequest.of(0, 10))).thenReturn(saleExecutivePage);
+		when(saleExecutiveRepository.findAll(any(Specification.class), any(Pageable.class)))
+				.thenReturn(saleExecutivePage);
 
-		List<SaleExecutive> result = saleExecutiveService.getSaleExecutives(0, 10);
+		List<SaleExecutive> result = saleExecutiveService.getSaleExecutives(0, 10, null, null, null, null);
 		assertEquals(2, result.size());
 
-		verify(saleExecutiveRepository).findAll(PageRequest.of(0, 10));
+		verify(saleExecutiveRepository).findAll(any(Specification.class), any(Pageable.class));
 	}
 
 	@Test

@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.repository.AdminRepository;
@@ -50,7 +51,7 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Before
 	public void setup() {
-		adminService = new AdminServiceImpl(adminRepository, saleExecutiveRepository, registrationRepository);
+		adminService = new AdminServiceImpl(adminRepository, saleExecutiveRepository);
 	}
 
 	@Test
@@ -60,12 +61,12 @@ public class AdminServiceConstructorInjectionTest {
 				new Admin(3L, "tech_lead", "tech@company.com", "dev789") };
 
 		Page<Admin> adminPage = convertListToPage(Arrays.asList(mockAdmins), 0, 5);
-		when(adminRepository.findAll(PageRequest.of(0, 5))).thenReturn(adminPage);
+		when(adminRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(adminPage);
 
-		List<Admin> admins = adminService.getAdmins(0, 5);
+		List<Admin> admins = adminService.getAdmins(0, 5, null, null);
 		assertEquals(3, admins.size());
 
-		verify(adminRepository).findAll(PageRequest.of(0, 5));
+		verify(adminRepository).findAll(any(Specification.class), any(Pageable.class));
 	}
 
 	@Test

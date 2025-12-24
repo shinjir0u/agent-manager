@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
@@ -46,12 +47,13 @@ public class RegistrationConstructorInjectionTest {
 		registrations.add(new Registration("agent2", "09456", new SaleExecutive()));
 
 		Page<Registration> registrationPage = convertListToPage(registrations, 0, 10);
-		when(registrationRepository.findAll(PageRequest.of(0, 10))).thenReturn(registrationPage);
+		when(registrationRepository.findAll(any(Specification.class), any(Pageable.class)))
+				.thenReturn(registrationPage);
 
-		List<Registration> result = registrationService.getRegistrations(0, 10);
+		List<Registration> result = registrationService.getRegistrations(0, 10, null, null, null, null);
 		assertEquals(2, result.size());
 
-		verify(registrationRepository).findAll(PageRequest.of(0, 10));
+		verify(registrationRepository).findAll(any(Specification.class), any(Pageable.class));
 	}
 
 	@Test
@@ -62,13 +64,14 @@ public class RegistrationConstructorInjectionTest {
 		registrations.add(new Registration("agent2", "09456", saleExecutive));
 
 		Page<Registration> registrationPage = convertListToPage(registrations, 0, 10);
-		when(registrationRepository.findBySaleExecutive(any(SaleExecutive.class), any(PageRequest.class)))
+		when(registrationRepository.findAll(any(Specification.class), any(Pageable.class)))
 				.thenReturn(registrationPage);
 
-		List<Registration> result = registrationService.getRegistrationsBySaleExecutive(saleExecutive, 0, 10);
+		List<Registration> result = registrationService.getRegistrationsBySaleExecutive(saleExecutive, 0, 10, null,
+				null, null);
 		assertEquals(2, result.size());
 
-		verify(registrationRepository).findBySaleExecutive(any(SaleExecutive.class), any(PageRequest.class));
+		verify(registrationRepository).findAll(any(Specification.class), any(Pageable.class));
 	}
 
 	@Test

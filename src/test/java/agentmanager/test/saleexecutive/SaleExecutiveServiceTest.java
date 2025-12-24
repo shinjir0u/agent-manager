@@ -29,7 +29,7 @@ public class SaleExecutiveServiceTest {
 
 	@Test
 	public void testGetSaleExecutives() {
-		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(0, 10);
+		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(0, 10, null, null, null, null);
 
 		assertNotNull(saleExecutives);
 		assertThat(saleExecutives.size() > 0);
