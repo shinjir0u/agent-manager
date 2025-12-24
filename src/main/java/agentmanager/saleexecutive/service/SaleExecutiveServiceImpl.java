@@ -7,10 +7,13 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.model.Status;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
+import agentmanager.saleexecutive.repository.specification.SaleExecutiveSpecifications;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -21,8 +24,14 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	private final SaleExecutiveRepository saleExecutiveRepository;
 
 	@Override
-	public List<SaleExecutive> getSaleExecutives(int page, int size) {
-		Page<SaleExecutive> saleExecutives = saleExecutiveRepository.findAll(PageRequest.of(page, size));
+	public List<SaleExecutive> getSaleExecutives(int page, int size, String username, String email, String phoneNumber,
+			Status status) {
+		Specification<SaleExecutive> specification = Specification
+				.where(SaleExecutiveSpecifications.withUsername(username))
+				.and(SaleExecutiveSpecifications.withEmail(email))
+				.and(SaleExecutiveSpecifications.withPhoneNumber(phoneNumber))
+				.and(SaleExecutiveSpecifications.withStatus(status));
+		Page<SaleExecutive> saleExecutives = saleExecutiveRepository.findAll(specification, PageRequest.of(page, size));
 		return saleExecutives.getContent();
 	}
 

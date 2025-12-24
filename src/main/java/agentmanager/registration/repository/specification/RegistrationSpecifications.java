@@ -11,13 +11,13 @@ public class RegistrationSpecifications {
 	public static Specification<Registration> withAgentName(String agentName) {
 		if (agentName == null)
 			return null;
-		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("agentName"), agentName);
+		return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("agentName"), "%" + agentName + "%");
 	}
 
 	public static Specification<Registration> withPhoneNumber(String phoneNumber) {
 		if (phoneNumber == null)
 			return null;
-		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("phoneNumber"), phoneNumber);
+		return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("phoneNumber"), "%" + phoneNumber + "%");
 	}
 
 	public static Specification<Registration> laterThanRegisteredAt(Date registeredAt) {

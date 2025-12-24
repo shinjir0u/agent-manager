@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import agentmanager.backoffice.service.AdminService;
 import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.model.Status;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,8 +45,10 @@ public class AdminSaleExecutiveController {
 	@GetMapping("/list")
 	public ResponseEntity<List<SaleExecutiveResponse>> getSaleExecutives(
 			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size) {
-		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size);
+			@RequestParam(name = "size", defaultValue = "10") int size, SaleExecutiveParams saleExecutiveParams) {
+		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size,
+				saleExecutiveParams.getUsername(), saleExecutiveParams.getEmail(),
+				saleExecutiveParams.getPhone_number(), saleExecutiveParams.getStatus());
 		List<SaleExecutiveResponse> response = saleExecutives
 				.stream().map(saleExecutive -> new SaleExecutiveResponse(saleExecutive.getId(),
 						saleExecutive.getUsername(), saleExecutive.getEmail(), saleExecutive.getPhoneNumber()))
@@ -166,6 +169,20 @@ public class AdminSaleExecutiveController {
 
 		@JsonProperty("phone_number")
 		private String phoneNumber;
+
+	}
+
+	@Data
+	@AllArgsConstructor
+	static class SaleExecutiveParams {
+
+		private String username;
+
+		private String email;
+
+		private String phone_number;
+
+		private Status status;
 
 	}
 

@@ -54,10 +54,10 @@ public class SaleExecutive {
 	@Enumerated(EnumType.STRING)
 	@Type(type = "status_enum")
 	@Column(columnDefinition = "sale_executive_status")
-	private Status status = Status.ACTIVE;
+	private Status status;
 
 	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Registration> registrations = new ArrayList<>();
+	private List<Registration> registrations;
 
 	public SaleExecutive(String username, String email, String password, String phoneNumber) {
 
@@ -65,6 +65,8 @@ public class SaleExecutive {
 		this.email = email;
 		this.password = encodingPassword(password);
 		this.phoneNumber = phoneNumber;
+		this.status = Status.ACTIVE;
+		this.registrations = new ArrayList<>();
 
 	}
 
