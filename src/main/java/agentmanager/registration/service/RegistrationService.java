@@ -11,7 +11,7 @@ public interface RegistrationService {
 			Long saleExecutiveId);
 
 	List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
-			String agentName, String phoneNumber, Date registeredAt, Long saleExecutiveId);
+			String agentName, String phoneNumber, Date registeredAt);
 
 	Registration getRegistration(Long registrationId);
 

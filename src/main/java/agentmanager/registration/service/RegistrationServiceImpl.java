@@ -38,14 +38,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
-			String agentName, String phoneNumber, Date registeredAt, Long saleExecutiveId) {
+			String agentName, String phoneNumber, Date registeredAt) {
 		Specification<Registration> specification = Specification
 				.where(RegistrationSpecifications.withAgentName(agentName))
 				.and(RegistrationSpecifications.withPhoneNumber(phoneNumber))
 				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
-				.and(RegistrationSpecifications.withSaleExecutive(saleExecutiveId));
-		Page<Registration> registrations = registrationRepository.findBySaleExecutive(saleExecutive, specification,
-				PageRequest.of(page, perPage));
+				.and(RegistrationSpecifications.withSaleExecutive(saleExecutive.getId()));
+		Page<Registration> registrations = registrationRepository.findAll(specification, PageRequest.of(page, perPage));
 		return registrations.getContent();
 	}
 
