@@ -7,11 +7,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.repository.AdminRepository;
-import agentmanager.registration.repository.RegistrationRepository;
+import agentmanager.backoffice.repository.specification.AdminSpecifications;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import lombok.AllArgsConstructor;
@@ -25,11 +26,11 @@ public class AdminServiceImpl implements AdminService {
 
 	private final SaleExecutiveRepository saleExecutiveRepository;
 
-	private final RegistrationRepository registrationRepository;
-
 	@Override
-	public List<Admin> getAdmins(int page, int size) {
-		Page<Admin> admins = adminRepository.findAll(PageRequest.of(page, size));
+	public List<Admin> getAdmins(int page, int size, String username, String email) {
+		Specification<Admin> specification = Specification.where(AdminSpecifications.withUsername(username))
+				.and(AdminSpecifications.withEmail(email));
+		Page<Admin> admins = adminRepository.findAll(specification, PageRequest.of(page, size));
 		return admins.getContent();
 	}
 
