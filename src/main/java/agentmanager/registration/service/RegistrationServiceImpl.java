@@ -1,7 +1,6 @@
 package agentmanager.registration.service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -25,7 +24,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private final RegistrationRepository registrationRepository;
 
 	@Override
-	public List<Registration> getRegistrations(int page, int size, String agentName, String phoneNumber,
+	public Page<Registration> getRegistrations(int page, int size, String agentName, String phoneNumber,
 			Date registeredAt, Long saleExecutiveId) {
 		Specification<Registration> specification = Specification
 				.where(RegistrationSpecifications.withAgentName(agentName))
@@ -33,11 +32,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
 				.and(RegistrationSpecifications.withSaleExecutive(saleExecutiveId));
 		Page<Registration> registrations = registrationRepository.findAll(specification, PageRequest.of(page, size));
-		return registrations.getContent();
+		return registrations;
 	}
 
 	@Override
-	public List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
+	public Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
 			String agentName, String phoneNumber, Date registeredAt) {
 		Specification<Registration> specification = Specification
 				.where(RegistrationSpecifications.withAgentName(agentName))
@@ -45,7 +44,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
 				.and(RegistrationSpecifications.withSaleExecutive(saleExecutive.getId()));
 		Page<Registration> registrations = registrationRepository.findAll(specification, PageRequest.of(page, perPage));
-		return registrations.getContent();
+		return registrations;
 	}
 
 	@Override

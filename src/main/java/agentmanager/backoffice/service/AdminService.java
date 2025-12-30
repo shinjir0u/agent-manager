@@ -1,12 +1,12 @@
 package agentmanager.backoffice.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface AdminService {
-	List<Admin> getAdmins(int page, int size, String username, String email);
+	Page<Admin> getAdmins(int page, int size, String username, String email);
 
 	Admin getAdmin(Long id);
 

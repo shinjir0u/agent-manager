@@ -1,6 +1,5 @@
 package agentmanager.saleexecutive.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -24,7 +23,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	private final SaleExecutiveRepository saleExecutiveRepository;
 
 	@Override
-	public List<SaleExecutive> getSaleExecutives(int page, int size, String username, String email, String phoneNumber,
+	public Page<SaleExecutive> getSaleExecutives(int page, int size, String username, String email, String phoneNumber,
 			Status status) {
 		Specification<SaleExecutive> specification = Specification
 				.where(SaleExecutiveSpecifications.withUsername(username))
@@ -32,7 +31,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 				.and(SaleExecutiveSpecifications.withPhoneNumber(phoneNumber))
 				.and(SaleExecutiveSpecifications.withStatus(status));
 		Page<SaleExecutive> saleExecutives = saleExecutiveRepository.findAll(specification, PageRequest.of(page, size));
-		return saleExecutives.getContent();
+		return saleExecutives;
 	}
 
 	@Override

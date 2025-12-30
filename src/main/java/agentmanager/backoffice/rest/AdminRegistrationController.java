@@ -1,12 +1,11 @@
 package agentmanager.backoffice.rest;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,17 +34,16 @@ public class AdminRegistrationController {
 	private RegistrationService registrationService;
 
 	@GetMapping("/list")
-	public ResponseEntity<List<RegistrationResponse>> getRegistrations(
+	public ResponseEntity<Page<RegistrationResponse>> getRegistrations(
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size, RegistrationParams registrationParams) {
-		List<Registration> registrations = registrationService.getRegistrations(page, size,
+		Page<Registration> registrations = registrationService.getRegistrations(page, size,
 				registrationParams.getAgent_name(), registrationParams.getPhone_number(),
 				registrationParams.getRegistered_at(), registrationParams.getRegistered_by());
-		List<RegistrationResponse> response = registrations.stream()
+		Page<RegistrationResponse> response = registrations
 				.map(registration -> new RegistrationResponse(registration.getId(), registration.getAgentName(),
 						registration.getPhoneNumber(), registration.getRegisteredAt(),
-						registration.getSaleExecutive().getUsername()))
-				.collect(Collectors.toList());
+						registration.getSaleExecutive().getUsername()));
 		logger.info("Fetched registrations: {}", response);
 
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);

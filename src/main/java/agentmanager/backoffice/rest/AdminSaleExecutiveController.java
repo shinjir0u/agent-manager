@@ -1,12 +1,11 @@
 package agentmanager.backoffice.rest;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,16 +42,15 @@ public class AdminSaleExecutiveController {
 	private AdminService adminService;
 
 	@GetMapping("/list")
-	public ResponseEntity<List<SaleExecutiveResponse>> getSaleExecutives(
+	public ResponseEntity<Page<SaleExecutiveResponse>> getSaleExecutives(
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size, SaleExecutiveParams saleExecutiveParams) {
-		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size,
+		Page<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size,
 				saleExecutiveParams.getUsername(), saleExecutiveParams.getEmail(),
 				saleExecutiveParams.getPhone_number(), saleExecutiveParams.getStatus());
-		List<SaleExecutiveResponse> response = saleExecutives
-				.stream().map(saleExecutive -> new SaleExecutiveResponse(saleExecutive.getId(),
-						saleExecutive.getUsername(), saleExecutive.getEmail(), saleExecutive.getPhoneNumber()))
-				.collect(Collectors.toList());
+		Page<SaleExecutiveResponse> response = saleExecutives
+				.map(saleExecutive -> new SaleExecutiveResponse(saleExecutive.getId(), saleExecutive.getUsername(),
+						saleExecutive.getEmail(), saleExecutive.getPhoneNumber()));
 		logger.info("Fetched sale executives: {}", response);
 
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);

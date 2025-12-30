@@ -1,6 +1,5 @@
 package agentmanager.backoffice.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -27,11 +26,11 @@ public class AdminServiceImpl implements AdminService {
 	private final SaleExecutiveRepository saleExecutiveRepository;
 
 	@Override
-	public List<Admin> getAdmins(int page, int size, String username, String email) {
+	public Page<Admin> getAdmins(int page, int size, String username, String email) {
 		Specification<Admin> specification = Specification.where(AdminSpecifications.withUsername(username))
 				.and(AdminSpecifications.withEmail(email));
 		Page<Admin> admins = adminRepository.findAll(specification, PageRequest.of(page, size));
-		return admins.getContent();
+		return admins;
 	}
 
 	@Override

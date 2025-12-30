@@ -2,11 +2,10 @@ package agentmanager.saleexecutive.rest;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,19 +45,18 @@ public class SaleExecutiveRegistrationController {
 	}
 
 	@GetMapping("/{saleExecutiveId}/registration/list")
-	public ResponseEntity<List<RegistrationResponse>> getRegistrationsBySaleExecutive(
+	public ResponseEntity<Page<RegistrationResponse>> getRegistrationsBySaleExecutive(
 			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size, RegistrationParams registrationParams) {
 		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
 
-		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,
+		Page<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,
 				size, registrationParams.getAgent_name(), registrationParams.getPhone_number(),
 				registrationParams.getRegistered_at());
-		List<RegistrationResponse> response = registrations.stream()
+		Page<RegistrationResponse> response = registrations
 				.map(registration -> new RegistrationResponse(registration.getId(), registration.getAgentName(),
 						registration.getPhoneNumber(), registration.getRegisteredAt(),
-						registration.getSaleExecutive().getUsername()))
-				.collect(Collectors.toList());
+						registration.getSaleExecutive().getUsername()));
 		logger.info("Fetched registrations: {}", response);
 
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);

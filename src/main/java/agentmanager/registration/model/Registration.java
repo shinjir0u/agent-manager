@@ -45,7 +45,7 @@ public class Registration {
 	@JsonProperty(value = "registered_at")
 	private Date registeredAt;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "sale_executive_id")
 	private SaleExecutive saleExecutive;
 

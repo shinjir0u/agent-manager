@@ -1,12 +1,12 @@
 package agentmanager.saleexecutive.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.Status;
 
 public interface SaleExecutiveService {
-	List<SaleExecutive> getSaleExecutives(int page, int size, String username, String email, String phoneNumber,
+	Page<SaleExecutive> getSaleExecutives(int page, int size, String username, String email, String phoneNumber,
 			Status status);
 
 	SaleExecutive getSaleExecutive(Long id);

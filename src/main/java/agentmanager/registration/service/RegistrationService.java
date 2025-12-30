@@ -1,16 +1,17 @@
 package agentmanager.registration.service;
 
 import java.util.Date;
-import java.util.List;
+
+import org.springframework.data.domain.Page;
 
 import agentmanager.registration.model.Registration;
 import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface RegistrationService {
-	List<Registration> getRegistrations(int page, int size, String agentName, String phoneNumber, Date registeredAt,
+	Page<Registration> getRegistrations(int page, int size, String agentName, String phoneNumber, Date registeredAt,
 			Long saleExecutiveId);
 
-	List<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
+	Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
 			String agentName, String phoneNumber, Date registeredAt);
 
 	Registration getRegistration(Long registrationId);
