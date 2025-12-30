@@ -32,7 +32,7 @@ public class UserInfoDetailsService implements UserDetailsService {
 			roles.add("USER");
 			roles.add("ADMIN");
 
-			return new UserInfoDetails(admin.getUsername(), admin.getPassword(), roles);
+			return new UserInfoDetails(admin.getId(), admin.getUsername(), admin.getPassword(), roles);
 		}
 
 		Optional<SaleExecutive> saleExecutiveOptional = saleExecutiveRepository.findByUsername(username);
@@ -41,7 +41,8 @@ public class UserInfoDetailsService implements UserDetailsService {
 			List<String> roles = new ArrayList<>();
 			roles.add("USER");
 
-			return new UserInfoDetails(saleExecutive.getUsername(), saleExecutive.getPassword(), roles);
+			return new UserInfoDetails(saleExecutive.getId(), saleExecutive.getUsername(), saleExecutive.getPassword(),
+					roles);
 		}
 
 		throw new UsernameNotFoundException("No such user with username: " + username);

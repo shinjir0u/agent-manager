@@ -10,13 +10,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserInfoDetails implements UserDetails {
 
+	private Long id;
+
 	private String username;
 
 	private String password;
 
 	private List<GrantedAuthority> roles;
 
-	public UserInfoDetails(String username, String password, List<String> roles) {
+	public UserInfoDetails(Long id, String username, String password, List<String> roles) {
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.roles = roles.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
@@ -25,6 +28,10 @@ public class UserInfoDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.roles;
+	}
+
+	public Long getId() {
+		return this.id;
 	}
 
 	@Override

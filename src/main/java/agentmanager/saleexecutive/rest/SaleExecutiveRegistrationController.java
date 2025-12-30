@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,7 @@ public class SaleExecutiveRegistrationController {
 		this.saleExecutiveService = saleExecutiveService;
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN') or #saleExecutiveId == principal.id")
 	@GetMapping("/{saleExecutiveId}/registration/list")
 	public ResponseEntity<PaginatedResponse<RegistrationResponse>> getRegistrationsBySaleExecutive(
 			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
@@ -70,6 +72,7 @@ public class SaleExecutiveRegistrationController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN') or #saleExecutiveId == principal.id")
 	@PostMapping(value = "/{saleExecutiveId}/registration/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RegistrationResponse> createRegistration(@PathVariable Long saleExecutiveId,
 			@RequestBody RegistrationRequest request) {
