@@ -44,8 +44,11 @@ public class AdminSaleExecutiveController {
 	@GetMapping("/list")
 	public ResponseEntity<Page<SaleExecutiveResponse>> getSaleExecutives(
 			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size, SaleExecutiveParams saleExecutiveParams) {
-		Page<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size,
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@RequestParam(name = "sort", defaultValue = "id") String sort,
+			@RequestParam(name = "direction", defaultValue = "ASC") String direction,
+			SaleExecutiveParams saleExecutiveParams) {
+		Page<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size, sort, direction,
 				saleExecutiveParams.getUsername(), saleExecutiveParams.getEmail(),
 				saleExecutiveParams.getPhone_number(), saleExecutiveParams.getStatus());
 		Page<SaleExecutiveResponse> response = saleExecutives

@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -24,26 +25,28 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private final RegistrationRepository registrationRepository;
 
 	@Override
-	public Page<Registration> getRegistrations(int page, int size, String agentName, String phoneNumber,
-			Date registeredAt, Long saleExecutiveId) {
+	public Page<Registration> getRegistrations(int page, int size, String sort, String direction, String agentName,
+			String phoneNumber, Date registeredAt, Long saleExecutiveId) {
 		Specification<Registration> specification = Specification
 				.where(RegistrationSpecifications.withAgentName(agentName))
 				.and(RegistrationSpecifications.withPhoneNumber(phoneNumber))
 				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
 				.and(RegistrationSpecifications.withSaleExecutive(saleExecutiveId));
-		Page<Registration> registrations = registrationRepository.findAll(specification, PageRequest.of(page, size));
+		Page<Registration> registrations = registrationRepository.findAll(specification,
+				PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort)));
 		return registrations;
 	}
 
 	@Override
-	public Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int perPage,
-			String agentName, String phoneNumber, Date registeredAt) {
+	public Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int size,
+			String sort, String direction, String agentName, String phoneNumber, Date registeredAt) {
 		Specification<Registration> specification = Specification
 				.where(RegistrationSpecifications.withAgentName(agentName))
 				.and(RegistrationSpecifications.withPhoneNumber(phoneNumber))
 				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
 				.and(RegistrationSpecifications.withSaleExecutive(saleExecutive.getId()));
-		Page<Registration> registrations = registrationRepository.findAll(specification, PageRequest.of(page, perPage));
+		Page<Registration> registrations = registrationRepository.findAll(specification,
+				PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort)));
 		return registrations;
 	}
 

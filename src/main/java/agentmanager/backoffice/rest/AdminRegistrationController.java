@@ -36,8 +36,11 @@ public class AdminRegistrationController {
 	@GetMapping("/list")
 	public ResponseEntity<Page<RegistrationResponse>> getRegistrations(
 			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size, RegistrationParams registrationParams) {
-		Page<Registration> registrations = registrationService.getRegistrations(page, size,
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@RequestParam(name = "sort", defaultValue = "id") String sort,
+			@RequestParam(name = "direction", defaultValue = "ASC") String direction,
+			RegistrationParams registrationParams) {
+		Page<Registration> registrations = registrationService.getRegistrations(page, size, sort, direction,
 				registrationParams.getAgent_name(), registrationParams.getPhone_number(),
 				registrationParams.getRegistered_at(), registrationParams.getRegistered_by());
 		Page<RegistrationResponse> response = registrations

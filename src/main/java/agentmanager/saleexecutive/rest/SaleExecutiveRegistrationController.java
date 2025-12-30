@@ -47,11 +47,14 @@ public class SaleExecutiveRegistrationController {
 	@GetMapping("/{saleExecutiveId}/registration/list")
 	public ResponseEntity<Page<RegistrationResponse>> getRegistrationsBySaleExecutive(
 			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size, RegistrationParams registrationParams) {
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@RequestParam(name = "sort", defaultValue = "id") String sort,
+			@RequestParam(name = "direction", defaultValue = "ASC") String direction,
+			RegistrationParams registrationParams) {
 		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
 
 		Page<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,
-				size, registrationParams.getAgent_name(), registrationParams.getPhone_number(),
+				size, sort, direction, registrationParams.getAgent_name(), registrationParams.getPhone_number(),
 				registrationParams.getRegistered_at());
 		Page<RegistrationResponse> response = registrations
 				.map(registration -> new RegistrationResponse(registration.getId(), registration.getAgentName(),
