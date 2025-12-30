@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import agentmanager.common.model.PaginatedResponse;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.service.RegistrationService;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,7 @@ public class AdminRegistrationController {
 	private RegistrationService registrationService;
 
 	@GetMapping("/list")
-	public ResponseEntity<Page<RegistrationResponse>> getRegistrations(
+	public ResponseEntity<PaginatedResponse<RegistrationResponse>> getRegistrations(
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size,
 			@RequestParam(name = "sort", defaultValue = "id") String sort,
@@ -43,10 +44,14 @@ public class AdminRegistrationController {
 		Page<Registration> registrations = registrationService.getRegistrations(page, size, sort, direction,
 				registrationParams.getAgent_name(), registrationParams.getPhone_number(),
 				registrationParams.getRegistered_at(), registrationParams.getRegistered_by());
-		Page<RegistrationResponse> response = registrations
+		Page<RegistrationResponse> registrationsResponse = registrations
 				.map(registration -> new RegistrationResponse(registration.getId(), registration.getAgentName(),
 						registration.getPhoneNumber(), registration.getRegisteredAt(),
 						registration.getSaleExecutive().getUsername()));
+		PaginatedResponse<RegistrationResponse> response = new PaginatedResponse<>(registrationsResponse.getContent(),
+				registrationsResponse.getNumber(), registrationsResponse.getTotalPages(),
+				registrationsResponse.getTotalElements(), registrationsResponse.getSize(),
+				registrationsResponse.hasNext(), registrationsResponse.hasPrevious());
 		logger.info("Fetched registrations: {}", response);
 
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);

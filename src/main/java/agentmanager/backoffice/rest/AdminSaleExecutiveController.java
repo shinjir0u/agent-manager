@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import agentmanager.backoffice.service.AdminService;
+import agentmanager.common.model.PaginatedResponse;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.Status;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
@@ -42,7 +43,7 @@ public class AdminSaleExecutiveController {
 	private AdminService adminService;
 
 	@GetMapping("/list")
-	public ResponseEntity<Page<SaleExecutiveResponse>> getSaleExecutives(
+	public ResponseEntity<PaginatedResponse<SaleExecutiveResponse>> getSaleExecutives(
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size,
 			@RequestParam(name = "sort", defaultValue = "id") String sort,
@@ -51,9 +52,13 @@ public class AdminSaleExecutiveController {
 		Page<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(page, size, sort, direction,
 				saleExecutiveParams.getUsername(), saleExecutiveParams.getEmail(),
 				saleExecutiveParams.getPhone_number(), saleExecutiveParams.getStatus());
-		Page<SaleExecutiveResponse> response = saleExecutives
+		Page<SaleExecutiveResponse> saleExecutivesResponse = saleExecutives
 				.map(saleExecutive -> new SaleExecutiveResponse(saleExecutive.getId(), saleExecutive.getUsername(),
 						saleExecutive.getEmail(), saleExecutive.getPhoneNumber()));
+		PaginatedResponse<SaleExecutiveResponse> response = new PaginatedResponse<>(saleExecutivesResponse.getContent(),
+				saleExecutivesResponse.getNumber(), saleExecutivesResponse.getTotalPages(),
+				saleExecutivesResponse.getTotalElements(), saleExecutivesResponse.getSize(),
+				saleExecutivesResponse.hasNext(), saleExecutivesResponse.hasPrevious());
 		logger.info("Fetched sale executives: {}", response);
 
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
