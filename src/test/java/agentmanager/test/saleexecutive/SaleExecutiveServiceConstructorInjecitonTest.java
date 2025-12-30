@@ -51,8 +51,8 @@ public class SaleExecutiveServiceConstructorInjecitonTest {
 		when(saleExecutiveRepository.findAll(any(Specification.class), any(Pageable.class)))
 				.thenReturn(saleExecutivePage);
 
-		List<SaleExecutive> result = saleExecutiveService.getSaleExecutives(0, 10, null, null, null, null);
-		assertEquals(2, result.size());
+		Page<SaleExecutive> result = saleExecutiveService.getSaleExecutives(0, 10, "id", "ASC", null, null, null, null);
+		assertEquals(2, result.getNumberOfElements());
 
 		verify(saleExecutiveRepository).findAll(any(Specification.class), any(Pageable.class));
 	}

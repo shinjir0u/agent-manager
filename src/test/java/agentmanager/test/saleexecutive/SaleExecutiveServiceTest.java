@@ -5,11 +5,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -29,10 +28,11 @@ public class SaleExecutiveServiceTest {
 
 	@Test
 	public void testGetSaleExecutives() {
-		List<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(0, 10, null, null, null, null);
+		Page<SaleExecutive> saleExecutives = saleExecutiveService.getSaleExecutives(0, 10, "id", "ASC", null, null,
+				null, null);
 
 		assertNotNull(saleExecutives);
-		assertThat(saleExecutives.size() > 0);
+		assertThat(saleExecutives.getNumberOfElements() > 0);
 	}
 
 	@Test

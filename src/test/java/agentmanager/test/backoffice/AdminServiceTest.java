@@ -5,11 +5,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -37,10 +36,10 @@ public class AdminServiceTest {
 
 	@Test
 	public void testGetAdmins() {
-		List<Admin> admins = adminService.getAdmins(0, 10, null, null);
+		Page<Admin> admins = adminService.getAdmins(0, 10, null, null);
 
 		assertNotNull(admins);
-		assertThat(admins.size() > 0);
+		assertThat(admins.getNumberOfElements() > 0);
 	}
 
 	@Test

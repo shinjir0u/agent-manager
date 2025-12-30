@@ -6,11 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -37,20 +37,21 @@ public class RegistrationServiceTest {
 
 	@Test
 	public void testGetRegistrations() {
-		List<Registration> registrations = registrationService.getRegistrations(0, 10, null, null, null, null);
+		Page<Registration> registrations = registrationService.getRegistrations(0, 10, "id", "ASC", null, null, null,
+				null);
 
 		assertNotNull(registrations);
-		assertThat(registrations.size() > 0);
+		assertThat(registrations.getNumberOfElements() > 0);
 	}
 
 	@Test
 	public void testGetRegistrationsBySaleExecutive() {
 		SaleExecutive saleExecutive = saleExecutiveRepository.findById(10L).orElse(null);
-		List<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, 0, 10,
-				null, null, null);
+		Page<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, 0, 10,
+				"id", "ASC", null, null, null);
 
 		assertNotNull(registrations);
-		assertThat(registrations.size() > 0);
+		assertThat(registrations.getNumberOfElements() > 0);
 	}
 
 	@Test

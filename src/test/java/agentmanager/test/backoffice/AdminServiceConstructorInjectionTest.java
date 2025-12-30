@@ -63,8 +63,8 @@ public class AdminServiceConstructorInjectionTest {
 		Page<Admin> adminPage = convertListToPage(Arrays.asList(mockAdmins), 0, 5);
 		when(adminRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(adminPage);
 
-		List<Admin> admins = adminService.getAdmins(0, 5, null, null);
-		assertEquals(3, admins.size());
+		Page<Admin> admins = adminService.getAdmins(0, 5, null, null);
+		assertEquals(3, admins.getNumberOfElements());
 
 		verify(adminRepository).findAll(any(Specification.class), any(Pageable.class));
 	}

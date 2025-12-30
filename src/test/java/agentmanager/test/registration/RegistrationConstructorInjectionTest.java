@@ -50,8 +50,8 @@ public class RegistrationConstructorInjectionTest {
 		when(registrationRepository.findAll(any(Specification.class), any(Pageable.class)))
 				.thenReturn(registrationPage);
 
-		List<Registration> result = registrationService.getRegistrations(0, 10, null, null, null, null);
-		assertEquals(2, result.size());
+		Page<Registration> result = registrationService.getRegistrations(0, 10, "id", "ASC", null, null, null, null);
+		assertEquals(2, result.getNumberOfElements());
 
 		verify(registrationRepository).findAll(any(Specification.class), any(Pageable.class));
 	}
@@ -67,9 +67,9 @@ public class RegistrationConstructorInjectionTest {
 		when(registrationRepository.findAll(any(Specification.class), any(Pageable.class)))
 				.thenReturn(registrationPage);
 
-		List<Registration> result = registrationService.getRegistrationsBySaleExecutive(saleExecutive, 0, 10, null,
-				null, null);
-		assertEquals(2, result.size());
+		Page<Registration> result = registrationService.getRegistrationsBySaleExecutive(saleExecutive, 0, 10, "id",
+				"ASC", null, null, null);
+		assertEquals(2, result.getNumberOfElements());
 
 		verify(registrationRepository).findAll(any(Specification.class), any(Pageable.class));
 	}
