@@ -6,7 +6,7 @@ import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.Status;
 
 public interface SaleExecutiveService {
-	Page<SaleExecutive> getSaleExecutives(int page, int size, String sort, String direction, String username,
+	Page<SaleExecutive> getSaleExecutives(Integer page, Integer size, String sort, String direction, String username,
 			String email, String phoneNumber, Status status);
 
 	SaleExecutive getSaleExecutive(Long id);

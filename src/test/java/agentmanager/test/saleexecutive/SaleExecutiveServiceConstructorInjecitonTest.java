@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,9 +23,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.query.SaleExecutiveQuery;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
 import agentmanager.saleexecutive.service.SaleExecutiveServiceImpl;
@@ -36,9 +39,12 @@ public class SaleExecutiveServiceConstructorInjecitonTest {
 	@Mock
 	private SaleExecutiveRepository saleExecutiveRepository;
 
+	@Mock
+	private SaleExecutiveQuery saleExecutiveQuery;
+
 	@Before
 	public void setup() {
-		saleExecutiveService = new SaleExecutiveServiceImpl(saleExecutiveRepository);
+		saleExecutiveService = new SaleExecutiveServiceImpl(saleExecutiveRepository, saleExecutiveQuery);
 	}
 
 	@Test
@@ -48,13 +54,15 @@ public class SaleExecutiveServiceConstructorInjecitonTest {
 		saleExecutives.add(new SaleExecutive("executive2", "executive2@gmail.com", "pass2", "09123321894"));
 		Page<SaleExecutive> saleExecutivePage = convertListToPage(saleExecutives, 0, 10);
 
-		when(saleExecutiveRepository.findAll(any(Specification.class), any(Pageable.class)))
-				.thenReturn(saleExecutivePage);
+		when(saleExecutiveQuery.getSaleExecutives(anyInt(), anyInt(), anyString(), anyString(), anyString(),
+				anyString(), anyString(), any(Status.class))).thenReturn(saleExecutivePage);
 
-		Page<SaleExecutive> result = saleExecutiveService.getSaleExecutives(0, 10, "id", "ASC", null, null, null, null);
+		Page<SaleExecutive> result = saleExecutiveService.getSaleExecutives(0, 5, "username", "ASC", "", "", "",
+				Status.ACTIVE);
 		assertEquals(2, result.getNumberOfElements());
 
-		verify(saleExecutiveRepository).findAll(any(Specification.class), any(Pageable.class));
+		verify(saleExecutiveQuery).getSaleExecutives(anyInt(), anyInt(), anyString(), anyString(), anyString(),
+				anyString(), anyString(), any(Status.class));
 	}
 
 	@Test

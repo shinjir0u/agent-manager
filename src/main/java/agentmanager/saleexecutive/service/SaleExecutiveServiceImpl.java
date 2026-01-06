@@ -5,15 +5,12 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.query.SaleExecutiveQuery;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
-import agentmanager.saleexecutive.repository.specification.SaleExecutiveSpecifications;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -23,16 +20,13 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	private final SaleExecutiveRepository saleExecutiveRepository;
 
+	private final SaleExecutiveQuery saleExecutiveQuery;
+
 	@Override
-	public Page<SaleExecutive> getSaleExecutives(int page, int size, String sort, String direction, String username,
-			String email, String phoneNumber, Status status) {
-		Specification<SaleExecutive> specification = Specification
-				.where(SaleExecutiveSpecifications.withUsername(username))
-				.and(SaleExecutiveSpecifications.withEmail(email))
-				.and(SaleExecutiveSpecifications.withPhoneNumber(phoneNumber))
-				.and(SaleExecutiveSpecifications.withStatus(status));
-		Page<SaleExecutive> saleExecutives = saleExecutiveRepository.findAll(specification,
-				PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort)));
+	public Page<SaleExecutive> getSaleExecutives(Integer page, Integer size, String sort, String direction,
+			String username, String email, String phoneNumber, Status status) {
+		Page<SaleExecutive> saleExecutives = saleExecutiveQuery.getSaleExecutives(page, size, sort, direction, username,
+				email, phoneNumber, status);
 		return saleExecutives;
 	}
 
