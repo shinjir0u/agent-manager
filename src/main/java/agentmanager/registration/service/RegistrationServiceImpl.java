@@ -6,15 +6,11 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.query.RegistrationQuery;
 import agentmanager.registration.repository.RegistrationRepository;
-import agentmanager.registration.repository.specification.RegistrationSpecifications;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import lombok.AllArgsConstructor;
 
@@ -38,13 +34,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, Integer page, Integer size,
 			String sort, String direction, String agentName, String phoneNumber, Date registeredAt) {
-		Specification<Registration> specification = Specification
-				.where(RegistrationSpecifications.withAgentName(agentName))
-				.and(RegistrationSpecifications.withPhoneNumber(phoneNumber))
-				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
-				.and(RegistrationSpecifications.withSaleExecutive(saleExecutive.getId()));
-		Page<Registration> registrations = registrationRepository.findAll(specification,
-				PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort)));
+		Page<Registration> registrations = registrationQuery.getRegistrations(page, size, sort, direction, agentName,
+				phoneNumber, registeredAt, saleExecutive.getId());
 		return registrations;
 	}
 
