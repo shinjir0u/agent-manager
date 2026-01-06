@@ -36,7 +36,7 @@ public class AdminServiceTest {
 
 	@Test
 	public void testGetAdmins() {
-		Page<Admin> admins = adminService.getAdmins(0, 10, null, null);
+		Page<Admin> admins = adminService.getAdmins(0, 10, "username", "ASC", null, null);
 
 		assertNotNull(admins);
 		assertThat(admins.getNumberOfElements() > 0);

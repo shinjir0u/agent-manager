@@ -3,7 +3,9 @@ package agentmanager.test.backoffice;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,9 +25,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import agentmanager.backoffice.model.Admin;
+import agentmanager.backoffice.model.query.AdminQuery;
 import agentmanager.backoffice.repository.AdminRepository;
 import agentmanager.backoffice.service.AdminService;
 import agentmanager.backoffice.service.AdminServiceImpl;
@@ -49,9 +51,12 @@ public class AdminServiceConstructorInjectionTest {
 	@Mock
 	private RegistrationRepository registrationRepository;
 
+	@Mock
+	private AdminQuery adminQuery;
+
 	@Before
 	public void setup() {
-		adminService = new AdminServiceImpl(adminRepository, saleExecutiveRepository);
+		adminService = new AdminServiceImpl(adminRepository, saleExecutiveRepository, adminQuery);
 	}
 
 	@Test
@@ -61,12 +66,13 @@ public class AdminServiceConstructorInjectionTest {
 				new Admin(3L, "tech_lead", "tech@company.com", "dev789") };
 
 		Page<Admin> adminPage = convertListToPage(Arrays.asList(mockAdmins), 0, 5);
-		when(adminRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(adminPage);
+		when(adminQuery.getAdmins(anyInt(), anyInt(), anyString(), anyString(), anyString(), anyString()))
+				.thenReturn(adminPage);
 
-		Page<Admin> admins = adminService.getAdmins(0, 5, null, null);
+		Page<Admin> admins = adminService.getAdmins(0, 5, "username", "ASC", "", "");
 		assertEquals(3, admins.getNumberOfElements());
 
-		verify(adminRepository).findAll(any(Specification.class), any(Pageable.class));
+		verify(adminQuery).getAdmins(anyInt(), anyInt(), anyString(), anyString(), anyString(), anyString());
 	}
 
 	@Test

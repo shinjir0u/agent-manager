@@ -6,7 +6,7 @@ import agentmanager.backoffice.model.Admin;
 import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface AdminService {
-	Page<Admin> getAdmins(int page, int size, String username, String email);
+	Page<Admin> getAdmins(int page, int size, String sort, String direction, String username, String email);
 
 	Admin getAdmin(Long id);
 
