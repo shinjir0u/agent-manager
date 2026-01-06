@@ -28,27 +28,27 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 		if (agentName != null)
 			where = RegistrationFilter.withAgentName(agentName);
 
-		if (phoneNumber != null)
-			where = (where != null) ? where.and(RegistrationFilter.withPhoneNumber(phoneNumber))
-					: RegistrationFilter.withPhoneNumber(phoneNumber);
+		if (phoneNumber != null) {
+			BooleanExpression phoneNumberExpression = RegistrationFilter.withPhoneNumber(phoneNumber);
+			where = (where != null) ? where.and(phoneNumberExpression) : phoneNumberExpression;
+		}
 
-		if (registeredAt != null)
-			where = (where != null) ? where.and(RegistrationFilter.withRegisteredAt(registeredAt))
-					: RegistrationFilter.withRegisteredAt(registeredAt);
+		if (registeredAt != null) {
+			BooleanExpression registeredAtExpression = RegistrationFilter.withRegisteredAt(registeredAt);
+			where = (where != null) ? where.and(registeredAtExpression) : registeredAtExpression;
+		}
 
-		if (saleExecutiveId != null)
-			where = (where != null) ? where.and(RegistrationFilter.withSaleExecutiveId(saleExecutiveId))
-					: RegistrationFilter.withSaleExecutiveId(saleExecutiveId);
+		if (saleExecutiveId != null) {
+			BooleanExpression saleExecutiveIdExpression = RegistrationFilter.withSaleExecutiveId(saleExecutiveId);
+			where = (where != null) ? where.and(saleExecutiveIdExpression) : saleExecutiveIdExpression;
+		}
 
-		Page<Registration> registrations = null;
-		if (where != null)
-			registrations = registrationRepository.findAll(where,
-					PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
-		else
-			registrations = registrationRepository
+		if (where == null)
+			return registrationRepository
 					.findAll(PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
-		;
-		return registrations;
+
+		return registrationRepository.findAll(where,
+				PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
 	}
 
 }

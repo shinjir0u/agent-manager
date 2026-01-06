@@ -27,27 +27,27 @@ public class SaleExecutiveQueryImpl implements SaleExecutiveQuery {
 		if (username != null)
 			where = SaleExecutiveFilter.withUsername(username);
 
-		if (email != null)
-			where = (where != null) ? where.and(SaleExecutiveFilter.withEmail(email))
-					: SaleExecutiveFilter.withEmail(email);
+		if (email != null) {
+			BooleanExpression emailExpression = SaleExecutiveFilter.withEmail(email);
+			where = (where != null) ? where.and(emailExpression) : emailExpression;
+		}
 
-		if (phoneNumber != null)
-			where = (where != null) ? where.and(SaleExecutiveFilter.withPhoneNumber(phoneNumber))
-					: SaleExecutiveFilter.withPhoneNumber(phoneNumber);
+		if (phoneNumber != null) {
+			BooleanExpression phoneNumberExpression = SaleExecutiveFilter.withPhoneNumber(phoneNumber);
+			where = (where != null) ? where.and(phoneNumberExpression) : phoneNumberExpression;
+		}
 
-		if (status != null)
-			where = (where != null) ? where.and(SaleExecutiveFilter.withStatus(status))
-					: SaleExecutiveFilter.withStatus(status);
+		if (status != null) {
+			BooleanExpression statusExpression = SaleExecutiveFilter.withStatus(status);
+			where = (where != null) ? where.and(statusExpression) : statusExpression;
+		}
 
-		Page<SaleExecutive> saleExecutives = null;
-		if (where != null)
-			saleExecutives = saleExecutiveRepository.findAll(where,
-					PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
-		else
-			saleExecutives = saleExecutiveRepository
+		if (where == null)
+			return saleExecutiveRepository
 					.findAll(PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
 
-		return saleExecutives;
+		return saleExecutiveRepository.findAll(where,
+				PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
 	}
 
 }
