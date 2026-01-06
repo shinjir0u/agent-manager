@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import agentmanager.registration.model.Registration;
+import agentmanager.registration.query.RegistrationQuery;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.registration.repository.specification.RegistrationSpecifications;
 import agentmanager.saleexecutive.model.SaleExecutive;
@@ -24,21 +25,18 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	private final RegistrationRepository registrationRepository;
 
+	private final RegistrationQuery registrationQuery;
+
 	@Override
-	public Page<Registration> getRegistrations(int page, int size, String sort, String direction, String agentName,
-			String phoneNumber, Date registeredAt, Long saleExecutiveId) {
-		Specification<Registration> specification = Specification
-				.where(RegistrationSpecifications.withAgentName(agentName))
-				.and(RegistrationSpecifications.withPhoneNumber(phoneNumber))
-				.and(RegistrationSpecifications.laterThanRegisteredAt(registeredAt))
-				.and(RegistrationSpecifications.withSaleExecutive(saleExecutiveId));
-		Page<Registration> registrations = registrationRepository.findAll(specification,
-				PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort)));
+	public Page<Registration> getRegistrations(Integer page, Integer size, String sort, String direction,
+			String agentName, String phoneNumber, Date registeredAt, Long saleExecutiveId) {
+		Page<Registration> registrations = registrationQuery.getRegistrations(page, size, sort, direction, agentName,
+				phoneNumber, registeredAt, saleExecutiveId);
 		return registrations;
 	}
 
 	@Override
-	public Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int size,
+	public Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, Integer page, Integer size,
 			String sort, String direction, String agentName, String phoneNumber, Date registeredAt) {
 		Specification<Registration> specification = Specification
 				.where(RegistrationSpecifications.withAgentName(agentName))

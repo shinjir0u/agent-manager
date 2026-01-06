@@ -8,11 +8,11 @@ import agentmanager.registration.model.Registration;
 import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface RegistrationService {
-	Page<Registration> getRegistrations(int page, int size, String sort, String direction, String agentName,
+	Page<Registration> getRegistrations(Integer page, Integer size, String sort, String direction, String agentName,
 			String phoneNumber, Date registeredAt, Long saleExecutiveId);
 
-	Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, int page, int size, String sort,
-			String direction, String agentName, String phoneNumber, Date registeredAt);
+	Page<Registration> getRegistrationsBySaleExecutive(SaleExecutive saleExecutive, Integer page, Integer size,
+			String sort, String direction, String agentName, String phoneNumber, Date registeredAt);
 
 	Registration getRegistration(Long registrationId);
 

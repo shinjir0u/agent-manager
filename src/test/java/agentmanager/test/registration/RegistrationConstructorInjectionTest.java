@@ -2,11 +2,14 @@ package agentmanager.test.registration;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import agentmanager.registration.model.Registration;
+import agentmanager.registration.query.RegistrationQuery;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.registration.service.RegistrationService;
 import agentmanager.registration.service.RegistrationServiceImpl;
@@ -35,9 +39,12 @@ public class RegistrationConstructorInjectionTest {
 	@Mock
 	private RegistrationRepository registrationRepository;
 
+	@Mock
+	private RegistrationQuery registrationQuery;
+
 	@Before
 	public void setup() {
-		registrationService = new RegistrationServiceImpl(registrationRepository);
+		registrationService = new RegistrationServiceImpl(registrationRepository, registrationQuery);
 	}
 
 	@Test
@@ -47,13 +54,14 @@ public class RegistrationConstructorInjectionTest {
 		registrations.add(new Registration("agent2", "09456", new SaleExecutive()));
 
 		Page<Registration> registrationPage = convertListToPage(registrations, 0, 10);
-		when(registrationRepository.findAll(any(Specification.class), any(Pageable.class)))
-				.thenReturn(registrationPage);
+		when(registrationQuery.getRegistrations(anyInt(), anyInt(), anyString(), anyString(), anyString(), anyString(),
+				any(Date.class), anyLong())).thenReturn(registrationPage);
 
-		Page<Registration> result = registrationService.getRegistrations(0, 10, "id", "ASC", null, null, null, null);
+		Page<Registration> result = registrationService.getRegistrations(0, 10, "id", "ASC", "", "", new Date(), 1L);
 		assertEquals(2, result.getNumberOfElements());
 
-		verify(registrationRepository).findAll(any(Specification.class), any(Pageable.class));
+		verify(registrationQuery).getRegistrations(anyInt(), anyInt(), anyString(), anyString(), anyString(),
+				anyString(), any(Date.class), anyLong());
 	}
 
 	@Test
