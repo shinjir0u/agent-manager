@@ -7,11 +7,15 @@ import agentmanager.backoffice.model.QAdmin;
 public class AdminFilter {
 
 	public static BooleanExpression withUsername(String username) {
-		return QAdmin.admin.username.contains(username);
+		if (username == null || username.isEmpty())
+			return null;
+		return QAdmin.admin.username.containsIgnoreCase(username);
 	}
 
 	public static BooleanExpression withEmail(String email) {
-		return QAdmin.admin.email.contains(email);
+		if (email == null || email.isEmpty())
+			return null;
+		return QAdmin.admin.email.containsIgnoreCase(email);
 	}
 
 }

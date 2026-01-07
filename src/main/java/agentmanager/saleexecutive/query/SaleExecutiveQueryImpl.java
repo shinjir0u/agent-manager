@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.BooleanBuilder;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.Status;
@@ -23,30 +23,12 @@ public class SaleExecutiveQueryImpl implements SaleExecutiveQuery {
 	public Page<SaleExecutive> getSaleExecutives(Integer page, Integer size, String sort, String direction,
 			String username, String email, String phoneNumber, Status status) {
 
-		BooleanExpression where = null;
-		if (username != null)
-			where = SaleExecutiveFilter.withUsername(username);
+		BooleanBuilder builder = new BooleanBuilder();
 
-		if (email != null) {
-			BooleanExpression emailExpression = SaleExecutiveFilter.withEmail(email);
-			where = (where != null) ? where.and(emailExpression) : emailExpression;
-		}
+		builder.and(SaleExecutiveFilter.withUsername(username)).and(SaleExecutiveFilter.withEmail(email))
+				.and(SaleExecutiveFilter.withPhoneNumber(phoneNumber)).and(SaleExecutiveFilter.withStatus(status));
 
-		if (phoneNumber != null) {
-			BooleanExpression phoneNumberExpression = SaleExecutiveFilter.withPhoneNumber(phoneNumber);
-			where = (where != null) ? where.and(phoneNumberExpression) : phoneNumberExpression;
-		}
-
-		if (status != null) {
-			BooleanExpression statusExpression = SaleExecutiveFilter.withStatus(status);
-			where = (where != null) ? where.and(statusExpression) : statusExpression;
-		}
-
-		if (where == null)
-			return saleExecutiveRepository
-					.findAll(PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
-
-		return saleExecutiveRepository.findAll(where,
+		return saleExecutiveRepository.findAll(builder,
 				PageRequest.of(page, size, Sort.Direction.fromString(direction), sort));
 	}
 

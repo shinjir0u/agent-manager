@@ -8,18 +8,26 @@ import agentmanager.saleexecutive.model.Status;
 public class SaleExecutiveFilter {
 
 	public static BooleanExpression withUsername(String username) {
-		return QSaleExecutive.saleExecutive.username.contains(username);
+		if (username == null || username.isEmpty())
+			return null;
+		return QSaleExecutive.saleExecutive.username.containsIgnoreCase(username);
 	}
 
 	public static BooleanExpression withEmail(String email) {
-		return QSaleExecutive.saleExecutive.email.contains(email);
+		if (email == null || email.isEmpty())
+			return null;
+		return QSaleExecutive.saleExecutive.email.containsIgnoreCase(email);
 	}
 
 	public static BooleanExpression withPhoneNumber(String phoneNumber) {
+		if (phoneNumber == null || phoneNumber.isEmpty())
+			return null;
 		return QSaleExecutive.saleExecutive.phoneNumber.eq(phoneNumber);
 	}
 
 	public static BooleanExpression withStatus(Status status) {
+		if (status == null)
+			return null;
 		return QSaleExecutive.saleExecutive.status.eq(status);
 	}
 
