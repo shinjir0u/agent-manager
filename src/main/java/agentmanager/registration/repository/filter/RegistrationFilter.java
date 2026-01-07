@@ -9,7 +9,7 @@ import agentmanager.registration.model.QRegistration;
 public class RegistrationFilter {
 
 	public static BooleanExpression withAgentName(String agentName) {
-		return QRegistration.registration.agentName.like(agentName);
+		return QRegistration.registration.agentName.contains(agentName);
 	}
 
 	public static BooleanExpression withPhoneNumber(String phoneNumber) {

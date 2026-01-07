@@ -7,11 +7,11 @@ import agentmanager.backoffice.model.QAdmin;
 public class AdminFilter {
 
 	public static BooleanExpression withUsername(String username) {
-		return QAdmin.admin.username.like(username);
+		return QAdmin.admin.username.contains(username);
 	}
 
 	public static BooleanExpression withEmail(String email) {
-		return QAdmin.admin.email.like(email);
+		return QAdmin.admin.email.contains(email);
 	}
 
 }

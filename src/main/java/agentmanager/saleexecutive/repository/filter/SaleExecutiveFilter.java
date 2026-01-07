@@ -8,11 +8,11 @@ import agentmanager.saleexecutive.model.Status;
 public class SaleExecutiveFilter {
 
 	public static BooleanExpression withUsername(String username) {
-		return QSaleExecutive.saleExecutive.username.like(username);
+		return QSaleExecutive.saleExecutive.username.contains(username);
 	}
 
 	public static BooleanExpression withEmail(String email) {
-		return QSaleExecutive.saleExecutive.email.like(email);
+		return QSaleExecutive.saleExecutive.email.contains(email);
 	}
 
 	public static BooleanExpression withPhoneNumber(String phoneNumber) {
