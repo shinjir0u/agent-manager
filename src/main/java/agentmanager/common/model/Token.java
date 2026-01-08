@@ -1,5 +1,7 @@
 package agentmanager.common.model;
 
+import java.time.Instant;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,10 +29,29 @@ public class Token {
 	@Column(name = "token")
 	private String value;
 
-	public String extractExpiration() {
-		if (value == null || value.isEmpty())
+	public Token(String value) {
+		this.value = value;
+	}
+
+	public Long extractId() {
+		if (this.value == null || this.value.isEmpty())
 			return null;
-		return value.split(".")[1];
+		return extractData(1);
+	}
+
+	public Long extractExpiration() {
+		return extractData(2);
+	}
+
+	public Boolean isTokenExpired() {
+		return Instant.now().toEpochMilli() > this.extractExpiration();
+	}
+
+	private Long extractData(Integer dataNumber) {
+		if (this.value == null || this.value.isEmpty())
+			return null;
+		String expiration = this.value.split(".")[dataNumber];
+		return Long.valueOf(expiration);
 	}
 
 }
