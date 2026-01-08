@@ -31,6 +31,7 @@ import agentmanager.backoffice.model.query.AdminQuery;
 import agentmanager.backoffice.repository.AdminRepository;
 import agentmanager.backoffice.service.AdminService;
 import agentmanager.backoffice.service.AdminServiceImpl;
+import agentmanager.common.model.Token;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
@@ -61,9 +62,9 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Test
 	public void testGetAdmins() {
-		Admin[] mockAdmins = new Admin[] { new Admin(1L, "super_admin", "admin1@company.com", "pass123"),
-				new Admin(2L, "hr_manager", "hr@company.com", "secure456"),
-				new Admin(3L, "tech_lead", "tech@company.com", "dev789") };
+		Admin[] mockAdmins = new Admin[] { new Admin(1L, "super_admin", "admin1@company.com", "pass123", new Token()),
+				new Admin(2L, "hr_manager", "hr@company.com", "secure456", new Token()),
+				new Admin(3L, "tech_lead", "tech@company.com", "dev789", new Token()) };
 
 		Page<Admin> adminPage = convertListToPage(Arrays.asList(mockAdmins), 0, 5);
 		when(adminQuery.getAdmins(anyInt(), anyInt(), anyString(), anyString(), anyString(), anyString()))
@@ -77,7 +78,7 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Test
 	public void testGetAdmin() {
-		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012");
+		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new Token());
 
 		when(adminRepository.findById(anyLong())).thenReturn(Optional.of(mockAdmin));
 
@@ -92,7 +93,7 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Test
 	public void testAddAdmin() {
-		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012");
+		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new Token());
 
 		when(adminRepository.save(any(Admin.class))).thenReturn(mockAdmin);
 
@@ -107,7 +108,7 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Test
 	public void testUpdateAdmin() {
-		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012");
+		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new Token());
 
 		when(adminRepository.findById(anyLong())).thenReturn(Optional.of(mockAdmin));
 		when(adminRepository.save(any(Admin.class))).thenReturn(mockAdmin);
@@ -132,7 +133,7 @@ public class AdminServiceConstructorInjectionTest {
 	@Test
 	public void testTerminateSaleExecutive() {
 		SaleExecutive mockSaleExecutive = new SaleExecutive(1L, "saler", "saler@gmail.com", "saleislife", "09123456789",
-				Status.ACTIVE, new ArrayList<>());
+				Status.ACTIVE, new ArrayList<>(), new Token());
 
 		when(saleExecutiveRepository.findById(anyLong())).thenReturn(Optional.of(mockSaleExecutive));
 		when(saleExecutiveRepository.save(any(SaleExecutive.class))).thenReturn(mockSaleExecutive);
@@ -151,9 +152,9 @@ public class AdminServiceConstructorInjectionTest {
 		Registration registration2 = new Registration(2L, "Agent2", "09222", new Date(), null);
 
 		SaleExecutive mockSaleExecutive = new SaleExecutive(1L, "saler", "saler@gmail.com", "saleislife", "09123456789",
-				Status.ACTIVE, new ArrayList<>());
+				Status.ACTIVE, new ArrayList<>(), new Token());
 		SaleExecutive mockSaleExecutive2 = new SaleExecutive(2L, "saler2", "saler2@gmail.com", "saleislife2",
-				"091234567892", Status.ACTIVE, new ArrayList<>());
+				"091234567892", Status.ACTIVE, new ArrayList<>(), new Token());
 		mockSaleExecutive.getRegistrations().add(registration);
 		mockSaleExecutive2.getRegistrations().add(registration2);
 

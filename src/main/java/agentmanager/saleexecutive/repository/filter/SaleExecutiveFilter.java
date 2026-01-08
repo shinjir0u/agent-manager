@@ -10,7 +10,7 @@ public class SaleExecutiveFilter {
 	public static BooleanExpression withUsername(String username) {
 		if (username == null || username.isEmpty())
 			return null;
-		return QSaleExecutive.saleExecutive.username.containsIgnoreCase(username);
+		return QSaleExecutive.saleExecutive.username.like(username);
 	}
 
 	public static BooleanExpression withEmail(String email) {
