@@ -33,25 +33,25 @@ public class Token {
 		this.value = value;
 	}
 
-	public Long extractId() {
+	public String extractId() {
 		if (this.value == null || this.value.isEmpty())
 			return null;
 		return extractData(1);
 	}
 
 	public Long extractExpiration() {
-		return extractData(2);
+		return Long.valueOf(extractData(2));
 	}
 
 	public Boolean isTokenExpired() {
 		return Instant.now().toEpochMilli() > this.extractExpiration();
 	}
 
-	private Long extractData(Integer dataNumber) {
+	private String extractData(Integer dataNumber) {
 		if (this.value == null || this.value.isEmpty())
 			return null;
 		String expiration = this.value.split(".")[dataNumber];
-		return Long.valueOf(expiration);
+		return expiration;
 	}
 
 }
