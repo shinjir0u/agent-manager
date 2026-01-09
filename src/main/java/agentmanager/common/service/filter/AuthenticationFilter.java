@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import agentmanager.common.model.Token;
@@ -20,6 +21,7 @@ import agentmanager.common.service.TokenService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@Component
 public class AuthenticationFilter extends OncePerRequestFilter {
 
 	private final TokenService tokenService;
@@ -28,7 +30,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String authenticationHeader = request.getHeader("Authentication");
-		String tokenValue = authenticationHeader.substring(7);
+		String tokenValue = null;
+		if (authenticationHeader != null && authenticationHeader.startsWith("Bearer"))
+			tokenValue = authenticationHeader.substring(7);
 
 		if (tokenValue != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			Token token = new Token(tokenValue);

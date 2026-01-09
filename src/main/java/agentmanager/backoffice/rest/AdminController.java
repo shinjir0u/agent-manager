@@ -1,5 +1,7 @@
 package agentmanager.backoffice.rest;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,9 @@ public class AdminController {
 	private final AdminService adminService;
 
 	@PostMapping("/login")
-	public Token login(@RequestBody LoginRequest loginRequest) {
-		return adminService.login(loginRequest.getUsername(), loginRequest.getPassword());
+	public ResponseEntity<Token> login(@RequestBody LoginRequest loginRequest) {
+		Token token = adminService.login(loginRequest.getUsername(), loginRequest.getPassword());
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(token);
 	}
 
 	@Data

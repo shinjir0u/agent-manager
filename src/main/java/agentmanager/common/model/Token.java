@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,10 +41,12 @@ public class Token {
 		return extractData(1);
 	}
 
+	@JsonIgnore
 	public Long extractExpiration() {
 		return Long.valueOf(extractData(2));
 	}
 
+	@JsonIgnore
 	public Boolean isTokenExpired() {
 		return Instant.now().toEpochMilli() > this.extractExpiration();
 	}
@@ -50,8 +54,10 @@ public class Token {
 	private String extractData(Integer dataNumber) {
 		if (this.value == null || this.value.isEmpty())
 			return null;
-		String expiration = this.value.split(".")[dataNumber];
-		return expiration;
+		String[] valueArray = this.value.split("\\.");
+		if (valueArray.length > dataNumber)
+			return valueArray[dataNumber];
+		return null;
 	}
 
 }
