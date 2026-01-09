@@ -29,7 +29,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String authenticationHeader = request.getHeader("Authentication");
+		String authenticationHeader = request.getHeader("Authorization");
 		String tokenValue = null;
 		if (authenticationHeader != null && authenticationHeader.startsWith("Bearer"))
 			tokenValue = authenticationHeader.substring(7);

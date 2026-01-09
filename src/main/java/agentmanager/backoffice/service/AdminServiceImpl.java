@@ -48,10 +48,12 @@ public class AdminServiceImpl implements AdminService {
 		Admin admin = adminRepository.findByUsername(username).orElse(null);
 		Token token = admin.getToken();
 
-		if (token == null) {
+		if (token == null || token.isTokenExpired()) {
 			token = tokenService.generateToken("a" + admin.getId());
 			admin.setToken(token);
-			tokenRepository.save(token);
+
+			if (token.getId() == null)
+				tokenRepository.save(token);
 			adminRepository.save(admin);
 		}
 		return token;

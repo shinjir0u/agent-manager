@@ -21,9 +21,10 @@ public class AdminController {
 	private final AdminService adminService;
 
 	@PostMapping("/login")
-	public ResponseEntity<Token> login(@RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
 		Token token = adminService.login(loginRequest.getUsername(), loginRequest.getPassword());
-		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(token);
+		TokenResponse response = new TokenResponse(token.getValue());
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
 	@Data
@@ -34,6 +35,15 @@ public class AdminController {
 		private String username;
 
 		private String password;
+
+	}
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	private static class TokenResponse {
+
+		private String token;
 
 	}
 
