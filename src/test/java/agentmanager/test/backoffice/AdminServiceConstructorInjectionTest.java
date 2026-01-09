@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.model.query.AdminQuery;
@@ -32,6 +33,8 @@ import agentmanager.backoffice.repository.AdminRepository;
 import agentmanager.backoffice.service.AdminService;
 import agentmanager.backoffice.service.AdminServiceImpl;
 import agentmanager.common.model.Token;
+import agentmanager.common.repository.TokenRepository;
+import agentmanager.common.service.TokenService;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
@@ -55,9 +58,19 @@ public class AdminServiceConstructorInjectionTest {
 	@Mock
 	private AdminQuery adminQuery;
 
+	@Mock
+	private TokenRepository tokenRepository;
+
+	@Mock
+	private TokenService tokenService;
+
+	@Mock
+	private AuthenticationManager authenticationManager;
+
 	@Before
 	public void setup() {
-		adminService = new AdminServiceImpl(adminRepository, saleExecutiveRepository, adminQuery);
+		adminService = new AdminServiceImpl(adminRepository, tokenRepository, saleExecutiveRepository, adminQuery,
+				authenticationManager, tokenService);
 	}
 
 	@Test

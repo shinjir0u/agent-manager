@@ -5,11 +5,18 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.model.query.AdminQuery;
 import agentmanager.backoffice.repository.AdminRepository;
+import agentmanager.common.model.Token;
+import agentmanager.common.repository.TokenRepository;
+import agentmanager.common.service.TokenService;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import lombok.AllArgsConstructor;
@@ -21,9 +28,34 @@ public class AdminServiceImpl implements AdminService {
 
 	private final AdminRepository adminRepository;
 
+	private final TokenRepository tokenRepository;
+
 	private final SaleExecutiveRepository saleExecutiveRepository;
 
 	private final AdminQuery adminQuery;
+
+	private final AuthenticationManager authenticationManager;
+
+	private final TokenService tokenService;
+
+	@Override
+	public Token login(String username, String password) {
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		if (!authentication.isAuthenticated())
+			throw new UsernameNotFoundException("Invalid credentials.");
+
+		Admin admin = adminRepository.findByUsername(username).orElse(null);
+		Token token = admin.getToken();
+
+		if (token == null) {
+			token = tokenService.generateToken("a" + admin.getId());
+			admin.setToken(token);
+			tokenRepository.save(token);
+			adminRepository.save(admin);
+		}
+		return token;
+	}
 
 	@Override
 	public Page<Admin> getAdmins(int page, int size, String sort, String direction, String username, String email) {

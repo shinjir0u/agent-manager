@@ -23,6 +23,7 @@ services:
           - redis
 
   app:
+    build: .	
     image: agent_manager:latest
     ports: 
       - "8080:8080"

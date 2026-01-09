@@ -1,5 +1,6 @@
 package agentmanager.backoffice.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,7 +38,7 @@ public class Admin {
 
 	private String password;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "token", referencedColumnName = "id")
 	private Token token;
 
