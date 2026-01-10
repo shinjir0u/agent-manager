@@ -26,12 +26,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
 	private final TokenService tokenService;
 
-//	@Override
-//	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-//		String path = request.getServletPath();
-//		return path.equals("/admin/login");
-//	}
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {

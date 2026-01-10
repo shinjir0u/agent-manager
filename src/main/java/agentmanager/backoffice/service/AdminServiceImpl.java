@@ -40,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Token login(String username, String password) {
 		Admin admin = adminRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("No user with username: " + username));
+				.orElseThrow(() -> new UsernameNotFoundException("No admin with username: " + username));
 		if (!passwordEncoder.matches(password, admin.getPassword()))
 			throw new BadCredentialsException("Invalid password");
 

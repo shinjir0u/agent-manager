@@ -34,7 +34,7 @@ public class TokenService {
 			Long adminId = Long.valueOf(id.substring(1));
 			Admin admin = adminRepository.findById(adminId).orElse(null);
 			return admin.getToken().getValue().equals(token);
-		} else if (id.startsWith("d")) {
+		} else if (id.startsWith("se")) {
 			Long saleExecutiveId = Long.valueOf(id.substring(1));
 			SaleExecutive saleExecutive = saleExecutiveRepository.findById(saleExecutiveId).orElse(null);
 			return saleExecutive.getToken().getValue().equals(token);

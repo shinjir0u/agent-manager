@@ -1,4 +1,4 @@
-package agentmanager.backoffice.rest;
+package agentmanager.saleexecutive.rest;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -7,22 +7,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import agentmanager.backoffice.service.AdminService;
 import agentmanager.common.model.LoginRequest;
 import agentmanager.common.model.Token;
 import agentmanager.common.model.TokenResponse;
+import agentmanager.saleexecutive.service.SaleExecutiveService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/admin")
 @AllArgsConstructor
-public class AdminController {
+@RequestMapping("/sale_executive")
+public class SaleExecutiveController {
 
-	private final AdminService adminService;
+	private final SaleExecutiveService saleExecutiveService;
 
 	@PostMapping("/login")
 	public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
-		Token token = adminService.login(request.getUsername(), request.getPassword());
+		Token token = saleExecutiveService.login(request.getUsername(), request.getPassword());
 		TokenResponse response = new TokenResponse(token.getValue());
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}

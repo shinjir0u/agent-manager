@@ -5,8 +5,14 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import agentmanager.common.model.Token;
+import agentmanager.common.repository.TokenRepository;
+import agentmanager.common.service.TokenService;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.Status;
 import agentmanager.saleexecutive.query.SaleExecutiveQuery;
@@ -21,6 +27,32 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	private final SaleExecutiveRepository saleExecutiveRepository;
 
 	private final SaleExecutiveQuery saleExecutiveQuery;
+
+	private final TokenRepository tokenRepository;
+
+	private final TokenService tokenService;
+
+	private final PasswordEncoder passwordEncoder;
+
+	@Override
+	public Token login(String username, String password) {
+		SaleExecutive saleExecutive = saleExecutiveRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("No such sale executive with username: " + username));
+		if (!passwordEncoder.matches(password, saleExecutive.getPassword()))
+			throw new BadCredentialsException("Invalid password");
+
+		Token token = saleExecutive.getToken();
+
+		if (token == null || token.isTokenExpired()) {
+			token = tokenService.generateToken("se" + saleExecutive.getId());
+			saleExecutive.setToken(token);
+
+			if (token.getId() == null)
+				tokenRepository.save(token);
+			saleExecutiveRepository.save(saleExecutive);
+		}
+		return token;
+	}
 
 	@Override
 	public Page<SaleExecutive> getSaleExecutives(Integer page, Integer size, String sort, String direction,
