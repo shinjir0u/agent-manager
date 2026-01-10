@@ -25,7 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.model.query.AdminQuery;
@@ -65,12 +65,12 @@ public class AdminServiceConstructorInjectionTest {
 	private TokenService tokenService;
 
 	@Mock
-	private AuthenticationManager authenticationManager;
+	private PasswordEncoder passwordEncoder;
 
 	@Before
 	public void setup() {
 		adminService = new AdminServiceImpl(adminRepository, tokenRepository, saleExecutiveRepository, adminQuery,
-				authenticationManager, tokenService);
+				tokenService, passwordEncoder);
 	}
 
 	@Test
