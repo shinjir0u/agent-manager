@@ -36,8 +36,6 @@ public class Token {
 	}
 
 	public String extractId() {
-		if (this.value == null || this.value.isEmpty())
-			return null;
 		return extractData(1);
 	}
 

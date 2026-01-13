@@ -14,16 +14,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import agentmanager.common.model.Token;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Data
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "admins")
 public class Admin {

@@ -1,6 +1,7 @@
 package agentmanager.saleexecutive.rest;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,14 +47,15 @@ public class SaleExecutiveRegistrationController {
 		this.saleExecutiveService = saleExecutiveService;
 	}
 
-	@PreAuthorize("hasAuthority('ADMIN') or #saleExecutiveId == principal.id")
+	@PreAuthorize("hasAuthority('ADMIN') or #saleExecutiveId.toString() == principal.id")
 	@GetMapping("/{saleExecutiveId}/registration/list")
 	public ResponseEntity<PaginatedResponse<RegistrationResponse>> getRegistrationsBySaleExecutive(
 			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size,
 			@RequestParam(name = "sort", defaultValue = "id") String sort,
 			@RequestParam(name = "direction", defaultValue = "ASC") String direction,
-			RegistrationParams registrationParams) {
+			RegistrationParams registrationParams, Principal principal) {
+		logger.info("Principal...... {}", principal.getName());
 		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
 
 		Page<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,

@@ -19,6 +19,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import agentmanager.common.model.Token;
 import agentmanager.common.service.TokenService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Component
 @AllArgsConstructor
@@ -44,12 +46,23 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 				if (id.startsWith("a"))
 					roles.add(new SimpleGrantedAuthority("ADMIN"));
 
-				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(id,
-						null, roles);
+				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+						new PrincipalObject(id, id.replaceAll("[a-z]", "")), null, roles);
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 			}
 		}
 		filterChain.doFilter(request, response);
+	}
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	private static class PrincipalObject {
+
+		private String code;
+
+		private String id;
+
 	}
 
 }
