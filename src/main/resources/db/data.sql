@@ -1,11 +1,11 @@
 INSERT INTO admins (username, email, password)
-SELECT 'admin1', 'admin1@example.com', 'hashed_pw'
+SELECT 'admin1', 'admin1@example.com', '$2a$10$tUNRABJfB2GNRLUQnvSV1utEcyeooQxuSQ0SB3.Te/KeZupCpZPRm'
 WHERE NOT EXISTS (
     SELECT 1 FROM admins WHERE email = 'admin1@example.com'
 );
 
 INSERT INTO admins (username, email, password)
-SELECT 'admin2', 'admin2@example.com', 'hashed_pw2'
+SELECT 'admin2', 'admin2@example.com', '$2a$10$./9USLJ6Xj/EkPvEu7ZGsOzCwTuLk1j5uh2Gu6UIZcJcteLw0ss4m'
 WHERE NOT EXISTS (
     SELECT 1 FROM admins WHERE email = 'admin2@example.com'
 );
