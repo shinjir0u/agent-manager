@@ -39,3 +39,5 @@ SELECT 'Agent C', '098765432', NOW(), 2
 WHERE NOT EXISTS (
     SELECT 1 FROM registrations WHERE agent_name = 'Agent C'
 );
+
+CREATE TYPE sale_executive_status AS ENUM ('ACTIVE', 'TERMINATED');
