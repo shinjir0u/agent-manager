@@ -26,7 +26,7 @@ services:
     build: .	
     image: agent_manager:latest
     ports: 
-      - "8080:8080"
+      - "8000:8080"
     networks:
       agent_manager_network:
         aliases:
