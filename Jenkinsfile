@@ -7,7 +7,7 @@ pipeline {
 				sh 'docker compose up -d --build'
 				
 				sh 'sleep 10' 
-        		sh 'curl -f http://localhost:8080 || exit 1'
+        		sh 'curl -f http://localhost:8000/health || exit 1'
 			}
 		}
 	}
