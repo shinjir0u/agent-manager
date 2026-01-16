@@ -1,5 +1,3 @@
-CREATE TYPE sale_executive_status AS ENUM ('ACTIVE', 'TERMINATED');
-
 INSERT INTO admins (username, email, password)
 SELECT 'admin1', 'admin1@example.com', '$2a$10$tUNRABJfB2GNRLUQnvSV1utEcyeooQxuSQ0SB3.Te/KeZupCpZPRm'
 WHERE NOT EXISTS (

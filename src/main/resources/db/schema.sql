@@ -23,3 +23,5 @@ CREATE TABLE IF NOT EXISTS registrations (
     FOREIGN KEY (sale_executive_id)
         REFERENCES sale_executives(id)
 );
+
+CREATE TYPE sale_executive_status AS ENUM ('ACTIVE', 'TERMINATED');
