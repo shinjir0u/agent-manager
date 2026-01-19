@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 	@Override
 	public Token login(String username, String password) {
 		SaleExecutive saleExecutive = saleExecutiveRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("No such sale executive with username: " + username));
+				.orElseThrow(() -> new BadCredentialsException("No such sale executive with username: " + username));
 		if (!passwordEncoder.matches(password, saleExecutive.getPassword()))
 			throw new BadCredentialsException("Invalid password");
 

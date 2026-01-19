@@ -2,6 +2,7 @@ package agentmanager.common.service.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.FilterChain;
@@ -27,6 +28,13 @@ import lombok.NoArgsConstructor;
 public class AuthenticationFilter extends OncePerRequestFilter {
 
 	private final TokenService tokenService;
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		String path = request.getServletPath();
+		String[] excludedPaths = new String[] { "/health", "/admin/login", "/sale_executive/login" };
+		return Arrays.stream(excludedPaths).anyMatch(excludedPath -> excludedPath.equals(path));
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Token login(String username, String password) {
 		Admin admin = adminRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("No admin with username: " + username));
+				.orElseThrow(() -> new BadCredentialsException("No admin with username: " + username));
 		if (!passwordEncoder.matches(password, admin.getPassword()))
 			throw new BadCredentialsException("Invalid password");
 
