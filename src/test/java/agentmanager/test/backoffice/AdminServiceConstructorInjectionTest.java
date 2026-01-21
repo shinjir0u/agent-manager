@@ -1,7 +1,6 @@
 package agentmanager.test.backoffice;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -144,23 +143,7 @@ public class AdminServiceConstructorInjectionTest {
 	}
 
 	@Test
-	public void testTerminateSaleExecutive() {
-		SaleExecutive mockSaleExecutive = new SaleExecutive(1L, "saler", "saler@gmail.com", "saleislife", "09123456789",
-				Status.ACTIVE, new ArrayList<>(), new Token());
-
-		when(saleExecutiveRepository.findById(anyLong())).thenReturn(Optional.of(mockSaleExecutive));
-		when(saleExecutiveRepository.save(any(SaleExecutive.class))).thenReturn(mockSaleExecutive);
-
-		SaleExecutive saleExecutive = adminService.terminateSaleExecutive(1L);
-		assertNotNull(saleExecutive);
-		assertEquals(Status.TERMINATED, saleExecutive.getStatus());
-
-		verify(saleExecutiveRepository).findById(anyLong());
-		verify(saleExecutiveRepository).save(any(SaleExecutive.class));
-	}
-
-	@Test
-	public void testReassignRegistrationsToNewSaleExecutive() {
+	public void testTerminateSaleExecutiveAndTransferRegistrations() {
 		Registration registration = new Registration(1L, "Agent1", "09222", new Date(), null);
 		Registration registration2 = new Registration(2L, "Agent2", "09222", new Date(), null);
 
@@ -176,10 +159,10 @@ public class AdminServiceConstructorInjectionTest {
 
 		when(saleExecutiveRepository.save(any(SaleExecutive.class))).thenReturn(mockSaleExecutive2);
 
-		SaleExecutive saleExecutive = adminService.reassignRegistrationsToNewSaleExecutive(1L, 2L);
+		SaleExecutive saleExecutive = adminService.terminateSaleExecutiveAndTransferRegistrations(1L, 2L);
 
 		verify(saleExecutiveRepository, times(2)).findById(anyLong());
-		verify(saleExecutiveRepository).save(any(SaleExecutive.class));
+		verify(saleExecutiveRepository, times(2)).save(any(SaleExecutive.class));
 
 		assertEquals(2, saleExecutive.getRegistrations().size());
 	}

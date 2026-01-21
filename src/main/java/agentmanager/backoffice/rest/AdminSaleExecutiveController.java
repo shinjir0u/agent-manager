@@ -119,8 +119,7 @@ public class AdminSaleExecutiveController {
 	public ResponseEntity<SaleExecutiveResponse> reassignAndTerminateSaleExecutive(@PathVariable Long id,
 			@PathVariable Long idToReassign) {
 
-		adminService.terminateSaleExecutive(id);
-		SaleExecutive saleExecutive = adminService.reassignRegistrationsToNewSaleExecutive(id, idToReassign);
+		SaleExecutive saleExecutive = adminService.terminateSaleExecutiveAndTransferRegistrations(id, idToReassign);
 		SaleExecutiveResponse response = new SaleExecutiveResponse(saleExecutive.getId(), saleExecutive.getUsername(),
 				saleExecutive.getEmail(), saleExecutive.getPhoneNumber());
 

@@ -19,7 +19,5 @@ public interface AdminService {
 
 	void deleteAdmin(Long id);
 
-	SaleExecutive terminateSaleExecutive(Long saleExecutiveId);
-
-	SaleExecutive reassignRegistrationsToNewSaleExecutive(Long saleExecutiveId, Long newSaleExecutiveId);
+	SaleExecutive terminateSaleExecutiveAndTransferRegistrations(Long saleExecutiveId, Long newSaleExecutiveId);
 }

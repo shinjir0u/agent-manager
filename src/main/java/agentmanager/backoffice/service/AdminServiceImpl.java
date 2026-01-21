@@ -93,20 +93,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public SaleExecutive terminateSaleExecutive(Long saleExecutiveId) {
-		SaleExecutive saleExecutive = saleExecutiveRepository.findById(saleExecutiveId).orElse(null);
-
-		saleExecutive.terminate();
-		SaleExecutive saleExecutiveTerminated = saleExecutiveRepository.save(saleExecutive);
-		return saleExecutiveTerminated;
-	}
-
-	@Override
-	public SaleExecutive reassignRegistrationsToNewSaleExecutive(Long saleExecutiveId, Long newSaleExecutiveId) {
-		SaleExecutive saleExecutiveToTransfer = saleExecutiveRepository.findById(saleExecutiveId).orElse(null);
+	public SaleExecutive terminateSaleExecutiveAndTransferRegistrations(Long saleExecutiveId, Long newSaleExecutiveId) {
+		SaleExecutive saleExecutiveToTerminate = saleExecutiveRepository.findById(saleExecutiveId).orElse(null);
 		SaleExecutive saleExecutiveToReceive = saleExecutiveRepository.findById(newSaleExecutiveId).orElse(null);
 
-		saleExecutiveToTransfer.transferRegistrations(saleExecutiveToReceive);
+		saleExecutiveToTerminate.terminate();
+		saleExecutiveToTerminate.transferRegistrations(saleExecutiveToReceive);
+		SaleExecutive saleExecutiveTerminated = saleExecutiveRepository.save(saleExecutiveToTerminate);
 		SaleExecutive saleExecutive = saleExecutiveRepository.save(saleExecutiveToReceive);
 		return saleExecutive;
 	}
