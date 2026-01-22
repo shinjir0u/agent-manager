@@ -3,7 +3,7 @@ package agentmanager.saleexecutive.repository.filter;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import agentmanager.saleexecutive.model.QSaleExecutive;
-import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 
 public class SaleExecutiveFilter {
 
@@ -25,7 +25,7 @@ public class SaleExecutiveFilter {
 		return QSaleExecutive.saleExecutive.phoneNumber.eq(phoneNumber);
 	}
 
-	public static BooleanExpression withStatus(Status status) {
+	public static BooleanExpression withStatus(SaleExecutiveStatus status) {
 		if (status == null)
 			return null;
 		return QSaleExecutive.saleExecutive.status.eq(status);

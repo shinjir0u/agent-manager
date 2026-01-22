@@ -13,7 +13,7 @@ import agentmanager.common.model.Token;
 import agentmanager.common.repository.TokenRepository;
 import agentmanager.common.service.TokenService;
 import agentmanager.saleexecutive.model.SaleExecutive;
-import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 import agentmanager.saleexecutive.query.SaleExecutiveQuery;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import lombok.AllArgsConstructor;
@@ -55,7 +55,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 
 	@Override
 	public Page<SaleExecutive> getSaleExecutives(Integer page, Integer size, String sort, String direction,
-			String username, String email, String phoneNumber, Status status) {
+			String username, String email, String phoneNumber, SaleExecutiveStatus status) {
 		Page<SaleExecutive> saleExecutives = saleExecutiveQuery.getSaleExecutives(page, size, sort, direction, username,
 				email, phoneNumber, status);
 		return saleExecutives;

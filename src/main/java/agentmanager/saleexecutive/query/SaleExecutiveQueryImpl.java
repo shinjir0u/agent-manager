@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.querydsl.core.BooleanBuilder;
 
 import agentmanager.saleexecutive.model.SaleExecutive;
-import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import agentmanager.saleexecutive.repository.filter.SaleExecutiveFilter;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class SaleExecutiveQueryImpl implements SaleExecutiveQuery {
 
 	@Override
 	public Page<SaleExecutive> getSaleExecutives(Integer page, Integer size, String sort, String direction,
-			String username, String email, String phoneNumber, Status status) {
+			String username, String email, String phoneNumber, SaleExecutiveStatus status) {
 
 		BooleanBuilder builder = new BooleanBuilder();
 

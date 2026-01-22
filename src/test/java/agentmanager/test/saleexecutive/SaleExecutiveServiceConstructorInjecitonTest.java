@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import agentmanager.common.repository.TokenRepository;
 import agentmanager.common.service.TokenService;
 import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 import agentmanager.saleexecutive.model.Status;
 import agentmanager.saleexecutive.query.SaleExecutiveQuery;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
@@ -68,14 +69,14 @@ public class SaleExecutiveServiceConstructorInjecitonTest {
 		Page<SaleExecutive> saleExecutivePage = convertListToPage(saleExecutives, 0, 10);
 
 		when(saleExecutiveQuery.getSaleExecutives(anyInt(), anyInt(), anyString(), anyString(), anyString(),
-				anyString(), anyString(), any(Status.class))).thenReturn(saleExecutivePage);
+				anyString(), anyString(), any(SaleExecutiveStatus.class))).thenReturn(saleExecutivePage);
 
 		Page<SaleExecutive> result = saleExecutiveService.getSaleExecutives(0, 5, "username", "ASC", "", "", "",
-				Status.ACTIVE);
+				new SaleExecutiveStatus(Status.ACTIVE));
 		assertEquals(2, result.getNumberOfElements());
 
 		verify(saleExecutiveQuery).getSaleExecutives(anyInt(), anyInt(), anyString(), anyString(), anyString(),
-				anyString(), anyString(), any(Status.class));
+				anyString(), anyString(), any(SaleExecutiveStatus.class));
 	}
 
 	@Test

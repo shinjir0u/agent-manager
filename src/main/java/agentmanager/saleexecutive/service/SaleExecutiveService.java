@@ -4,13 +4,13 @@ import org.springframework.data.domain.Page;
 
 import agentmanager.common.model.Token;
 import agentmanager.saleexecutive.model.SaleExecutive;
-import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 
 public interface SaleExecutiveService {
 	Token login(String username, String password);
 
 	Page<SaleExecutive> getSaleExecutives(Integer page, Integer size, String sort, String direction, String username,
-			String email, String phoneNumber, Status status);
+			String email, String phoneNumber, SaleExecutiveStatus status);
 
 	SaleExecutive getSaleExecutive(Long id);
 

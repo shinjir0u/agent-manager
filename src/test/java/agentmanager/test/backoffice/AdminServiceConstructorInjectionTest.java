@@ -31,12 +31,15 @@ import agentmanager.backoffice.model.query.AdminQuery;
 import agentmanager.backoffice.repository.AdminRepository;
 import agentmanager.backoffice.service.AdminService;
 import agentmanager.backoffice.service.AdminServiceImpl;
+import agentmanager.common.model.Role;
 import agentmanager.common.model.Token;
+import agentmanager.common.model.UserRole;
 import agentmanager.common.repository.TokenRepository;
 import agentmanager.common.service.TokenService;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
+import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 import agentmanager.saleexecutive.model.Status;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 
@@ -148,9 +151,11 @@ public class AdminServiceConstructorInjectionTest {
 		Registration registration2 = new Registration(2L, "Agent2", "09222", new Date(), null);
 
 		SaleExecutive mockSaleExecutive = new SaleExecutive(1L, "saler", "saler@gmail.com", "saleislife", "09123456789",
-				Status.ACTIVE, new ArrayList<>(), new Token());
+				new UserRole(Role.SALE_EXECUTIVE), new SaleExecutiveStatus(Status.ACTIVE), new ArrayList<>(),
+				new Token());
 		SaleExecutive mockSaleExecutive2 = new SaleExecutive(2L, "saler2", "saler2@gmail.com", "saleislife2",
-				"091234567892", Status.ACTIVE, new ArrayList<>(), new Token());
+				"091234567892", new UserRole(Role.SALE_EXECUTIVE), new SaleExecutiveStatus(Status.ACTIVE),
+				new ArrayList<>(), new Token());
 		mockSaleExecutive.getRegistrations().add(registration);
 		mockSaleExecutive2.getRegistrations().add(registration2);
 

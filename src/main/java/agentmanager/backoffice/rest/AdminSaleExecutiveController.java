@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import agentmanager.backoffice.service.AdminService;
 import agentmanager.common.model.PaginatedResponse;
 import agentmanager.saleexecutive.model.SaleExecutive;
-import agentmanager.saleexecutive.model.Status;
+import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 import agentmanager.saleexecutive.service.SaleExecutiveService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -187,7 +187,7 @@ public class AdminSaleExecutiveController {
 
 		private String phone_number;
 
-		private Status status;
+		private SaleExecutiveStatus status;
 
 	}
 

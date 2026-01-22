@@ -6,8 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,14 +15,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import agentmanager.common.model.UserRole;
 import agentmanager.common.model.Token;
+import agentmanager.common.model.Role;
 import agentmanager.registration.model.Registration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +35,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder(toBuilder = true)
 @Table(name = "sale_executives")
-@TypeDef(name = "status_enum", typeClass = PostgresEnumType.class)
 public class SaleExecutive {
 
 	@Id
@@ -54,10 +51,13 @@ public class SaleExecutive {
 	@JsonProperty("phone_number")
 	private String phoneNumber;
 
-	@Enumerated(EnumType.STRING)
-	@Type(type = "status_enum")
-	@Column(columnDefinition = "sale_executive_status")
-	private Status status;
+	@OneToOne
+	@JoinColumn(name = "role", referencedColumnName = "id")
+	private UserRole role;
+
+	@OneToOne
+	@JoinColumn(name = "status", referencedColumnName = "id")
+	private SaleExecutiveStatus status;
 
 	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Registration> registrations;
@@ -72,7 +72,8 @@ public class SaleExecutive {
 		this.email = email;
 		this.password = encodingPassword(password);
 		this.phoneNumber = phoneNumber;
-		this.status = Status.ACTIVE;
+		this.role = new UserRole(Role.SALE_EXECUTIVE);
+		this.status = new SaleExecutiveStatus(Status.ACTIVE);
 		this.registrations = new ArrayList<>();
 
 	}
@@ -111,7 +112,7 @@ public class SaleExecutive {
 	}
 
 	public void terminate() {
-		this.status = Status.TERMINATED;
+		this.status = new SaleExecutiveStatus(Status.TERMINATED);
 	}
 
 }
