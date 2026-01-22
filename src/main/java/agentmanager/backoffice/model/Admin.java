@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import agentmanager.common.model.Token;
+import agentmanager.common.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +38,10 @@ public class Admin {
 	private String email;
 
 	private String password;
+
+	@OneToOne
+	@JoinColumn(name = "role", referencedColumnName = "id")
+	private UserRole role;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "token", referencedColumnName = "id")
