@@ -69,4 +69,9 @@ public class Admin {
 		this.email = email;
 	}
 
+	public Boolean validatePassword(String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.matches(password, this.password);
+	}
+
 }

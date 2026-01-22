@@ -1,6 +1,8 @@
 package agentmanager.common.model;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,31 +33,19 @@ public class Token {
 	@Column(name = "token")
 	private String value;
 
-	public Token(String value) {
-		this.value = value;
-	}
-
-	public String extractId() {
-		return extractData(1);
-	}
-
-	@JsonIgnore
-	public Long extractExpiration() {
-		return Long.valueOf(extractData(2));
-	}
+	private Long expiration;
 
 	@JsonIgnore
 	public Boolean isTokenExpired() {
-		return Instant.now().toEpochMilli() > this.extractExpiration();
+		return Instant.now().toEpochMilli() > this.expiration;
 	}
 
-	private String extractData(Integer dataNumber) {
-		if (this.value == null || this.value.isEmpty())
-			return null;
-		String[] valueArray = this.value.split("\\.");
-		if (valueArray.length > dataNumber)
-			return valueArray[dataNumber];
-		return null;
+	public void generateToken() {
+		String token = UUID.randomUUID().toString();
+		Long expirationDate = Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli();
+
+		this.value = token;
+		this.expiration = expirationDate;
 	}
 
 }

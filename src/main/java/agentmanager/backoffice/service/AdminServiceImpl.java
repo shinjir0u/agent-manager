@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import agentmanager.backoffice.model.Admin;
@@ -14,7 +13,6 @@ import agentmanager.backoffice.model.query.AdminQuery;
 import agentmanager.backoffice.repository.AdminRepository;
 import agentmanager.common.model.Token;
 import agentmanager.common.repository.TokenRepository;
-import agentmanager.common.service.TokenService;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
 import lombok.AllArgsConstructor;
@@ -32,21 +30,17 @@ public class AdminServiceImpl implements AdminService {
 
 	private final AdminQuery adminQuery;
 
-	private final TokenService tokenService;
-
-	private final PasswordEncoder passwordEncoder;
-
 	@Override
 	public Token login(String username, String password) {
 		Admin admin = adminRepository.findByUsername(username)
 				.orElseThrow(() -> new BadCredentialsException("No admin with username: " + username));
-		if (!passwordEncoder.matches(password, admin.getPassword()))
+		if (!admin.validatePassword(password))
 			throw new BadCredentialsException("Invalid password");
 
 		Token token = admin.getToken();
 
 		if (token == null || token.isTokenExpired()) {
-			token = tokenService.generateToken("a" + admin.getId());
+			token.generateToken();
 			admin.setToken(token);
 
 			if (token.getId() == null)
