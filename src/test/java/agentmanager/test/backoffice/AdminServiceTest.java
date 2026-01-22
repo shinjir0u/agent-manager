@@ -79,16 +79,10 @@ public class AdminServiceTest {
 
 	@Test
 	public void testTerminateSaleExecutive() {
-		SaleExecutive saleExecutive = adminService.terminateSaleExecutive(10L);
-
-		assertEquals(saleExecutive.getStatus(), Status.TERMINATED);
-	}
-
-	@Test
-	public void testReassignRegistrationsToNewSaleExecutive() {
-		SaleExecutive saleExecutive = adminService.reassignRegistrationsToNewSaleExecutive(10L, 17L);
+		SaleExecutive saleExecutive = adminService.terminateSaleExecutiveAndTransferRegistrations(10L, 17L);
 		SaleExecutive saleExecutiveTransferred = saleExecutiveService.getSaleExecutive(10L);
 
+		assertEquals(saleExecutive.getStatus(), Status.TERMINATED);
 		assertEquals(saleExecutiveTransferred.getRegistrations().size(), 0);
 		assertThat(saleExecutive.getRegistrations().size() > 1);
 	}
