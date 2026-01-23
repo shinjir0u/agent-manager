@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import agentmanager.backoffice.service.AdminService;
-import agentmanager.common.model.LoginRequest;
-import agentmanager.common.model.Token;
-import agentmanager.common.model.TokenResponse;
+import agentmanager.common.model.request.LoginRequest;
+import agentmanager.common.model.response.TokenResponse;
+import agentmanager.common.model.token.Token;
 import lombok.AllArgsConstructor;
 
 @RestController

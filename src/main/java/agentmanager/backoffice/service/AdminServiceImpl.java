@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.model.query.AdminQuery;
 import agentmanager.backoffice.repository.AdminRepository;
-import agentmanager.common.model.Token;
+import agentmanager.common.model.authority.UserAuthority;
+import agentmanager.common.model.token.Token;
 import agentmanager.common.repository.TokenRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.repository.SaleExecutiveRepository;
@@ -40,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
 		Token token = admin.getToken();
 
 		if (token == null || token.isTokenExpired()) {
-//			token.generateToken();
+			token.generateToken(UserAuthority.ADMIN);
 			admin.setToken(token);
 
 			if (token.getId() == null)

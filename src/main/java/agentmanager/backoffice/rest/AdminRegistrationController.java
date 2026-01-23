@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import agentmanager.common.model.PaginatedResponse;
+import agentmanager.common.model.response.PaginatedResponse;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.service.RegistrationService;
 import lombok.AllArgsConstructor;

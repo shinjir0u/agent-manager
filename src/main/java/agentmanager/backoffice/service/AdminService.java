@@ -3,7 +3,7 @@ package agentmanager.backoffice.service;
 import org.springframework.data.domain.Page;
 
 import agentmanager.backoffice.model.Admin;
-import agentmanager.common.model.Token;
+import agentmanager.common.model.token.Token;
 import agentmanager.saleexecutive.model.SaleExecutive;
 
 public interface AdminService {

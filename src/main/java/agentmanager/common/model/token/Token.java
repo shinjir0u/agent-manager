@@ -1,4 +1,4 @@
-package agentmanager.common.model;
+package agentmanager.common.model.token;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import agentmanager.common.model.authority.UserAuthority;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,12 +42,23 @@ public class Token {
 		return Instant.now().toEpochMilli() > this.expiration;
 	}
 
-	public void generateToken(String role) {
-		String token = UUID.randomUUID().toString() + "." + role;
+	public void generateToken(Long id) {
+		this.generateToken(id, null);
+	}
+
+	public void generateToken(Long id, UserAuthority authority) {
+		String authorityType = authority == null ? "" : authority.toString();
+
+		String token = UUID.randomUUID().toString() + "." + id + "." + authorityType;
 		Long expirationDate = Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli();
 
 		this.value = Base64.getEncoder().encodeToString(token.getBytes());
 		this.expiration = expirationDate;
+	}
+
+	public String extractData(Integer dataNumber) {
+		String plainToken = new String(Base64.getDecoder().decode(this.value));
+		return plainToken.split("\\.")[dataNumber];
 	}
 
 }

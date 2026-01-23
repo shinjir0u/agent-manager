@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
-import agentmanager.common.model.Token;
+import agentmanager.common.model.token.Token;
 import agentmanager.common.repository.TokenRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.SaleExecutiveStatus;
@@ -37,7 +37,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 		Token token = saleExecutive.getToken();
 
 		if (token == null || token.isTokenExpired()) {
-//			token.generateToken();
+			token.generateToken();
 			saleExecutive.setToken(token);
 
 			if (token.getId() == null)

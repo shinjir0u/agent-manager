@@ -2,7 +2,7 @@ package agentmanager.saleexecutive.service;
 
 import org.springframework.data.domain.Page;
 
-import agentmanager.common.model.Token;
+import agentmanager.common.model.token.Token;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 

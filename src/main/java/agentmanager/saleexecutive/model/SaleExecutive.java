@@ -20,9 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import agentmanager.common.model.Role;
-import agentmanager.common.model.Token;
-import agentmanager.common.model.UserRole;
+import agentmanager.common.model.role.Role;
+import agentmanager.common.model.role.UserRole;
+import agentmanager.common.model.token.Token;
 import agentmanager.registration.model.Registration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

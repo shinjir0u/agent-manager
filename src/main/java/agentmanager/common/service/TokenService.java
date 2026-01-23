@@ -1,6 +1,6 @@
 package agentmanager.common.service;
 
-import agentmanager.common.model.Token;
+import agentmanager.common.model.token.Token;
 
 public interface TokenService {
 

@@ -1,4 +1,4 @@
-package agentmanager.common.model;
+package agentmanager.common.model.role;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

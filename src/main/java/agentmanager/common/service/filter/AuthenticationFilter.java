@@ -1,18 +1,24 @@
 package agentmanager.common.service.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import agentmanager.common.model.Token;
+import agentmanager.common.model.token.Token;
 import agentmanager.common.service.TokenService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,18 +48,18 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		if (tokenValue != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			Token token = tokenService.getTokenByValue(tokenValue);
 
-			// fix: token in admin and sale_executive service
-//			if (token != null) {
-//				String role = new String(Base64.getDecoder().decode(tokenValue));
-//				List<GrantedAuthority> roles = new ArrayList<>();
-//				roles.add(new SimpleGrantedAuthority(token.get));
-//				if (id.startsWith("a"))
-//					roles.add(new SimpleGrantedAuthority("ADMIN"));
-//
-//				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-//						new PrincipalObject(id, id.replaceAll("[a-z]", "")), null, roles);
-//				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//			}
+			if (token != null) {
+				String plainToken = new String(Base64.getDecoder().decode(tokenValue));
+				String authorityType = plainToken.split("\\.")[1];
+
+				List<GrantedAuthority> authorities = new ArrayList<>();
+				if (!authorityType.isEmpty())
+					authorities.add(new SimpleGrantedAuthority(authorityType));
+
+				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+						new PrincipalObject(id, id.replaceAll("[a-z]", "")), null, authorities);
+				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+			}
 		}
 		filterChain.doFilter(request, response);
 	}

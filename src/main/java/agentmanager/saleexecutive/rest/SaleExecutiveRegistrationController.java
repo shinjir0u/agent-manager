@@ -22,7 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import agentmanager.common.model.PaginatedResponse;
+import agentmanager.common.model.response.PaginatedResponse;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.service.RegistrationService;
 import agentmanager.saleexecutive.model.SaleExecutive;

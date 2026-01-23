@@ -1,4 +1,4 @@
-package agentmanager.common.model;
+package agentmanager.common.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

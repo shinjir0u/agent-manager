@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import agentmanager.common.model.Token;
-import agentmanager.common.model.UserRole;
+import agentmanager.common.model.role.UserRole;
+import agentmanager.common.model.token.Token;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "admins")
+@Table(name = "back_office")
 public class Admin {
 
 	@Id
