@@ -47,7 +47,7 @@ public class SaleExecutiveRegistrationController {
 		this.saleExecutiveService = saleExecutiveService;
 	}
 
-	@PreAuthorize("hasAuthority('ADMIN') or #saleExecutiveId.toString() == principal.id")
+	@PreAuthorize("hasAuthority('ADMIN') or #saleExecutiveId == principal.id")
 	@GetMapping("/{saleExecutiveId}/registration/list")
 	public ResponseEntity<PaginatedResponse<RegistrationResponse>> getRegistrationsBySaleExecutive(
 			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
