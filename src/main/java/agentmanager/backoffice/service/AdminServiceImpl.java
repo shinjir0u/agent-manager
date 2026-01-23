@@ -40,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
 		Token token = admin.getToken();
 
 		if (token == null || token.isTokenExpired()) {
-			token.generateToken();
+//			token.generateToken();
 			admin.setToken(token);
 
 			if (token.getId() == null)

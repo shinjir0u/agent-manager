@@ -2,6 +2,7 @@ package agentmanager.common.model;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -40,11 +41,11 @@ public class Token {
 		return Instant.now().toEpochMilli() > this.expiration;
 	}
 
-	public void generateToken() {
-		String token = UUID.randomUUID().toString();
+	public void generateToken(String role) {
+		String token = UUID.randomUUID().toString() + "." + role;
 		Long expirationDate = Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli();
 
-		this.value = token;
+		this.value = Base64.getEncoder().encodeToString(token.getBytes());
 		this.expiration = expirationDate;
 	}
 

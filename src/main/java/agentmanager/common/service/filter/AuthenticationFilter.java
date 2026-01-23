@@ -42,9 +42,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		if (tokenValue != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			Token token = tokenService.getTokenByValue(tokenValue);
 
+			// fix: token in admin and sale_executive service
 //			if (token != null) {
+//				String role = new String(Base64.getDecoder().decode(tokenValue));
 //				List<GrantedAuthority> roles = new ArrayList<>();
-//				roles.add(new SimpleGrantedAuthority("SALE_EXECUTIVE"));
+//				roles.add(new SimpleGrantedAuthority(token.get));
 //				if (id.startsWith("a"))
 //					roles.add(new SimpleGrantedAuthority("ADMIN"));
 //
