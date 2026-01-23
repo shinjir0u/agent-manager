@@ -23,10 +23,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import agentmanager.common.repository.TokenRepository;
-import agentmanager.common.service.TokenService;
 import agentmanager.saleexecutive.model.SaleExecutive;
 import agentmanager.saleexecutive.model.SaleExecutiveStatus;
 import agentmanager.saleexecutive.model.Status;
@@ -49,16 +47,10 @@ public class SaleExecutiveServiceConstructorInjecitonTest {
 	@Mock
 	private TokenRepository tokenRepository;
 
-	@Mock
-	private TokenService tokenService;
-
-	@Mock
-	private PasswordEncoder passwordEncoder;
-
 	@Before
 	public void setup() {
 		saleExecutiveService = new SaleExecutiveServiceImpl(saleExecutiveRepository, saleExecutiveQuery,
-				tokenRepository, tokenService, passwordEncoder);
+				tokenRepository);
 	}
 
 	@Test

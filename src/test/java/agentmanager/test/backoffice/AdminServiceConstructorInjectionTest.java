@@ -24,7 +24,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import agentmanager.backoffice.model.Admin;
 import agentmanager.backoffice.model.query.AdminQuery;
@@ -35,7 +34,6 @@ import agentmanager.common.model.role.Role;
 import agentmanager.common.model.role.UserRole;
 import agentmanager.common.model.token.Token;
 import agentmanager.common.repository.TokenRepository;
-import agentmanager.common.service.TokenService;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.repository.RegistrationRepository;
 import agentmanager.saleexecutive.model.SaleExecutive;
@@ -63,23 +61,17 @@ public class AdminServiceConstructorInjectionTest {
 	@Mock
 	private TokenRepository tokenRepository;
 
-	@Mock
-	private TokenService tokenService;
-
-	@Mock
-	private PasswordEncoder passwordEncoder;
-
 	@Before
 	public void setup() {
-		adminService = new AdminServiceImpl(adminRepository, tokenRepository, saleExecutiveRepository, adminQuery,
-				tokenService, passwordEncoder);
+		adminService = new AdminServiceImpl(adminRepository, tokenRepository, saleExecutiveRepository, adminQuery);
 	}
 
 	@Test
 	public void testGetAdmins() {
-		Admin[] mockAdmins = new Admin[] { new Admin(1L, "super_admin", "admin1@company.com", "pass123", new Token()),
-				new Admin(2L, "hr_manager", "hr@company.com", "secure456", new Token()),
-				new Admin(3L, "tech_lead", "tech@company.com", "dev789", new Token()) };
+		Admin[] mockAdmins = new Admin[] {
+				new Admin(1L, "super_admin", "admin1@company.com", "pass123", new UserRole(Role.ADMIN), new Token()),
+				new Admin(2L, "hr_manager", "hr@company.com", "secure456", new UserRole(Role.ADMIN), new Token()),
+				new Admin(3L, "tech_lead", "tech@company.com", "dev789", new UserRole(Role.ADMIN), new Token()) };
 
 		Page<Admin> adminPage = convertListToPage(Arrays.asList(mockAdmins), 0, 5);
 		when(adminQuery.getAdmins(anyInt(), anyInt(), anyString(), anyString(), anyString(), anyString()))
@@ -93,7 +85,8 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Test
 	public void testGetAdmin() {
-		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new Token());
+		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new UserRole(Role.ADMIN),
+				new Token());
 
 		when(adminRepository.findById(anyLong())).thenReturn(Optional.of(mockAdmin));
 
@@ -108,7 +101,8 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Test
 	public void testAddAdmin() {
-		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new Token());
+		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new UserRole(Role.ADMIN),
+				new Token());
 
 		when(adminRepository.save(any(Admin.class))).thenReturn(mockAdmin);
 
@@ -123,7 +117,8 @@ public class AdminServiceConstructorInjectionTest {
 
 	@Test
 	public void testUpdateAdmin() {
-		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new Token());
+		Admin mockAdmin = new Admin(4L, "sale_lead", "sale@company.com", "sale012", new UserRole(Role.ADMIN),
+				new Token());
 
 		when(adminRepository.findById(anyLong())).thenReturn(Optional.of(mockAdmin));
 		when(adminRepository.save(any(Admin.class))).thenReturn(mockAdmin);
@@ -151,11 +146,9 @@ public class AdminServiceConstructorInjectionTest {
 		Registration registration2 = new Registration(2L, "Agent2", "09222", new Date(), null);
 
 		SaleExecutive mockSaleExecutive = new SaleExecutive(1L, "saler", "saler@gmail.com", "saleislife", "09123456789",
-				new UserRole(Role.SALE_EXECUTIVE), new SaleExecutiveStatus(Status.ACTIVE), new ArrayList<>(),
-				new Token());
+				new SaleExecutiveStatus(Status.ACTIVE), new ArrayList<>(), new Token());
 		SaleExecutive mockSaleExecutive2 = new SaleExecutive(2L, "saler2", "saler2@gmail.com", "saleislife2",
-				"091234567892", new UserRole(Role.SALE_EXECUTIVE), new SaleExecutiveStatus(Status.ACTIVE),
-				new ArrayList<>(), new Token());
+				"091234567892", new SaleExecutiveStatus(Status.ACTIVE), new ArrayList<>(), new Token());
 		mockSaleExecutive.getRegistrations().add(registration);
 		mockSaleExecutive2.getRegistrations().add(registration2);
 

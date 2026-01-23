@@ -3,7 +3,6 @@ package agentmanager.common.service.filter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.FilterChain;
@@ -49,15 +48,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 			Token token = tokenService.getTokenByValue(tokenValue);
 
 			if (token != null) {
-				String plainToken = new String(Base64.getDecoder().decode(tokenValue));
-				String authorityType = plainToken.split("\\.")[1];
+				String authorityType = token.extractAuthority();
 
 				List<GrantedAuthority> authorities = new ArrayList<>();
-				if (!authorityType.isEmpty())
+				if (authorityType != "NONE")
 					authorities.add(new SimpleGrantedAuthority(authorityType));
 
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-						new PrincipalObject(id, id.replaceAll("[a-z]", "")), null, authorities);
+						new PrincipalObject(token.extractId()), null, authorities);
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 			}
 		}
@@ -69,9 +67,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	@AllArgsConstructor
 	private static class PrincipalObject {
 
-		private String code;
-
-		private String id;
+		private Long id;
 
 	}
 

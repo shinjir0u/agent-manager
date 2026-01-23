@@ -47,7 +47,7 @@ public class Token {
 	}
 
 	public void generateToken(Long id, UserAuthority authority) {
-		String authorityType = authority == null ? "" : authority.toString();
+		String authorityType = authority == null ? "NONE" : authority.toString();
 
 		String token = UUID.randomUUID().toString() + "." + id + "." + authorityType;
 		Long expirationDate = Instant.now().plus(2, ChronoUnit.HOURS).toEpochMilli();
@@ -56,9 +56,28 @@ public class Token {
 		this.expiration = expirationDate;
 	}
 
-	public String extractData(Integer dataNumber) {
+	private String extractData(Integer dataNumber) {
+		if (this.value == null || this.value.isEmpty())
+			return null;
+
 		String plainToken = new String(Base64.getDecoder().decode(this.value));
 		return plainToken.split("\\.")[dataNumber];
+	}
+
+	public Long extractId() {
+		return Long.valueOf(this.extractData(1));
+	}
+
+	public String extractAuthority() {
+		return this.extractData(2);
+	}
+
+	public static void main(String[] args) {
+		Token token = new Token();
+		token.generateToken(1L);
+
+		System.out.println(token.extractAuthority());
+		System.out.println(token.extractId());
 	}
 
 }

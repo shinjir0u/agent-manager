@@ -37,7 +37,7 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 		Token token = saleExecutive.getToken();
 
 		if (token == null || token.isTokenExpired()) {
-			token.generateToken();
+			token.generateToken(saleExecutive.getId());
 			saleExecutive.setToken(token);
 
 			if (token.getId() == null)

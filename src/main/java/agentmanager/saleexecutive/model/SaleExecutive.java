@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import agentmanager.common.model.role.Role;
-import agentmanager.common.model.role.UserRole;
 import agentmanager.common.model.token.Token;
 import agentmanager.registration.model.Registration;
 import lombok.AllArgsConstructor;
@@ -52,10 +50,6 @@ public class SaleExecutive {
 	private String phoneNumber;
 
 	@OneToOne
-	@JoinColumn(name = "role", referencedColumnName = "id")
-	private UserRole role;
-
-	@OneToOne
 	@JoinColumn(name = "status", referencedColumnName = "id")
 	private SaleExecutiveStatus status;
 
@@ -72,7 +66,6 @@ public class SaleExecutive {
 		this.email = email;
 		this.password = encodingPassword(password);
 		this.phoneNumber = phoneNumber;
-		this.role = new UserRole(Role.SALE_EXECUTIVE);
 		this.status = new SaleExecutiveStatus(Status.ACTIVE);
 		this.registrations = new ArrayList<>();
 
