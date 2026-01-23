@@ -38,9 +38,9 @@ public class AdminServiceImpl implements AdminService {
 		if (!admin.validatePassword(password))
 			throw new BadCredentialsException("Invalid password");
 
-		Token token = admin.getToken();
+		Token token = admin.getToken() == null ? new Token() : admin.getToken();
 
-		if (token == null || token.isTokenExpired()) {
+		if (token.getValue() == null || token.isTokenExpired()) {
 			token.generateToken(admin.getId(), UserAuthority.ADMIN);
 			admin.setToken(token);
 

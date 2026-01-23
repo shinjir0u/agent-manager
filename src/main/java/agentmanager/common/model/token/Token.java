@@ -72,12 +72,4 @@ public class Token {
 		return this.extractData(2);
 	}
 
-	public static void main(String[] args) {
-		Token token = new Token();
-		token.generateToken(1L);
-
-		System.out.println(token.extractAuthority());
-		System.out.println(token.extractId());
-	}
-
 }

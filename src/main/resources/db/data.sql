@@ -29,13 +29,13 @@ WHERE NOT EXISTS (
 );
 
 INSERT INTO sale_executives (username, email, password, phone_number, status)
-SELECT 'dse001', 'dse001@example.com', 'pw123', '09410000001', 1
+SELECT 'dse001', 'dse001@example.com', '$2a$10$LURInqSu9VQTMPUdk5IJvuFW3B4zx3cAV56zTFacmSe/vVnWH0lA.', '09410000001', 1
 WHERE NOT EXISTS (
     SELECT 1 FROM sale_executives WHERE email = 'dse001@example.com'
 );
 
 INSERT INTO sale_executives (username, email, password, phone_number, status)
-SELECT 'dse002', 'dse002@example.com', 'pw456', '09410000002', 1
+SELECT 'dse002', 'dse002@example.com', '$2a$10$LqBXAvIGqcIYfFJKTts37efYknDz46hnZBW14zwCPMmrbOD5p4loG', '09410000002', 1
 WHERE NOT EXISTS (
     SELECT 1 FROM sale_executives WHERE email = 'dse002@example.com'
 );

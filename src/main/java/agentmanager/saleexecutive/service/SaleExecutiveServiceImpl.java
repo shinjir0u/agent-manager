@@ -34,9 +34,9 @@ public class SaleExecutiveServiceImpl implements SaleExecutiveService {
 		if (!saleExecutive.validatePassword(password))
 			throw new BadCredentialsException("Invalid password");
 
-		Token token = saleExecutive.getToken();
+		Token token = saleExecutive.getToken() == null ? new Token() : saleExecutive.getToken();
 
-		if (token == null || token.isTokenExpired()) {
+		if (token.getValue() == null || token.isTokenExpired()) {
 			token.generateToken(saleExecutive.getId());
 			saleExecutive.setToken(token);
 
