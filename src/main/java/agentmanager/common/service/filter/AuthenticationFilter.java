@@ -72,7 +72,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
 	private void handleFilterException(HttpServletResponse response, Exception e) throws IOException {
 
-		// 1. Set the headers
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setContentType("application/json");
 

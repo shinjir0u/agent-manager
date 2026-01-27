@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import agentmanager.backoffice.rest.AdminSaleExecutiveController;
+import agentmanager.common.security.MyAccessDeniedHandler;
+import agentmanager.common.security.MyAuthenticationEntryPoint;
 import agentmanager.common.service.filter.AuthenticationFilter;
 
 @Configuration
@@ -20,8 +23,14 @@ import agentmanager.common.service.filter.AuthenticationFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private final AdminSaleExecutiveController adminSaleExecutiveController;
+
 	@Autowired
 	private AuthenticationFilter authenticationFilter;
+
+	SecurityConfig(AdminSaleExecutiveController adminSaleExecutiveController) {
+		this.adminSaleExecutiveController = adminSaleExecutiveController;
+	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -34,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeRequests(auth -> auth.antMatchers("/admin/login", "/sale_executive/login", "/health")
 						.permitAll().antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest().authenticated())
+				.exceptionHandling(exception -> exception.accessDeniedHandler(new MyAccessDeniedHandler())
+						.authenticationEntryPoint(new MyAuthenticationEntryPoint()))
 				.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
