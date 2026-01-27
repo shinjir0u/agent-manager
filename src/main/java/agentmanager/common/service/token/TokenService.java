@@ -1,4 +1,4 @@
-package agentmanager.common.service;
+package agentmanager.common.service.token;
 
 import agentmanager.common.model.token.Token;
 

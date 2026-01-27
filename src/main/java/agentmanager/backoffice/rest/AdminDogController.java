@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import agentmanager.api.DogApi;
 import agentmanager.api.model.DogDataCollection;
-import agentmanager.common.service.RedisService;
+import agentmanager.common.service.redis.RedisService;
 import lombok.AllArgsConstructor;
 import retrofit2.Call;
 import retrofit2.Response;

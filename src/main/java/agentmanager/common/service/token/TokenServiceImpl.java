@@ -1,10 +1,9 @@
-package agentmanager.common;
+package agentmanager.common.service.token;
 
 import org.springframework.stereotype.Service;
 
 import agentmanager.common.model.token.Token;
 import agentmanager.common.repository.TokenRepository;
-import agentmanager.common.service.TokenService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -16,6 +15,8 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public Token getTokenByValue(String value) {
 		Token token = tokenRepository.findByValue(value).orElse(null);
+		if (token == null)
+			throw new NullPointerException("No such token with value: " + value);
 		return token;
 	}
 

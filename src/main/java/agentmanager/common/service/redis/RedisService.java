@@ -1,4 +1,4 @@
-package agentmanager.common.service;
+package agentmanager.common.service.redis;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

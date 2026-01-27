@@ -56,7 +56,7 @@ public class SaleExecutive {
 	@OneToMany(mappedBy = "saleExecutive", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Registration> registrations;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "token", referencedColumnName = "id")
 	private Token token;
 

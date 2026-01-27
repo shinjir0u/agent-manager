@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import agentmanager.common.model.token.Token;
-import agentmanager.common.service.TokenService;
+import agentmanager.common.service.token.TokenService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
