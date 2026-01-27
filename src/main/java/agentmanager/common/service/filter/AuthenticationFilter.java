@@ -17,11 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import agentmanager.common.model.principal.PrincipalObject;
 import agentmanager.common.model.token.Token;
 import agentmanager.common.service.token.TokenService;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Component
 @AllArgsConstructor
@@ -60,15 +59,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 			}
 		}
 		filterChain.doFilter(request, response);
-	}
-
-	@Data
-	@NoArgsConstructor
-	@AllArgsConstructor
-	private static class PrincipalObject {
-
-		private Long id;
-
 	}
 
 }

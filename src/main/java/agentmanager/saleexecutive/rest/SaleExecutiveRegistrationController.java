@@ -1,7 +1,6 @@
 package agentmanager.saleexecutive.rest;
 
 import java.net.URI;
-import java.security.Principal;
 import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import agentmanager.common.model.principal.PrincipalObject;
 import agentmanager.common.model.response.PaginatedResponse;
 import agentmanager.registration.model.Registration;
 import agentmanager.registration.service.RegistrationService;
@@ -46,16 +47,16 @@ public class SaleExecutiveRegistrationController {
 		this.saleExecutiveService = saleExecutiveService;
 	}
 
-	@GetMapping("/{saleExecutiveId}/registration/list")
+	@GetMapping("/registration/list")
 	public ResponseEntity<PaginatedResponse<RegistrationResponse>> getRegistrationsBySaleExecutive(
-			@PathVariable Long saleExecutiveId, @RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size,
 			@RequestParam(name = "sort", defaultValue = "id") String sort,
 			@RequestParam(name = "direction", defaultValue = "ASC") String direction,
-			RegistrationParams registrationParams, Principal principal) {
-		logger.info("Principal...... {}", principal.getName());
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+			RegistrationParams registrationParams, Authentication authentication) {
 
+		PrincipalObject principalObject = (PrincipalObject) authentication.getPrincipal();
+		SaleExecutive saleExecutive = getSaleExecutive(principalObject.getId());
 		Page<Registration> registrations = registrationService.getRegistrationsBySaleExecutive(saleExecutive, page,
 				size, sort, direction, registrationParams.getAgent_name(), registrationParams.getPhone_number(),
 				registrationParams.getRegistered_at());
@@ -72,10 +73,11 @@ public class SaleExecutiveRegistrationController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
 	}
 
-	@PostMapping(value = "/{saleExecutiveId}/registration/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RegistrationResponse> createRegistration(@PathVariable Long saleExecutiveId,
-			@RequestBody RegistrationRequest request) {
-		SaleExecutive saleExecutive = getSaleExecutive(saleExecutiveId);
+	@PostMapping(value = "/registration/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RegistrationResponse> createRegistration(@RequestBody RegistrationRequest request,
+			Authentication authentication) {
+		PrincipalObject principalObject = (PrincipalObject) authentication.getPrincipal();
+		SaleExecutive saleExecutive = getSaleExecutive(principalObject.getId());
 		Registration registration = registrationService.addRegistration(request.getAgentName(),
 				request.getPhoneNumber(), saleExecutive);
 		RegistrationResponse response = new RegistrationResponse(registration.getId(), registration.getAgentName(),
