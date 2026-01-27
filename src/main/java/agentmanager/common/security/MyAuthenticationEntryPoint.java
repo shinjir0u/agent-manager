@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -23,10 +24,8 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
 		Map<String, Object> body = new HashMap<>();
-		body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-		body.put("error", "Unauthorized");
-		body.put("message", "Full authentication is required to access this resource");
-		body.put("path", request.getServletPath());
+		body.put("status", HttpStatus.UNAUTHORIZED);
+		body.put("message", "A valid token is needed for authentication. Log in again if token is expired.");
 
 		new ObjectMapper().writeValue(response.getOutputStream(), body);
 

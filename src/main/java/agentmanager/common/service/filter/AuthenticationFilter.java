@@ -52,7 +52,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 			if (tokenValue != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 				Token token = tokenService.getTokenByValue(tokenValue);
 
-				if (token != null) {
+				if (token != null && !token.isTokenExpired()) {
 					String authorityType = token.extractAuthority();
 
 					List<GrantedAuthority> authorities = new ArrayList<>();
@@ -65,7 +65,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 				}
 			}
 			filterChain.doFilter(request, response);
-		} catch (NullPointerException exception) {
+		} catch (IllegalArgumentException exception) {
 			handleFilterException(response, exception);
 		}
 	}

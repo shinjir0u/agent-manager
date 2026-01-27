@@ -38,16 +38,16 @@ public class AdminServiceImpl implements AdminService {
 		if (!admin.validatePassword(password))
 			throw new BadCredentialsException("Invalid password");
 
-		Token token = admin.getToken() == null ? new Token() : admin.getToken();
+		Long tokenId = admin.getToken().getId() == null ? null : admin.getToken().getId();
 
-		if (token.getValue() == null || token.isTokenExpired()) {
-			token.generateToken(admin.getId(), UserAuthority.ADMIN);
-			admin.setToken(token);
+		Token token = new Token();
+		token.setId(tokenId);
+		token.generateToken(admin.getId(), UserAuthority.ADMIN);
+		admin.setToken(token);
 
-			if (token.getId() == null)
-				tokenRepository.save(token);
-			adminRepository.save(admin);
-		}
+		if (token.getId() == null)
+			tokenRepository.save(token);
+		adminRepository.save(admin);
 		return token;
 	}
 
