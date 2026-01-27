@@ -14,9 +14,8 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public Token getTokenByValue(String value) {
-		Token token = tokenRepository.findByValue(value).orElse(null);
-		if (token == null)
-			throw new NullPointerException("No such token with value: " + value);
+		Token token = tokenRepository.findByValue(value)
+				.orElseThrow(() -> new NullPointerException("No such token with value: " + value));
 		return token;
 	}
 

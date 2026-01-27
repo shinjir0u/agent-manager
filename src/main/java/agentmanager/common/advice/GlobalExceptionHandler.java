@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "agentmanager")
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
